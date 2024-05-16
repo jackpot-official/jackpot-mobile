@@ -53,7 +53,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginPage} />
+        <Stack.Screen name="Dollaz" component={LoginPage} />
         <Stack.Screen name="Home" component={HomePage} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   title: {
-    fontSize: 32,
+    fontSize: 50,
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
