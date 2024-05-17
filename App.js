@@ -20,7 +20,7 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Dollaz</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter your email"
