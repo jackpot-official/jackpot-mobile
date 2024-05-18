@@ -3,6 +3,8 @@
 import { registerRootComponent } from 'expo';
 
 import { useState } from 'react';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { View, ScrollView, SafeAreaView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
@@ -11,9 +13,13 @@ import {
     Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome 
 } from '../components';
 
+// const Stack = createStackNavigator();
+
 const Home = () => {
 
     const router = useRouter();
+
+    const navigation = useNavigation();
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
