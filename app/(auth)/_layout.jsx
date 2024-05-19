@@ -1,13 +1,31 @@
 import { View, Text } from 'react-native' // rnfe
 import React from 'react'
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 // Special layout included in route group as authorization screen doesn't have navigation bar.
 
 const AuthLayout = () => {
   return (
-    <View>
-      <Text>AuthLayout</Text>
-    </View>
+    <>
+      <Stack>
+        <Stack.Screen
+        name="sign-in"
+        options={{
+          headerShown: false
+        }}
+        />
+
+        <Stack.Screen
+        name="sign-up"
+        options={{
+          headerShown: false
+        }}
+        />
+      </Stack>
+
+      <StatusBar backgroundColor="#161622" style="light" />
+    </>
   )
 }
 
