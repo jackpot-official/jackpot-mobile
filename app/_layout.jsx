@@ -26,30 +26,14 @@ const RootLayout = () => {
 
   if(!fontsLoaded && !error) return null;
 
-  // return (
-  //   <View style={styles.container}>
-  //     <Text>RootLayout</Text>
-  //   </View>
-  // )
   return (
-    // <>
-    //   <Text>Header</Text>
-    //   <Slot />
-    //   <Text>Footer</Text>
-    // </>
     <Stack>
       <Stack.Screen name="index" options={{headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{headerShown: false }} />
+      {/* <Stack.Screen name="/search/[query]" options={{headerShown: false }} /> */}
     </Stack>
   )
 }
 
 export default RootLayout
-
-// const styles = StyleSheet.create({
-//   container: {
-//     display: 'flex',
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center'
-//   }
-// })
