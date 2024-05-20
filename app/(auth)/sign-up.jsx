@@ -9,6 +9,8 @@ import CustomButton from '../../components/CustomButton';
 import { createUser } from '../../lib/appwrite';
 
 const SignUp = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
@@ -28,6 +30,8 @@ const SignUp = () => {
       const result = await createUser(form.email, form.password, form.username);
 
       // set global state using context
+      setUser(result);
+      setIsLoggedIn(true);
 
       router.replace('/home')
     } catch (error) {
