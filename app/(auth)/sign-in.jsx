@@ -8,6 +8,7 @@ import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 
 import { getCurrentUser, signIn } from '../../lib/appwrite';
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignIn = () => {
   const { setUser, setIsLoggedIn } = useGlobalContext();
