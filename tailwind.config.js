@@ -16,6 +16,9 @@ module.exports = {
           100: "#e6c24f",
           200: "#ccad46",
         },
+        lightgreen: {
+          DEFAULT: "#EEFCC5",
+        },
         black: {
           DEFAULT: "#000",
           100: "#1E1E2D",

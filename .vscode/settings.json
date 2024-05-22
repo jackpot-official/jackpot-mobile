@@ -5,8 +5,10 @@
         "pblack",
         "pmedium",
         "pregular",
+        "primaryshade",
         "psemibold",
         "Riya",
-        "rnfe"
+        "rnfe",
+        "tailwindcss"
     ]
 }
