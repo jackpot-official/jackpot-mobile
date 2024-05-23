@@ -26,6 +26,7 @@ const zoomOut = {
 
 const TrendingItem = ({ activeItem, item }) => {
   const [play, setPlay] = useState(false);
+
   return (
     <Animatable.View
       className="mr-5"
@@ -33,17 +34,28 @@ const TrendingItem = ({ activeItem, item }) => {
       duration={500}
     >
       {play ? (
-        <Text className="text-white">Playing</Text>
+        <Video
+          source={{ uri: item.video }}
+          className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls
+          shouldPlay
+          onPlaybackStatusUpdate={(status) => {
+            if(status.didJustFinish) {
+              setPlay(false);
+            }
+          }}
+        />
       ) : (
         <TouchableOpacity
-          className="relative justify-center items-center"
+          className="relative flex justify-center items-center"
           activeOpacity={0.7}
           onPress={() => setPlay(true)}>
             <ImageBackground
               source={{
                 uri: item.thumbnail
               }}
-              className="w-52 h-72 rounded-[35px] my-5 overflow-hidden shadow-lg shadow-black-40"
+              className="w-52 h-72 rounded-[33px] my-5 overflow-hidden shadow-lg shadow-black/40"
               resizeMode='cover'
             />
 
@@ -56,8 +68,8 @@ const TrendingItem = ({ activeItem, item }) => {
         </TouchableOpacity>
       )}
     </Animatable.View>
-  )
-}
+  );
+};
 
 const Trending = ({posts}) => {
   const [activeItem, setActiveItem] = useState(posts[1]);
@@ -80,7 +92,7 @@ const Trending = ({posts}) => {
         )}
         onViewableItemsChanged={viewableItemsChanged}
         viewabilityConfig={{
-          itemVisiblePercentThreshold: 70
+          itemVisiblePercentThreshold: 70,
         }}
         contentOffset={ { x: 170 }}
         horizontal

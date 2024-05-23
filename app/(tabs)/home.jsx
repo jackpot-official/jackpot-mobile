@@ -21,15 +21,11 @@ const Home = () => {
     // re call videos when new videos appear
     await refetch();
     setRefreshing(false);
-  }
-
-  // console.log(posts);
+  };
 
   return (
-    // border-red-500
     <SafeAreaView className="bg-primary">
       <FlatList
-        // data={[ {id: 1}, {id: 2}, {id: 3} ]}
         data={ posts }
         keyExtractor={ ( item ) => item.$id }
         renderItem={({ item }) => (
@@ -49,10 +45,10 @@ const Home = () => {
                 </Text>
               </View>
 
-              <View className="mt-1.5">
+              <View className="mt-1">
                 <Image
-                  source={ images.logo_small_outline }
-                  className="w-20 h-20"
+                  source={ images.text_white }
+                  className="w-48 h-9"
                   resizeMode='contain'
                 />
               </View>
