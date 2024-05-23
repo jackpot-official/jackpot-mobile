@@ -18,6 +18,11 @@ const RootLayout = () => {
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
+    "Hind-Bold": require("../assets/fonts/Hind-Bold.ttf"),
+    "Hind-Light": require("../assets/fonts/Hind-Light.ttf"),
+    "Hind-Medium": require("../assets/fonts/Hind-Medium.ttf"),
+    "Hind-Regular": require("../assets/fonts/Hind-Regular.ttf"),
+    "Hind-Semibold": require("../assets/fonts/Hind-SemiBold.ttf"),
   });
 
   useEffect(() => {
