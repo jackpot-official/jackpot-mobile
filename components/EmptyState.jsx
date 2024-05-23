@@ -14,11 +14,11 @@ const EmptyState = ({ title, subtitle }) => {
             resizeMode='contain'
         />
 
-        <Text className="text-xl font-psemibold text-white mt-2">
+        <Text className="text-xl font-hsemibold text-white mt-2">
             { title }
         </Text>
-        
-        <Text className="font-pmedium text-sm text-gray-100">
+
+        <Text className="font-hmedium text-sm text-gray-100">
             { subtitle }
         </Text>
 

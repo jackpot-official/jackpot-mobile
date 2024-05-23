@@ -22,7 +22,7 @@ export default function App() {
             resizeMode="contain"
           />
 
-          <Text className="text-secondary font-pblack text-7xl mt-8">
+          <Text className="text-secondary font-hbold text-7xl mt-8">
             Dollaz
           </Text>
 
@@ -33,7 +33,7 @@ export default function App() {
                 resizeMode="contain"
             />
 
-            <Text className="text-3xl text-white font-bold text-center font-pmedium">
+            <Text className="text-3xl text-white font-bold text-center font-hmedium">
               Trade. Social. Earn.
             </Text>
           </View>

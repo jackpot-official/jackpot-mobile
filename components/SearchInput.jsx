@@ -9,7 +9,7 @@ const SearchInput = ( {title, value, placeholder, handleChangeText, otherStyles,
 
       <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-100 rounded-2xl focus:border-secondary items-center flex-row space-x-4">
         <TextInput
-            className="text-base mt-0.5 text-white flex-1 font-pregular"
+            className="text-base mt-0.5 text-white flex-1 font-hregular"
             value={ value }
             placeholder="Search for a post topic"
             placeholderTextColor="#eefcc5"

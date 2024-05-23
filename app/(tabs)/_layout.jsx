@@ -18,7 +18,7 @@ const TabIcon = ({ icon, color, name, focused }) => { // destructuring
           className="w-6 h-6"
         />
       {/* </LinearGradient> */}
-      <Text className={ `${ focused ? 'font-psemibold' : 'font-pregular' } text-xs` }
+      <Text className={ `${ focused ? 'font-hsemibold' : 'font-hregular' } text-xs` }
       style={{ color }}>
         { name }
       </Text>
