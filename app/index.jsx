@@ -17,14 +17,14 @@ export default function App() {
       <ScrollView contentContainerStyle={{ height: '100%' }}>
         <View className="w-full justify-center items-center min-h-[85vh] px-4">
           <Image
-            source={ images.dollaz }
+            source={ images.text_white }
             className="w-[390px] h-[252px]"
             resizeMode="contain"
           />
 
-          <Text className="text-secondary font-hbold text-7xl mt-8">
-            Dollaz
-          </Text>
+          {/* <Text className="text-secondary font-hbold text-7xl mt-8">
+            Jackpot
+          </Text> */}
 
           <View className="relative mt-7">
             <Image

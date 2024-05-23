@@ -51,8 +51,8 @@ const Home = () => {
 
               <View className="mt-1.5">
                 <Image
-                  source={ images.dollaz }
-                  className="w-9 h-10"
+                  source={ images.logo_small_outline }
+                  className="w-20 h-20"
                   resizeMode='contain'
                 />
               </View>
