@@ -22,7 +22,7 @@ const SignUp = () => {
 
   const submit = async () => {
     if(!form.username || !form.email || !form.password){
-      Alert.alert('Error', 'Please fill in all fields.')
+      Alert.alert('Error', 'Please fill in all fields.');
     }
 
     setIsSubmitting(true);
@@ -34,7 +34,7 @@ const SignUp = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      router.replace('/home')
+      router.replace('/home');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
