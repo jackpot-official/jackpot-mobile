@@ -9,7 +9,7 @@ import VideoCard from '../../components/VideoCard';
 import { useGlobalContext } from '../../context/GlobalProvider';
 import { icons } from '../../constants';
 import InfoBox from '../../components/InfoBox';
-import { router } from expo-router;
+import { router } from 'expo-router';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
