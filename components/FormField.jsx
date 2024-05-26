@@ -7,14 +7,14 @@ const FormField = ( {title, value, placeholder, handleChangeText, otherStyles, .
   
     return (
     <View className={ `space-y-2 ${otherStyles}` }>
-      <Text className="text-base text-gray-100 font-hmedium">{ title }</Text>
+      <Text className="text-base text-white font-hbold">{ title }</Text>
 
       <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-100 rounded-2xl focus:border-secondary items-center flex-row">
         <TextInput
-        className="flex-1 text-white font-hsemibold text-base"
+        className="flex-1 text-white font-hmedium text-base"
         value={ value }
         placeholder={ placeholder }
-        placeholderTextColor="#7b7b8b"
+        placeholderTextColor="#ffffff"
         onChangeText={ handleChangeText }
         secureTextEntry={ title === 'Password' && !showPassword }
         />
