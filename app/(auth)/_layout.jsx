@@ -1,5 +1,4 @@
-import { View, Text } from 'react-native' // rnfe
-import React from 'react'
+import React from 'react' // rnfe
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 

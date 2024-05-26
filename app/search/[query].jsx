@@ -1,10 +1,8 @@
-import { View, Text, FlatList, Image, RefreshControl, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList } from 'react-native'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { images } from '../../constants';
 import SearchInput from '../../components/SearchInput';
-import Trending from '../../components/Trending';
 import EmptyState from '../../components/EmptyState';
 import useAppwrite from '../../lib/useAppwrite';
 import { searchPosts } from '../../lib/appwrite';
@@ -16,8 +14,6 @@ const Search = () => {
   const { data: posts, refetch } = useAppwrite(
     () => searchPosts(query)
   );
-
-  // console.log(query, posts);
 
   useEffect(() => {
     refetch();
