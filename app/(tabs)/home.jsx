@@ -9,8 +9,10 @@ import EmptyState from '../../components/EmptyState';
 import useAppwrite from '../../lib/useAppwrite';
 import { getAllPosts, getLatestPosts } from '../../lib/appwrite';
 import VideoCard from '../../components/VideoCard';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const Home = () => {
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
 
@@ -38,10 +40,10 @@ const Home = () => {
             <View className="flex justify-between items-start flex-row mb-6">
               <View>
                 <Text className="font-hmedium text-sm text-gray-100">
-                  Welcome Back
+                  Welcome back,
                 </Text>
                 <Text className="text-2xl font-hsemibold text-white">
-                  Riya Dev
+                  { user?.username }
                 </Text>
               </View>
 

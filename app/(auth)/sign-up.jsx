@@ -11,10 +11,8 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignUp = () => {
   const { setUser, setIsLoggedIn } = useGlobalContext();
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [form, setForm] = useState({
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
+  const [ form, setForm ] = useState({
     username: '',
     email: '',
     password: ''
@@ -30,7 +28,6 @@ const SignUp = () => {
     try {
       const result = await createUser(form.email, form.password, form.username);
 
-      // set global state using context
       setUser(result);
       setIsLoggedIn(true);
 
