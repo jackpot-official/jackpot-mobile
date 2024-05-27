@@ -1,10 +1,11 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
 import FormField from '../../components/FormField'
+import CustomButton from '../../components/CustomButton'
 import { ResizeMode, Video } from 'expo-av'
 import { icons } from '../../constants'
-import CustomButton from '../../components/CustomButton'
 import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router';
 import { createVideo } from '../../lib/appwrite';
@@ -18,7 +19,7 @@ const Create = () => {
     video: null,
     thumbnail: null,
     prompt: "",
-  })
+  });
 
   const openPicker = async (selectType) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -48,11 +49,10 @@ const Create = () => {
     setUploading(true);
 
     try {
-      // console.log('VIDEO', form.video, 'THUMBNAIL', form.thumbnail);
       await createVideo({
         ...form,
         userId: user.$id
-      });r
+      });
 
       Alert.alert('Success', "Post uploaded successfully");
       router.push('/home');
