@@ -50,7 +50,7 @@ const SignUp = () => {
           />
 
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">
-            Sign up to Dollaz
+            Sign up to Jackpot
           </Text>
 
           <FormField

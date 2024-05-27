@@ -21,7 +21,7 @@ const Profile = () => {
     await signOut();
     setUser(null);
     setIsLoggedIn(false);
-    router.replace('/sign-in'); // replace not push, so can't go back
+    router.replace('/sign-in');
   }
 
   return (

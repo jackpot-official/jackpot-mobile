@@ -22,10 +22,6 @@ export default function App() {
             resizeMode="contain"
           />
 
-          {/* <Text className="text-secondary font-hbold text-7xl mt-8">
-            Jackpot
-          </Text> */}
-
           <View className="relative mt-7">
             <Image
                 source={ images.zigzag }
@@ -46,16 +42,8 @@ export default function App() {
         </View>
       </ScrollView>
 
-      {/* Light / Dark mode of status bar */}
       <StatusBar backgroundColor='#161622' style='light'/>
 
     </SafeAreaView>
   );
 }
-
-    // <View className="flex-1 items-center justify-center bg-white">
-    //   <Text className="text-3xl font-pblack">DollaZ</Text>
-    //   <StatusBar style="auto" />
-    //   <Link href="/home" style= {{ color: 'blue' }}>
-    //     Go to Home</Link>
-    // </View>

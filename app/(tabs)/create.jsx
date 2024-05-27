@@ -46,8 +46,6 @@ const Create = () => {
       return Alert.alert("Please fill in all of the fields.")
     }
 
-    console.log('THUMBNAIL', form.thumbnail, 'VIDEO', form.video);
-
     setUploading(true);
 
     try {

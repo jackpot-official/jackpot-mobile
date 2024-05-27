@@ -4,25 +4,20 @@ import {Tabs, Redirect} from 'expo-router';
 
 import { icons } from '../../constants';
 
-const TabIcon = ({ icon, color, name, focused }) => { // destructuring
+const TabIcon = ({ icon, color, name, focused }) => {
   return (
     <View className="items-center justify-center gap-2">
-      {/* <LinearGradient
-        colors={['rgba(255, 255, 255, 0.5)', 'rgba(255, 255, 255, 0)']}
-        style={{ borderRadius: 12 }}
-      > */}
         <Image
           source={ icon }
           resizeMode="contain"
           tintColor={ color }
           className="w-6 h-6"
         />
-      {/* </LinearGradient> */}
       <Text className={ `${ focused ? 'font-hsemibold' : 'font-hregular' } text-xs` }
       style={{ color }}>
         { name }
       </Text>
-    </View> // like a div
+    </View>
   )
 }
 
@@ -33,9 +28,7 @@ const TabsLayout = () => {
         screenOptions={{
           tabBarShowLabel: false,
           tabBarActiveTintColor: '#ffd858',
-          // ffd858
           tabBarInactiveTintColor: '#eefcc5',
-          // fff7de
           tabBarStyle: {
             backgroundColor: '#043725',
             borderTopWidth: 1,
