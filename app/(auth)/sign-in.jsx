@@ -52,7 +52,7 @@ const SignIn = () => {
           />
 
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">
-            Log in to Dollaz
+            Log in to Jackpot
           </Text>
 
           <FormField

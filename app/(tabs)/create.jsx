@@ -46,6 +46,8 @@ const Create = () => {
       return Alert.alert("Please fill in all of the fields.")
     }
 
+    console.log('THUMBNAIL', form.thumbnail, 'VIDEO', form.video);
+
     setUploading(true);
 
     try {
@@ -120,7 +122,7 @@ const Create = () => {
 
           <TouchableOpacity onPress={() => openPicker("image")}>
             { form.thumbnail ? (
-              <Image 
+              <Image
                 source={{uri: form.thumbnail.uri}}
                 resizeMode="cover"
                 className="w-full h-64 rounded-2xl"
