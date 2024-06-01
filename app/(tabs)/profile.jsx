@@ -1,4 +1,4 @@
-import { View, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -10,6 +10,7 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 import { icons } from '../../constants';
 import InfoBox from '../../components/InfoBox';
 import { router } from 'expo-router';
+import GainLossCard from '../../components/GainLossCard';
 
 const Profile = () => {
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
@@ -25,7 +26,7 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-white h-full">
       <FlatList
         data={ posts }
         keyExtractor={ ( item ) => item.$id }
@@ -69,11 +70,17 @@ const Profile = () => {
               />
 
               <InfoBox
-                title="1.2k"
+                title="1.3k"
                 subtitle="Followers"
                 titleStyles="text-xl"
               />
             </View>
+
+            <GainLossCard
+              gainloss="-$45,678.99"
+              percentage="-20"
+            />
+
           </View>
           )}
 
