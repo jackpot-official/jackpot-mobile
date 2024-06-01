@@ -1,36 +1,43 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import { useState } from 'react'
-import { icons } from '../constants'
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { useState } from "react";
+import { icons } from "../constants";
 
-const FormField = ( {title, value, placeholder, handleChangeText, otherStyles, ...props } ) => {
-  const [showPassword, setShowPassword] = useState(false)
-  
-    return (
-    <View className={ `space-y-2 ${otherStyles}` }>
-      <Text className="text-base text-white font-hbold">{ title }</Text>
+const FormField = ({
+  title,
+  value,
+  placeholder,
+  handleChangeText,
+  otherStyles,
+  ...props
+}) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <View className={`space-y-2 ${otherStyles}`}>
+      <Text className="text-base text-white font-hbold">{title}</Text>
 
       <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-100 rounded-2xl focus:border-secondary items-center flex-row">
         <TextInput
-        className="flex-1 text-white font-hmedium text-base"
-        value={ value }
-        placeholder={ placeholder }
-        placeholderTextColor="#ffffff"
-        onChangeText={ handleChangeText }
-        secureTextEntry={ title === 'Password' && !showPassword }
+          className="flex-1 text-white font-hmedium text-base"
+          value={value}
+          placeholder={placeholder}
+          placeholderTextColor="#ffffff"
+          onChangeText={handleChangeText}
+          secureTextEntry={title === "Password" && !showPassword}
         />
 
-        { title === 'Password' && (
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Image
-                source={!showPassword ? icons.eye : icons.eyeHide}
-                className="w-6 h-6"
-                resizeMode="contain"
-                />
-            </TouchableOpacity>
+        {title === "Password" && (
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Image
+              source={!showPassword ? icons.eye : icons.eyeHide}
+              className="w-6 h-6"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
         )}
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default FormField
+export default FormField;

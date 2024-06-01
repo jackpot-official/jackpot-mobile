@@ -9,4 +9,15 @@ import text_white from "../assets/images/text_white.png";
 import logo from "../assets/images/logo.png";
 import logo_small_outline from "../assets/images/logo_small_outline.png";
 
-export default { profile, thumbnail, cards, path, empty, zigzag, text_black, text_white, logo, logo_small_outline };
+export default {
+  profile,
+  thumbnail,
+  cards,
+  path,
+  empty,
+  zigzag,
+  text_black,
+  text_white,
+  logo,
+  logo_small_outline,
+};
