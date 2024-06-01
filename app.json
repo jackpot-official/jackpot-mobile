@@ -12,10 +12,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "package": "com.dollaz.app"
+      "package": "com.dollaz.app",
+      "bundleIdentifier": "com.dollaz.app"
     },
     "android": {
       "adaptiveIcon": {

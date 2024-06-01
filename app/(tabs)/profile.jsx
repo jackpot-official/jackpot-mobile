@@ -1,5 +1,5 @@
 import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import EmptyState from '../../components/EmptyState';
@@ -10,9 +10,11 @@ import { useGlobalContext } from '../../context/GlobalProvider';
 import { icons } from '../../constants';
 import InfoBox from '../../components/InfoBox';
 import { router } from 'expo-router';
-import GainLossCard from '../../components/GainLossCard';
+import GainLossCard from '../../components/profile/GainLossCard';
+import ProfileNavButton from '../../components/profile/ProfileNavButton';
 
 const Profile = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts } = useAppwrite(
     () => getUserPosts(user.$id)
@@ -25,6 +27,18 @@ const Profile = () => {
     router.replace('/sign-in');
   }
 
+  const submit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      router.replace('/profile')
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <FlatList
@@ -35,10 +49,12 @@ const Profile = () => {
             video={ item }
           />
         )}
+        
         ListHeaderComponent={() => (
-          <View className="w-full jusitfy-center items-center mt-6 mb-12 px-4">
+          <>
+          <View className="w-full justify-center items-center mt-6 mb-12 px-4">
             <TouchableOpacity
-              className="w-full items-end mb-10"
+              className="w-full items-end mb-10 drop-shadow-md"
               onPress={ logout }
             >
               <Image
@@ -76,12 +92,43 @@ const Profile = () => {
               />
             </View>
 
+          </View>
+
+          <View className="flex flex-row justify-items-start ml-3">
+              <ProfileNavButton
+                title="Portfolio"
+                handlePress={ submit }
+                containerStyles="bg-primary w-1/4 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm"
+                textStyles="text-white"
+                isLoading={isSubmitting}
+              />
+
+              {/* shadow-sm shadow-gray-500 */}
+              <ProfileNavButton
+                title="Posts"
+                handlePress={ submit }
+                containerStyles="bg-white w-1/5 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm"
+                textStyles="text-black"
+                isLoading={isSubmitting}
+              />
+
+              <ProfileNavButton
+                title="Achievements"
+                handlePress={ submit }
+                containerStyles="bg-white w-4/12 h-10 mt-3 shadow-gray-500 shadow-sm"
+                textStyles="text-black"
+                isLoading={isSubmitting}
+              />
+          </View>
+
+          <View className="items-center">
             <GainLossCard
-              gainloss="-$45,678.99"
+              gainloss="-$45,678.90"
               percentage="-20"
             />
-
           </View>
+
+          </>
           )}
 
           ListEmptyComponent={() => (

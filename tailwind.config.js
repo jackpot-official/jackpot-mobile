@@ -32,6 +32,9 @@ module.exports = {
           100: "#e6c24f",
           200: "#ccad46",
         },
+        tertiary: {
+          DEFAULT: '#E29728',
+        },
         lightgreen: {
           DEFAULT: "#EEFCC5",
         },
