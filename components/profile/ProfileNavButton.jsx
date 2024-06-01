@@ -12,11 +12,11 @@ const ProfileNavButton = ({
         <TouchableOpacity
             onPress={handlePress}
             activeOpacity={0.7}
-            className={`bg-secondary-100 rounded-full justify-center items-center ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
+            className={`rounded-full justify-center items-center h-10 mt-3 mr-3 shadow-gray-900 shadow-lg ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
             disabled={isLoading}
         >
             <Text
-                className={`text-primary font-hsemibold text-lg ${textStyles}`}
+                className={`font-hsemibold text-lg ${textStyles}`}
             >
                 {title}
             </Text>
