@@ -58,8 +58,9 @@ const Profile = () => {
                                 />
                             </TouchableOpacity>
 
-                            <View className="flex flex-row">
-                                <View className="flex flex-row">
+							{/* Header */}
+                            <View className="flex flex-row justify-between items-center">
+                                <View className="flex flex-row items-center">
                                     {/* user pfp */}
                                     <View className="w-16 h-16 rounded-lg justify-center items-center">
                                         <Image
