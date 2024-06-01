@@ -1,22 +1,27 @@
+/* Libraries */
 import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
 
-import EmptyState from '../../components/EmptyState'
+/* Assets */
 import useAppwrite from '../../lib/useAppwrite'
 import { getUserPosts, signOut } from '../../lib/appwrite'
-import VideoCard from '../../components/VideoCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import { icons } from '../../constants'
+
+/* Components */
 import InfoBox from '../../components/InfoBox'
-import { router } from 'expo-router'
+import VideoCard from '../../components/VideoCard'
+import EmptyState from '../../components/EmptyState'
 import GainLossCard from '../../components/profile/GainLossCard'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
 
 const Profile = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const { user, setUser, setIsLoggedIn } = useGlobalContext()
-    const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
+    const [isSubmitting, setIsSubmitting] = useState(false);
+	const [selectedTab, setSelectedTab] = useState('Portfolio');
+    const { user, setUser, setIsLoggedIn } = useGlobalContext();
+    const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
 
     const logout = async () => {
         await signOut()
@@ -25,30 +30,65 @@ const Profile = () => {
         router.replace('/sign-in')
     }
 
-    const submit = async () => {
-        setIsSubmitting(true)
-
-        try {
-            router.replace('/profile')
-        } catch (error) {
-            Alert.alert('Error', error.message)
-        } finally {
-            setIsSubmitting(false)
+	const renderContent = () => {
+        switch (selectedTab) {
+            case 'Portfolio':
+                return (
+                    <View className="items-center">
+                        <GainLossCard
+                            gainloss="-$45,678.90"
+                            percentage="-20"
+                        />
+                    </View>
+                );
+            case 'Posts':
+                return (
+                    <FlatList
+                        data={posts}
+                        keyExtractor={(item) => item.$id}
+                        renderItem={({ item }) => <VideoCard video={item} />}
+                        ListEmptyComponent={() => (
+                            <EmptyState
+                                title="No posts found."
+                                subtitle="No videos found for this search query."
+                            />
+                        )}
+                    />
+                );
+            case 'Achievements':
+                return (
+                    <View className="items-center">
+                        <Text>Achievements content here...</Text>
+                    </View>
+                );
+            default:
+                return null;
         }
-    }
+    };
+
+    // const submit = async () => {
+    //     setIsSubmitting(true)
+
+    //     try {
+    //         router.replace('/profile')
+    //     } catch (error) {
+    //         Alert.alert('Error', error.message)
+    //     } finally {
+    //         setIsSubmitting(false)
+    //     }
+    // }
 
     return (
         <SafeAreaView className="bg-white h-full">
             <FlatList
-                data={posts}
-                keyExtractor={(item) => item.$id}
-                renderItem={({ item }) => <VideoCard video={item} />}
+                data={[]}
+                keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={() => (
                     <>
-                        <View className="w-full justify-center mt-6 mb-12 px-4">
+                        <View className="w-full justify-center mt-6 mb-6 px-4">
                             {/* logout */}
                             <TouchableOpacity
-                                className="w-full items-end mb-10 drop-shadow-md"
+                                className="w-full items-end mb-6 drop-shadow-md"
                                 onPress={logout}
                             >
                                 <Image
@@ -98,47 +138,36 @@ const Profile = () => {
                             </View>
                         </View>
 
-                        <View className="flex flex-row justify-items-start ml-3">
+                        <View className="flex flex-row justify-items-start ml-3 mb-6">
                             <ProfileNavButton
                                 title="Portfolio"
-                                handlePress={submit}
-                                containerStyles="bg-primary w-1/4 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm"
-                                textStyles="text-white"
+                                handlePress={() => setSelectedTab('Portfolio')}
+                                containerStyles={`w-1/4 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm ${selectedTab === 'Portfolio' ? 'bg-primary' : 'bg-white'}`}
+                                textStyles={`${selectedTab === 'Portfolio' ? 'text-white' : 'text-black'}`}
                                 isLoading={isSubmitting}
                             />
 
                             {/* shadow-sm shadow-gray-500 */}
                             <ProfileNavButton
                                 title="Posts"
-                                handlePress={submit}
-                                containerStyles="bg-white w-1/5 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm"
-                                textStyles="text-black"
+                                handlePress={() => setSelectedTab('Posts')}
+                                containerStyles={`w-1/5 h-10 mt-3 mr-3 shadow-gray-500 shadow-sm ${selectedTab === 'Posts' ? 'bg-primary' : 'bg-white'}`}
+                                textStyles={`${selectedTab === 'Posts' ? 'text-white' : 'text-black'}`}
                                 isLoading={isSubmitting}
                             />
 
                             <ProfileNavButton
                                 title="Achievements"
-                                handlePress={submit}
-                                containerStyles="bg-white w-4/12 h-10 mt-3 shadow-gray-500 shadow-sm"
-                                textStyles="text-black"
+                                handlePress={() => setSelectedTab('Achievements')}
+                                containerStyles={`w-4/12 h-10 mt-3 shadow-gray-500 shadow-sm ${selectedTab === 'Achievements' ? 'bg-primary' : 'bg-white'}`}
+                                textStyles={`${selectedTab === 'Achievements' ? 'text-white' : 'text-black'}`}
                                 isLoading={isSubmitting}
-                            />
-                        </View>
-
-                        <View className="items-center">
-                            <GainLossCard
-                                gainloss="-$45,678.90"
-                                percentage="-20"
                             />
                         </View>
                     </>
                 )}
-                ListEmptyComponent={() => (
-                    <EmptyState
-                        title="No posts found."
-                        subtitle="No videos found for this search query."
-                    />
-                )}
+
+				ListFooterComponent={renderContent()}
             />
         </SafeAreaView>
     )
