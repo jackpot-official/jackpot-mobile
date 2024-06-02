@@ -32,17 +32,19 @@ const TabsLayout = () => {
                     tabBarActiveTintColor: '#043725',
                     tabBarInactiveTintColor: '#E29728',
                     tabBarStyle: {
-                        // backgroundColor: '#043725',
                         backgroundColor: '#ffffff',
                         borderTopWidth: 0,
                         borderTopColor: '#043725',
                         height: 86,
-                        paddingTop: 18,
                         shadowColor: '#000',
                         shadowOffset: { width: 0, height: 3 },
                         shadowOpacity: 0.5,
                         shadowRadius: 5,
                         elevation: 5,
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
                     },
                 }}
             >
