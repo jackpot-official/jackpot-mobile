@@ -19,19 +19,20 @@ import EmptyState from '../../components/EmptyState'
 import GainLossCard from '../../components/profile/GainLossCard'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
 import TopHoldings from '../../components/profile/TopHoldings'
+import CommunityPost from '../../components/posts/CommunityPost'
 
 const Profile = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-	const [selectedTab, setSelectedTab] = useState('Portfolio');
-    const { user, setUser, setIsLoggedIn } = useGlobalContext();
-    const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [selectedTab, setSelectedTab] = useState('Portfolio')
+    const { user, setUser, setIsLoggedIn } = useGlobalContext()
+    const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
     const holdings = [
         'AAPL (Apple Inc.)',
         'KO (Coca Cola)',
         'VZ (Verizon)',
         'T (T-Mobile)',
         'U (Unity)',
-    ];
+    ]
 
     const logout = async () => {
         await signOut()
@@ -40,45 +41,48 @@ const Profile = () => {
         router.replace('/sign-in')
     }
 
-	const renderContent = () => {
+    const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
                 return (
                     <View className="items-center">
-                        <GainLossCard
-                            gainloss="-$45,678.90"
-                            percentage="-20"
-                        />
+                        <GainLossCard gainloss="-$45,678.90" percentage="-20" />
 
-                        <TopHoldings
-                            holdings={ holdings }
-                        />
+                        <TopHoldings holdings={holdings} />
                     </View>
-                );
+                )
             case 'Posts':
                 return (
-                    <FlatList
-                        data={posts}
-                        keyExtractor={(item) => item.$id}
-                        renderItem={({ item }) => <VideoCard video={item} />}
-                        ListEmptyComponent={() => (
-                            <EmptyState
-                                title="No posts found."
-                                subtitle="No videos found for this search query."
-                            />
-                        )}
-                    />
-                );
+                    <>
+                        <CommunityPost
+                            user={ user }
+                        />
+
+                        <FlatList
+                            data={posts}
+                            keyExtractor={(item) => item.$id}
+                            renderItem={({ item }) => <VideoCard video={item} />}
+                            ListEmptyComponent={() => (
+                                <EmptyState
+                                    title="No posts found."
+                                    subtitle="No videos found for this search query."
+                                />
+                            )}
+                        />
+                    </>
+                )
             case 'Achievements':
                 return (
                     <View className="items-center">
-                        <Text className="font-hlight text-lg">No achievements collected yet.</Text>
+                        <Text className="font-hlight text-lg">
+                            No achievements collected yet.
+                        </Text>
                     </View>
-                );
+                )
             default:
-                return null;
+                return null
         }
-    };
+    }
 
     return (
         <SafeAreaView className="bg-white h-full">
@@ -100,7 +104,7 @@ const Profile = () => {
                                 />
                             </TouchableOpacity>
 
-							{/* Header */}
+                            {/* Header */}
                             <View className="flex flex-row justify-between items-center">
                                 <View className="flex flex-row items-center">
                                     {/* user pfp */}
@@ -137,8 +141,17 @@ const Profile = () => {
                             </View>
                         </View>
 
-						{/* Line separator */}
-						<View className="border-b border-gray-200 mb-3 shadow-md" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }} />
+                        {/* Line separator */}
+                        <View
+                            className="border-b border-gray-200 mb-3 shadow-md"
+                            style={{
+                                shadowColor: '#000',
+                                shadowOffset: { width: 0, height: 2 },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 3.84,
+                                elevation: 5,
+                            }}
+                        />
 
                         <View className="flex flex-row justify-items-start ml-3 mb-6">
                             <ProfileNavButton
@@ -160,7 +173,9 @@ const Profile = () => {
 
                             <ProfileNavButton
                                 title="Achievements"
-                                handlePress={() => setSelectedTab('Achievements')}
+                                handlePress={() =>
+                                    setSelectedTab('Achievements')
+                                }
                                 containerStyles={`w-4/12 ${selectedTab === 'Achievements' ? 'bg-primary' : 'bg-white'}`}
                                 textStyles={`${selectedTab === 'Achievements' ? 'text-white' : 'text-black'}`}
                                 isLoading={isSubmitting}
@@ -168,8 +183,7 @@ const Profile = () => {
                         </View>
                     </>
                 )}
-
-				ListFooterComponent={ renderContent() }
+                ListFooterComponent={renderContent()}
             />
         </SafeAreaView>
     )

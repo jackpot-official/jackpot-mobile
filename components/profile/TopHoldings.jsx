@@ -11,7 +11,10 @@ const TopHoldings = ({ holdings }) => {
 
                 <View className="mt-3">
                     {holdings.map((holding, index) => (
-                        <Text key={index} className="font-hmedium text-tertiary text-2xl">
+                        <Text
+                            key={index}
+                            className="font-hmedium text-tertiary text-2xl"
+                        >
                             {index + 1}. {holding}
                         </Text>
                     ))}
