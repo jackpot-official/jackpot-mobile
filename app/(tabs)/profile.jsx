@@ -18,12 +18,20 @@ import VideoCard from '../../components/VideoCard'
 import EmptyState from '../../components/EmptyState'
 import GainLossCard from '../../components/profile/GainLossCard'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
+import TopHoldings from '../../components/profile/TopHoldings'
 
 const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 	const [selectedTab, setSelectedTab] = useState('Portfolio');
     const { user, setUser, setIsLoggedIn } = useGlobalContext();
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+    const holdings = [
+        'AAPL (Apple Inc.)',
+        'KO (Coca Cola)',
+        'VZ (Verizon)',
+        'T (T-Mobile)',
+        'U (Unity)',
+    ];
 
     const logout = async () => {
         await signOut()
@@ -40,6 +48,10 @@ const Profile = () => {
                         <GainLossCard
                             gainloss="-$45,678.90"
                             percentage="-20"
+                        />
+
+                        <TopHoldings
+                            holdings={ holdings }
                         />
                     </View>
                 );
@@ -102,8 +114,8 @@ const Profile = () => {
 
                                     {/* username */}
                                     <InfoBox
-                                        title={user?.username}
-                                        containerStyles="mt-5 ml-3"
+                                        title={`@${user?.username}`}
+                                        containerStyles="mt-5 ml-2"
                                     />
                                 </View>
 
