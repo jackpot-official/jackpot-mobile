@@ -27,11 +27,11 @@ const Profile = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
     const holdings = [
-        'AAPL (Apple Inc.)',
-        'KO (Coca Cola)',
-        'VZ (Verizon)',
-        'T (T-Mobile)',
-        'U (Unity)',
+        'AAPL',
+        'KO',
+        'VZ',
+        'T',
+        'U',
     ]
 
     const logout = async () => {
@@ -48,7 +48,11 @@ const Profile = () => {
                     <View className="items-center">
                         <GainLossCard gainloss="-$45,678.90" percentage="-20" />
 
-                        <TopHoldings holdings={holdings} />
+                        <View className="flex flex-row">
+                            <TopHoldings holdings={holdings} title="Stocks" />
+                            <TopHoldings holdings={holdings} title="Movers" />
+                        </View>
+
                     </View>
                 )
             case 'Posts':
