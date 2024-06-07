@@ -1,6 +1,6 @@
 /* Libraries */
-import { View, FlatList, TouchableOpacity, Image, Text, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { View, FlatList, TouchableOpacity, Image, Text, ScrollView, Animated, Dimensions } from 'react-native'
+import React, { useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
@@ -20,12 +20,14 @@ import GainLossCard from '../../components/profile/GainLossCard'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
 import TopHoldings from '../../components/profile/TopHoldings'
 import CommunityPost from '../../components/posts/CommunityPost'
+import Portfolio from '../../components/profileSubpages/Portfolio'
 
 const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [selectedTab, setSelectedTab] = useState('Portfolio')
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
+    const { width: screenWidth } = Dimensions.get('window');
 
     const [topHoldings, setTopHoldings] = useState([
         { symbol: 'TSLA', image: "https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/06/1200/675/TESLA-LOGO.jpg?ve=1&tl=1" },
@@ -58,37 +60,68 @@ const Profile = () => {
         router.replace('/sign-in')
     }
 
+    const scrollX = useRef(new Animated.Value(0)).current;
+    const [contentWidth, setContentWidth] = useState(1);
+
     const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
                 return (
-                    <ScrollView
-                        className="bg-white flex-1"
-                        contentContainerStyle={{ paddingBottom: 50 }}>
+                    <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className="flex-1">
                         <View className="items-center">
                             <GainLossCard gainloss="-$45,678.90" percentage="-20" />
 
-                            <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg">
+                            <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4 mb-4">
                                 <Image
-                                    source={ images.chart }
-                                    className="w-96 h-72 rounded-xl"
-                                    resizeMode="contain"
+                                source={images.chart}
+                                className="w-96 h-72 rounded-xl"
+                                resizeMode="contain"
                                 />
                             </View>
 
-                            <ScrollView
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                className=""
-                            >
-                                <View className="flex flex-row m-4">
-                                    <TopHoldings holdings={topHoldings} title="Holdings" boxStyle="mr-4" />
-                                    <TopHoldings holdings={topGainers} title="Gainers" boxStyle="mr-4" />
-                                    <TopHoldings holdings={topLosers} title="Losers" boxStyle="mr-4" />
+                            <View style={{ position: 'relative', width: '100%' }}>
+                                <ScrollView
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    className="mt-4"
+                                    onContentSizeChange={(w) => setContentWidth(w)}
+                                    onScroll={Animated.event(
+                                        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                                        { useNativeDriver: false }
+                                    )}
+                                    scrollEventThrottle={16}
+                                >
+                                    <View className="flex flex-row mx-4">
+                                        <TopHoldings holdings={topHoldings} title="Holdings" boxStyle="mr-4" />
+                                        <TopHoldings holdings={topGainers} title="Gainers" boxStyle="mr-4" />
+                                        <TopHoldings holdings={topLosers} title="Losers" boxStyle="mr-4" />
+                                    </View>
+                                </ScrollView>
 
+                                {contentWidth > screenWidth && (
+                                <View style={{ height: 8, backgroundColor: '#e0e0e0', borderRadius: 4, marginTop: 8, overflow: 'hidden', width: '90%', alignSelf: 'center' }}>
+                                    <Animated.View
+                                        style={{
+                                            height: 8,
+                                            backgroundColor: '#043725',
+                                            borderRadius: 4,
+                                            width: scrollX.interpolate({
+                                                inputRange: [0, contentWidth - screenWidth],
+                                                outputRange: [screenWidth / contentWidth * screenWidth, screenWidth],
+                                                extrapolate: 'clamp',
+                                            }),
+                                            transform: [{
+                                                translateX: scrollX.interpolate({
+                                                    inputRange: [0, contentWidth - screenWidth],
+                                                    outputRange: [0, screenWidth - screenWidth / contentWidth * screenWidth],
+                                                    extrapolate: 'clamp',
+                                                }),
+                                            }],
+                                        }}
+                                    />
                                 </View>
-                            </ScrollView>
-
+                            )}
+                            </View>
                         </View>
                     </ScrollView>
                 )
