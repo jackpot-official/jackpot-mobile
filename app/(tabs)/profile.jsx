@@ -15,9 +15,9 @@ import { icons } from '../../constants'
 /* Components */
 import InfoBox from '../../components/InfoBox'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
-import UserPortfolio from '../../components/profilepages/UserPortfolio'
-import UserAchievements from '../../components/profilepages/UserAchievements'
-import UserPosts from '../../components/profilepages/UserPosts'
+import Portfolio from '../../components/profilepages/Portfolio'
+import Achievements from '../../components/profilepages/Achievements'
+import Posts from '../../components/profilepages/Posts'
 import TopNavigation from '../../components/profile/TopNavigation'
 
 const Profile = () => {
@@ -60,11 +60,11 @@ const Profile = () => {
     const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
-                return <UserPortfolio topHoldings={topHoldings} topGainers={topGainers} topLosers={topLosers} />;
+                return <Portfolio topHoldings={topHoldings} topGainers={topGainers} topLosers={topLosers} />;
             case 'Posts':
-                return <UserPosts user={user} posts={posts} />;
+                return <Posts user={user} posts={posts} />;
             case 'Achievements':
-                return <UserAchievements />;
+                return <Achievements />;
             default:
                 return null
         }

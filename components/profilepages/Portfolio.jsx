@@ -13,7 +13,7 @@ const UserPortfolio = ({ topHoldings, topGainers, topLosers }) => {
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className="flex-1">
       <View className="items-center">
-        <GainLossCard gainloss="-$45,678.90" percentage="-20" />
+        <GainLossCard gainloss="$45,678.90" percentage="-20" />
 
         <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4">
           <Image
