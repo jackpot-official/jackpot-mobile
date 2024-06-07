@@ -14,11 +14,10 @@ import { icons } from '../../constants'
 
 /* Components */
 import InfoBox from '../../components/InfoBox'
-import VideoCard from '../../components/VideoCard'
-import EmptyState from '../../components/EmptyState'
 import ProfileNavButton from '../../components/profile/ProfileNavButton'
-import CommunityPost from '../../components/posts/CommunityPost'
-import Portfolio from '../../components/profilepages/Portfolio'
+import UserPortfolio from '../../components/profilepages/UserPortfolio'
+import UserAchievements from '../../components/profilepages/UserAchievements'
+import UserPosts from '../../components/profilepages/UserPosts'
 
 const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,35 +59,11 @@ const Profile = () => {
     const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
-                return <Portfolio topHoldings={topHoldings} topGainers={topGainers} topLosers={topLosers} />;
+                return <UserPortfolio topHoldings={topHoldings} topGainers={topGainers} topLosers={topLosers} />;
             case 'Posts':
-                return (
-                    <>
-                        <CommunityPost
-                            user={ user }
-                        />
-
-                        <FlatList
-                            data={posts}
-                            keyExtractor={(item) => item.$id}
-                            renderItem={({ item }) => <VideoCard video={item} />}
-                            ListEmptyComponent={() => (
-                                <EmptyState
-                                    title="No posts found."
-                                    subtitle="No videos found for this search query."
-                                />
-                            )}
-                        />
-                    </>
-                )
+                return <UserPosts user={user} posts={posts} />;
             case 'Achievements':
-                return (
-                    <View className="items-center">
-                        <Text className="font-hlight text-lg">
-                            No achievements collected yet.
-                        </Text>
-                    </View>
-                )
+                return <UserAchievements />;
             default:
                 return null
         }

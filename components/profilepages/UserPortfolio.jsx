@@ -6,7 +6,7 @@ import { images } from '../../constants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
+const UserPortfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
 
@@ -71,4 +71,4 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   );
 };
 
-export default Portfolio;
+export default UserPortfolio;
