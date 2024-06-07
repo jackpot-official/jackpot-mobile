@@ -15,7 +15,7 @@ const UserPortfolio = ({ topHoldings, topGainers, topLosers }) => {
       <View className="items-center">
         <GainLossCard gainloss="-$45,678.90" percentage="-20" />
 
-        <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4 mb-4">
+        <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4">
           <Image
             source={images.chart}
             className="w-96 h-72 rounded-xl"

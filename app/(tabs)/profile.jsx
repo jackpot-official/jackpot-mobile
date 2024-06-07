@@ -18,6 +18,7 @@ import ProfileNavButton from '../../components/profile/ProfileNavButton'
 import UserPortfolio from '../../components/profilepages/UserPortfolio'
 import UserAchievements from '../../components/profilepages/UserAchievements'
 import UserPosts from '../../components/profilepages/UserPosts'
+import TopNavigation from '../../components/profile/TopNavigation'
 
 const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -76,19 +77,8 @@ const Profile = () => {
                 keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={() => (
                     <>
+                        <TopNavigation logout={logout} />
                         <View className="w-full justify-center mt-6 mb-3 px-4">
-                            {/* logout */}
-                            <TouchableOpacity
-                                className="w-full items-end mb-6 drop-shadow-md"
-                                onPress={logout}
-                            >
-                                <Image
-                                    source={icons.logout}
-                                    resizeMode="contain"
-                                    className="w-6 h-6"
-                                />
-                            </TouchableOpacity>
-
                             {/* Header */}
                             <View className="flex flex-row justify-between items-center">
                                 <View className="flex flex-row items-center">
@@ -114,13 +104,20 @@ const Profile = () => {
                                     <InfoBox
                                         title={posts?.length || 0}
                                         subtitle="Posts"
-                                        containerStyles="mr-10"
+                                        containerStyles="mr-8"
                                     />
 
                                     {/* number of followers */}
                                     <InfoBox
                                         title="1.3k"
                                         subtitle="Followers"
+                                        containerStyles="mr-8"
+                                    />
+
+                                    {/* number following */}
+                                    <InfoBox
+                                        title="1.1k"
+                                        subtitle="Following"
                                     />
                                 </View>
                             </View>

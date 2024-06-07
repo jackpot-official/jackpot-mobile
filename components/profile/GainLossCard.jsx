@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 
 const GainLossCard = ({ gainloss, percentage }) => {
     return (
-        <View className="bg-white w-2/3 mb-5 rounded-xl shadow-md shadow-black-300 p-5 flex flex-col space-y-3 border border-gray-100">
+        <View className="bg-white w-2/3 rounded-xl shadow-md shadow-black-300 p-5 flex flex-col space-y-3 border border-gray-100">
             <Text className="font-hmedium text-black text-2xl">
                 Today's G/L
             </Text>
