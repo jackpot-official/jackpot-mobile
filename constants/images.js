@@ -8,6 +8,7 @@ import text_black from '../assets/images/text_black.png'
 import text_white from '../assets/images/text_white.png'
 import logo from '../assets/images/logo.png'
 import logo_small_outline from '../assets/images/logo_small_outline.png'
+import chart from '../assets/images/chart.png'
 
 export default {
     profile,
@@ -20,4 +21,5 @@ export default {
     text_white,
     logo,
     logo_small_outline,
+    chart,
 }
