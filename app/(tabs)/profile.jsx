@@ -1,5 +1,5 @@
 /* Libraries */
-import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native'
+import { View, FlatList, TouchableOpacity, Image, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -45,15 +45,25 @@ const Profile = () => {
         switch (selectedTab) {
             case 'Portfolio':
                 return (
-                    <View className="items-center">
-                        <GainLossCard gainloss="-$45,678.90" percentage="-20" />
+                    <ScrollView className="flex-1">
+                        <View className="items-center">
+                            <GainLossCard gainloss="-$45,678.90" percentage="-20" />
 
-                        <View className="flex flex-row">
-                            <TopHoldings holdings={holdings} title="Stocks" />
-                            <TopHoldings holdings={holdings} title="Movers" />
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                // customize horizontal scroll indicator
+                                className=""
+                            >
+                                <View className="flex flex-row">
+                                    <TopHoldings holdings={holdings} title="Holdings" boxStyle="ml-3 mr-3" />
+                                    <TopHoldings holdings={holdings} title="Gainers" boxStyle="mr-3" />
+                                    <TopHoldings holdings={holdings} title="Losers" boxStyle="mr-3" />
+                                </View>
+                            </ScrollView>
+
                         </View>
-
-                    </View>
+                    </ScrollView>
                 )
             case 'Posts':
                 return (
