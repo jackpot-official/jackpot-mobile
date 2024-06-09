@@ -40,7 +40,7 @@ const SignIn = () => {
     return (
         <SafeAreaView className="bg-primary h-full">
             <ScrollView>
-                <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+                <View className="w-full justify-center flex-1 px-4 my-6">
                     <Image
                         source={images.dollaz}
                         resizeMode="contain"
@@ -79,6 +79,7 @@ const SignIn = () => {
                         title="Sign In"
                         handlePress={submit}
                         containerStyles="mt-7"
+                        textStyles=""
                         isLoading={isSubmitting}
                     />
 

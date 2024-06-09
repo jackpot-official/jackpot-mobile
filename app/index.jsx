@@ -13,31 +13,33 @@ export default function App() {
     if (!isLoading && isLoggedIn) return <Redirect href="/home" />
 
     return (
-        <SafeAreaView className="bg-primary h-full">
-            <ScrollView contentContainerStyle={{ height: '100%' }}>
-                <View className="w-full justify-center items-center min-h-[85vh] px-4">
+        <SafeAreaView className="bg-white h-full flex-1">
+            <ScrollView contentContainerStyle={{ flexGrow: 1, height: '100%' }}>
+                <View className="w-full justify-center items-center min-h-[85vh]">
                     <Image
-                        source={images.text_white}
+                        source={images.text_black}
                         className="w-[390px] h-[252px]"
                         resizeMode="contain"
                     />
 
-                    <View className="relative mt-7">
+                    <View className="relative">
                         <Image
                             source={images.zigzag}
-                            className="w-[496px] h-[110px] absolute -bottom-7 -right-70.5"
+                            className="w-[496px] h-[110px]"
                             resizeMode="contain"
                         />
 
-                        <Text className="text-3xl text-white font-bold text-center font-hmedium">
-                            Trade. Social. Earn.
+                        <Text className="text-3xl text-black font-bold text-center font-hbold mt-1">
+                            Trade. Social.
+                            <Text className="text-tertiary font-pbold"> Earn.</Text>
                         </Text>
                     </View>
 
                     <CustomButton
                         title="Continue with email"
                         handlePress={() => router.push('/sign-in')}
-                        containerStyles="w-full mt-12"
+                        containerStyles="rounded-full w-11/12 mt-12 bg-primary shadow-black-300 shadow-xl px-4"
+                        textStyles="text-white text-bold text-lg font-hbold"
                     />
                 </View>
             </ScrollView>
