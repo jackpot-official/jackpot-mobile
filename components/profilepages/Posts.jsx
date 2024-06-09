@@ -4,7 +4,7 @@ import CommunityPost from '../../components/posts/CommunityPost';
 import VideoCard from '../../components/VideoCard';
 import EmptyState from '../../components/EmptyState';
 
-const UserPosts = ({ user, posts }) => {
+const Posts = ({ user, posts }) => {
   return (
     <>
       <CommunityPost user={user} />
@@ -24,4 +24,4 @@ const UserPosts = ({ user, posts }) => {
   );
 };
 
-export default UserPosts;
+export default Posts;

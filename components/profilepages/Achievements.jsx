@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const UserAchievements = () => {
+const Achievements = () => {
   return (
     <View className="items-center">
       <Text className="font-hlight text-lg">
@@ -11,4 +11,4 @@ const UserAchievements = () => {
   );
 };
 
-export default UserAchievements;
+export default Achievements;

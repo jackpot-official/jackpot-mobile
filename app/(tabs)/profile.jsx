@@ -31,7 +31,7 @@ const Profile = () => {
         { symbol: 'LOWE', image: "https://mobileimages.lowes.com/marketingimages/d0c68e7e-54a6-4d2d-a53d-385f8a156529/lowes-dp18-328966-og.png" },
         { symbol: 'T', image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/T-Mobile_logo_2022.svg/2048px-T-Mobile_logo_2022.svg.png" },
         { symbol: 'AAL', image: "https://external-preview.redd.it/noGVmHkGp3tV46SVyR3TSndGMlFp-2Vf3uLBm9UUZlY.png?auto=webp&s=fd18075339f5cf34ee0a7512ede6476c619a21cb" },
-        { symbol: 'TSM', image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/TSM_Logo.svg/800px-TSM_Logo.svg.png" },
+        { symbol: 'TSM', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRqo5wp-OXM1witvjvBX9my2Dkuc287jm1sg&s" },
     ]);
 
     const [topGainers, setTopGainers] = useState([
