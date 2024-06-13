@@ -1,85 +1,98 @@
 import React, { useRef, useState } from 'react';
-import { View, Image, ScrollView, Animated, Dimensions, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, ScrollView, Animated, Dimensions, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import GainLossCard from '../../components/profile/GainLossCard';
 import TopHoldings from '../../components/profile/TopHoldings';
 import { images } from '../../constants';
-import PlaidLink, { create, open } from 'react-native-plaid-link-sdk';
-// import PlaidLink from '../plaid/PlaidLink';
+import {
+  LinkExit,
+  LinkEvent,
+  LinkLogLevel,
+  LinkSuccess,
+  dismissLink,
+  LinkOpenProps,
+  usePlaidEmitter,
+  LinkIOSPresentationStyle,
+  LinkTokenConfiguration,
+  EmbeddedLinkView,
+} from 'react-native-plaid-link-sdk';
+
+import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
 
 const { width: screenWidth } = Dimensions.get('window');
+
+function isValidString(str) {
+  if (str && str.trim() !== '') {
+    return true;
+  }
+  return false;
+}
+
+function createLinkTokenConfiguration( token ) {
+  console.log(`token: ${token}`);
+  return {
+    token: token
+  };
+}
+
+function createLinkOpenProps() {
+  return {
+    onSuccess: (success) => {
+      console.log('Success: ', success);
+      success.metadata.accounts.forEach(it => console.log('accounts', it));
+    },
+    onExit: (linkExit) => {
+      console.log('Exit: ', linkExit);
+      dismissLink();
+    },
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+    logLevel: LinkLogLevel.ERROR,
+  };
+}
 
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
-  // const [disabled, setDisabled] = useState(true);
-  // const [linkToken, setLinkToken] = useState("link-sandbox-cacdf4c4-bf3c-4c1d-84ef-6a92166434da");
+  const [text, onChangeText] = React.useState('');
+  const [disabled, setDisabled] = useState(true);
 
-  // const onSuccess = (linkSuccess) => {
-  //   fetch('https://yourserver.com/exchange_public_token', {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.Stringify({
-  //       publicToken: linkSuccess.publicToken,
-  //       accounts: linkSuccess.metadata.accounts,
-  //       institution: linkSuccess.metadata.institution,
-  //       linkSessionId: linkSuccess.metadata.linkSessionId,
-  //     }),
-  //   });
-  // };
-
-  // const onExit = (linkExit) => {
-  //   supportHandler.report({
-  //     error: linkExit.error,
-  //     institution: linkExit.metadata.institution,
-  //     linkSessionId: linkExit.metadata.linkSessionId,
-  //     requestId: linkExit.metadata.requestId,
-  //     status: linkExit.metadata.status,
-  //   });
-  // };
-
-  // const handleCreateLink = () => {
-  //   if (linkToken) {
-  //     create({ token: linkToken });
-  //     setDisabled(false);
-  //     // console.log("create -- success");
-  //   }
-  // };
-
-  // const handleOpenLink = () => {
-  //   const openProps = {
-  //     onSuccess: (success) => {
-  //       console.log(success);
-  //       console.log("success");
-  //     },
-  //     onExit: (linkExit) => {
-  //       console.log(linkExit);
-  //       console.log("exit");
-  //     },
-  //   };
-  //   open(openProps);
-  //   // console.log("open -- success");
-  //   setDisabled(true);
-  // };
+  usePlaidEmitter((event) => {
+    console.log(event);
+  });
 
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className="flex-1">
+    <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
       <View className="items-center">
-        {/* <TouchableOpacity
+
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeText}
+          value={text}
+          placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+          placeholderTextColor={'#D3D3D3'}
+        />
+
+        <TouchableOpacity
           style={styles.button}
-          onPress={handleCreateLink}
-        >
-          <Text style={styles.buttonText}>Create Link</Text>
+          onPress={() => {
+            if (isValidString(text)) {
+              const tokenConfiguration = createLinkTokenConfiguration(text);
+              create(tokenConfiguration);
+              setDisabled(false);
+            }
+          }}>
+          <Text style={styles.button}>Create Link</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           disabled={disabled}
           style={disabled ? styles.disabledButton : styles.button}
-          onPress={handleOpenLink}
-        >
-          <Text style={styles.buttonText}>Open Link</Text>
-        </TouchableOpacity> */}
+          onPress={() => {
+            const openProps = createLinkOpenProps();
+            open(openProps);
+            setDisabled(true);
+          }}>
+          <Text style={styles.button}>Open Link</Text>
+        </TouchableOpacity>
 
         <GainLossCard gainloss="$45,678.90" percentage="-20" />
 
@@ -141,22 +154,47 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginVertical: 10,
+    elevation: 8,
+    backgroundColor: '#2196F3',
+    width: '90%',
+    margin: 4,
+    paddingVertical: 4,
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'white',
+    borderRadius: 4,
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    overflow: 'hidden',
   },
   disabledButton: {
-    backgroundColor: '#d3d3d3',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: '#fff',
+    elevation: 8,
+    backgroundColor: '#2196F3',
+    width: '90%',
+    margin: 4,
+    paddingVertical: 4,
     fontSize: 16,
+    textAlign: 'center',
+    color: 'white',
+    borderRadius: 4,
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    overflow: 'hidden',
+    opacity: 0.5,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    width: '90%',
+    alignSelf: 'center',
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#000000',
+  },
+  embedded: {
+    width: '95%',
+    alignSelf: 'center',
+    height: 360,
   },
 });
 
