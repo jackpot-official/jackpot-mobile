@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, Component } from 'react';
 import { View, Image, ScrollView, Animated, Dimensions, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import GainLossCard from '../../components/profile/GainLossCard';
 import TopHoldings from '../../components/profile/TopHoldings';
