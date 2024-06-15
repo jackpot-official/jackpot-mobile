@@ -14,7 +14,7 @@ import {
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
   EmbeddedLinkView,
-} from 'react-native-plaid-laink-sdk';
+} from 'react-native-plaid-link-sdk';
 
 import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
 
