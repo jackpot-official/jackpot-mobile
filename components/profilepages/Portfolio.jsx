@@ -49,7 +49,7 @@ function createLinkOpenProps() {
   };
 }
 
-const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
+const Portfolio = ({ topHoldings, topGainers, topLosers, linkToken }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
   const [text, onChangeText] = React.useState('');
@@ -63,19 +63,19 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
       <View className="items-center">
 
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           onChangeText={onChangeText}
           value={text}
           placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
           placeholderTextColor={'#D3D3D3'}
-        />
+        /> */}
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            if (isValidString(text)) {
-              const tokenConfiguration = createLinkTokenConfiguration(text);
+            if (isValidString(linkToken)) {
+              const tokenConfiguration = createLinkTokenConfiguration(linkToken);
               create(tokenConfiguration);
               setDisabled(false);
             }

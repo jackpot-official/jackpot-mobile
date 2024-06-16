@@ -1,8 +1,9 @@
 /* Libraries */
 import { View, FlatList, TouchableOpacity, Image, Text, ScrollView, Animated, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
+import axios from 'axios';
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
@@ -25,6 +26,7 @@ const Profile = () => {
     const [selectedTab, setSelectedTab] = useState('Portfolio')
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
+    const [linkToken, setLinkToken] = useState('');
 
     const [topHoldings, setTopHoldings] = useState([
         { symbol: 'TSLA', image: "https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/06/1200/675/TESLA-LOGO.jpg?ve=1&tl=1" },
@@ -50,6 +52,19 @@ const Profile = () => {
         { symbol: 'BABA', image: "https://companiesmarketcap.com/img/company-logos/256/BABA.png" },
     ]);
 
+    useEffect(() => {
+        const fetchLinkToken = async () => {
+            try {
+                const response = await axios.post('http://localhost:3000/create_link_token');
+                setLinkToken(response.data.link_token);
+            } catch (error) {
+                console.error('Error fetching link token:', error);
+            }
+        };
+
+        fetchLinkToken();
+    }, []);
+
     const logout = async () => {
         await signOut()
         setUser(null)
@@ -60,7 +75,12 @@ const Profile = () => {
     const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
-                return <Portfolio topHoldings={topHoldings} topGainers={topGainers} topLosers={topLosers} />;
+                return <Portfolio
+                    topHoldings={topHoldings}
+                    topGainers={topGainers}
+                    topLosers={topLosers}
+                    linkToken={linkToken}
+                />;
             case 'Posts':
                 return <Posts user={user} posts={posts} />;
             case 'Achievements':
