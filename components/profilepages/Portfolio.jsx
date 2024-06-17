@@ -1,5 +1,5 @@
-import React, { useRef, useState, Component } from 'react';
-import { View, Image, ScrollView, Animated, Dimensions, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import React, { useRef, useState, Component, useEffect } from 'react';
+import { View, Image, ScrollView, Animated, Dimensions, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import GainLossCard from '../../components/profile/GainLossCard';
 import TopHoldings from '../../components/profile/TopHoldings';
 import { images } from '../../constants';
@@ -17,6 +17,7 @@ import {
 } from 'react-native-plaid-link-sdk';
 
 import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
+import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -49,15 +50,78 @@ function createLinkOpenProps() {
   };
 }
 
-const Portfolio = ({ topHoldings, topGainers, topLosers, linkToken }) => {
+const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
   const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = useState(true);
+  const [holdings, setHoldings] = useState(null);
+
+  const [linkToken, setLinkToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+
+  useEffect(() => {
+    const fetchLinkToken = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/create_link_token');
+            setLinkToken(response.data.link_token);
+        } catch (error) {
+            console.error('Error fetching link token:', error);
+        }
+    };
+
+    fetchLinkToken();
+  }, []);
+
+  const createAccessToken = async (publicToken) => {
+    try {
+      const response = await axios.post('http://localhost:3000/set_access_token', {
+        public_token: publicToken
+      });
+      setAccessToken(response.data.access_token);
+      Alert.alert('Success', 'Access token set successfully');
+    } catch (error) {
+      console.error('Error setting access token', error);
+      Alert.alert('Error', 'Failed to set access token');
+    }
+  };
+
+  const fetchHoldings = async () => {
+    if (!accessToken) {
+      Alert.alert('Error', 'Access token is required');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3000/investments/holdings/get', {
+        access_token: accessToken
+      });
+      console.log(response.data);
+      Alert.alert('Success', 'Holdings fetched successfully');
+    } catch (error) {
+      console.error('Error fetching holdings', error);
+      Alert.alert('Error', 'Failed to fetch holdings');
+    }
+  };
 
   usePlaidEmitter((event) => {
-    console.log(event);
+    if (event.eventName === 'SUCCESS') {
+      setAccessToken(event.metadata.publicToken);
+    }
   });
+
+  // const fetchHoldings = async () => {
+  //   try {
+  //     const response = await axios.post('http://localhost:3000/investments/holdings/get', {
+  //       access_token: 'your_access_token'
+  //     });
+  //     setHoldings(response.data);
+  //     Alert.alert('Success', 'Holdings fetched successfully');
+  //   } catch (error) {
+  //     console.error('Error fetching holdings', error);
+  //     Alert.alert('Error', 'Failed to fetch holdings');
+  //   }
+  // };
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
@@ -92,6 +156,12 @@ const Portfolio = ({ topHoldings, topGainers, topLosers, linkToken }) => {
             setDisabled(true);
           }}>
           <Text style={styles.button}>Open Link</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={fetchHoldings}>
+          <Text style={styles.button}>Fetch Holdings</Text>
         </TouchableOpacity>
 
         <GainLossCard gainloss="$45,678.90" percentage="-20" />
