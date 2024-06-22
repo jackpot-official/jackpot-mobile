@@ -61,6 +61,12 @@ const Home = () => {
 
                         <SearchInput />
 
+                        {/* ADD CONTENT IN HERE  */}
+
+                        
+
+                        {/* ADD CONTENT IN HERE */}
+
                         <View className="w-full flex-1 pt-5 pb-8">
                             <Text className="text-lightgreen text-lg font-hregular">
                                 Latest Posts
