@@ -2,6 +2,7 @@ import { View, Text, Image } from 'react-native'
 import React from 'react'
 import InfoBox from '../InfoBox'
 
+// add like_count, comment_count, comments[] as parameters
 const CommunityPost = ( { user, title, body, datetime } ) => {
     return (
         <View className="mb-6">
@@ -37,6 +38,10 @@ const CommunityPost = ( { user, title, body, datetime } ) => {
             <Text className="font-hregular text-gray-400 text-sm ml-16">
                 { datetime }
             </Text>
+
+            {/* Add like and comment clickable icons */}
+            {/* like button - implement logic where like_count increases by 1 */}
+            {/* comment button that allows seeing content of comments[]. in this page, should be able to create a comment */}
 
         </View>
     )
