@@ -24,7 +24,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
-  const [disabled, setDisabled] = useState(true);
   const [holdings, setHoldings] = useState(null);
 
   const [linkToken, setLinkToken] = useState(null);
@@ -99,33 +98,30 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
       <View className="items-center">
-      <View className="flex-row justify-between	mb-5 w-full	">
+      <View className="flex-row justify-between w-96 mb-5">
         <TouchableOpacity
-          style={styles.button}
+          className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
           onPress={() => {
             if (linkToken) {
               create({ token: linkToken });
-              setDisabled(false);
             }
           }}>
-          <Text style={styles.button}>Create Link</Text>
+          <Text className="text-white text-lg uppercase text-center">Create Link</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          disabled={disabled}
-          style={disabled ? styles.disabledButton : styles.button}
+          className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
           onPress={() => {
             const openProps = createLinkOpenProps();
             open(openProps);
-            setDisabled(true);
           }}>
-          <Text style={styles.button}>Open Link</Text>
+          <Text className="text-white text-lg uppercase text-center">Open Link</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.button}
+          className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
           onPress={fetchHoldings}>
-          <Text style={styles.button}>Fetch Holdings</Text>
+          <Text className="text-white text-lg uppercase text-center">Fetch Holdings</Text>
         </TouchableOpacity>
         </View>
 
@@ -189,35 +185,5 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    elevation: 8,
-    backgroundColor: '#2196F3',
-    // margin: 4,
-    paddingVertical: 4,
-    fontSize: 16,
-    textAlign: 'center',
-    color: 'white',
-    borderRadius: 4,
-    alignSelf: 'center',
-    textTransform: 'uppercase',
-    overflow: 'hidden',
-  },
-  disabledButton: {
-    elevation: 8,
-    backgroundColor: '#2196F3',
-    // margin: 4,
-    paddingVertical: 4,
-    fontSize: 16,
-    textAlign: 'center',
-    color: 'white',
-    borderRadius: 4,
-    alignSelf: 'center',
-    textTransform: 'uppercase',
-    overflow: 'hidden',
-    opacity: 0.5,
-  },
-});
 
 export default Portfolio;
