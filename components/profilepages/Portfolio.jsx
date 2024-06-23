@@ -21,44 +21,13 @@ import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-// function isValidString(str) {
-//   if (str && str.trim() !== '') {
-//     return true;
-//   }
-//   return false;
-// }
-
-// function createLinkTokenConfiguration( token ) {
-//   console.log(`token: ${token}`);
-//   return {
-//     token: token
-//   };
-// }
-
-// function createLinkOpenProps() {
-//   return {
-//     onSuccess: (success) => {
-//       console.log('Success: ', success);
-//       success.metadata.accounts.forEach(it => console.log('accounts', it));
-//     },
-//     onExit: (linkExit) => {
-//       console.log('Exit: ', linkExit);
-//       dismissLink();
-//     },
-//     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
-//     logLevel: LinkLogLevel.ERROR,
-//   };
-// }
-
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
-  // const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = useState(true);
   const [holdings, setHoldings] = useState(null);
 
   const [linkToken, setLinkToken] = useState(null);
-  const [publicToken, setPublicToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
@@ -75,52 +44,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     fetchLinkToken();
   }, []);
 
-  const createAccessToken = async (publicToken) => {
-    try {
-      const response = await axios.post('http://localhost:3000/set_access_token', {
-        public_token: publicToken
-      });
-      setAccessToken(response.data.access_token);
-      Alert.alert('Success', 'Access token set successfully');
-    } catch (error) {
-      console.error('Error setting access token', error);
-      Alert.alert('Error', 'Failed to set access token');
-    }
-  };
-
-  const fetchHoldings = async () => {
-    if (!accessToken) {
-      Alert.alert('Error', 'Access token is required');
-      return;
-    }
-
-    try {
-      const response = await axios.post('http://localhost:3000/investments/holdings/get', {
-        access_token: accessToken
-      });
-      console.log(response.data);
-      setHoldings(response.data);
-      Alert.alert('Success', 'Holdings fetched successfully');
-    } catch (error) {
-      console.error('Error fetching holdings', error);
-      Alert.alert('Error', 'Failed to fetch holdings');
-    }
-  };
-
-  // const createLinkOpenProps = () => {
-  //   return {
-  //     onSuccess: (success) => {
-  //       console.log('Success: ', success);
-  //       createAccessToken(success.public_token);
-  //     },
-  //     onExit: (linkExit) => {
-  //       console.log('Exit: ', linkExit);
-  //       dismissLink();
-  //     },
-  //     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
-  //     logLevel: LinkLogLevel.ERROR,
-  //   };
-  // };
   const createLinkOpenProps = () => {
     return {
       onSuccess: async (success) => {
@@ -145,48 +68,35 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     };
   };
 
+  const fetchHoldings = async () => {
+    if (!accessToken) {
+      Alert.alert('Error', 'Access token is required');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3000/investments/holdings/get', {
+        access_token: accessToken
+      });
+      console.log(response.data);
+      setHoldings(response.data);
+      Alert.alert('Success', 'Holdings fetched successfully');
+    } catch (error) {
+      console.error('Error fetching holdings', error);
+      Alert.alert('Error', 'Failed to fetch holdings');
+    }
+  };
+
   usePlaidEmitter((event) => {
     if (event.eventName === 'SUCCESS') {
       setAccessToken(event.metadata.publicToken);
     }
   });
 
-  // const fetchHoldings = async () => {
-  //   try {
-  //     const response = await axios.post('http://localhost:3000/investments/holdings/get', {
-  //       access_token: 'your_access_token'
-  //     });
-  //     setHoldings(response.data);
-  //     Alert.alert('Success', 'Holdings fetched successfully');
-  //   } catch (error) {
-  //     console.error('Error fetching holdings', error);
-  //     Alert.alert('Error', 'Failed to fetch holdings');
-  //   }
-  // };
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
       <View className="items-center">
-
-        {/* <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-          placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-          placeholderTextColor={'#D3D3D3'}
-        /> */}
-
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            if (isValidString(linkToken)) {
-              const tokenConfiguration = createLinkTokenConfiguration(linkToken);
-              create(tokenConfiguration);
-              setDisabled(false);
-            }
-          }}>
-          <Text style={styles.button}>Create Link</Text>
-        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.button}
@@ -209,27 +119,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
           }}>
           <Text style={styles.button}>Open Link</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          disabled={disabled}
-          style={disabled ? styles.disabledButton : styles.button}
-          onPress={() => {
-            open({
-              onSuccess: (success) => {
-                console.log('Success: ', success);
-                setPublicToken(success.public_token);
-              },
-              onExit: (linkExit) => {
-                console.log('Exit: ', linkExit);
-                dismissLink();
-              },
-              iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
-              logLevel: LinkLogLevel.ERROR,
-            });
-            setDisabled(true);
-          }}>
-          <Text style={styles.button}>Open Link</Text>
-        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.button}

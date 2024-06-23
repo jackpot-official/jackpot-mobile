@@ -59,18 +59,13 @@ def create_link_token():
         return jsonify({"error": str(e)}), 400
 
 
-# Exchange token flow - exchange a Link public_token for
-# an API access_token
-# https://plaid.com/docs/#exchange-token-flow
-
 @app.route('/api/set_access_token', methods=['POST'])
 def get_access_token():
     global access_token
     global item_id
     data = request.json
     public_token = data.get('public_token')
-    # public_token = request.form['public_token']
-    print(public_token)
+
     try:
         exchange_request = ItemPublicTokenExchangeRequest(
             public_token=public_token)
@@ -81,14 +76,6 @@ def get_access_token():
         return jsonify(exchange_response.to_dict())
     except plaid.ApiException as e:
         return json.loads(e.body)
-    # public_token = request.json['public_token']
-    # try:
-    #     exchange_request = ItemPublicTokenExchangeRequest(
-    #         public_token=public_token)
-    #     exchange_response = client.item_public_token_exchange(exchange_request)
-    #     return jsonify(exchange_response.to_dict())
-    # except ApiException as e:
-    #     return jsonify({"error": str(e)}), 400
 
 
 @app.route('/investments/holdings/get', methods=['POST'])
@@ -99,8 +86,10 @@ def get_holdings():
     try:
         holdings_request = InvestmentsHoldingsGetRequest(access_token=access_token)
         holdings_response = client.investments_holdings_get(holdings_request)
-        holdings = holdings_response['holdings']
-        securities = holdings_response['securities']
+        
+        holdings = [holding.to_dict() for holding in holdings_response['holdings']]
+        securities = [security.to_dict() for security in holdings_response['securities']]
+        
         
         return jsonify({
             'holdings': holdings,
