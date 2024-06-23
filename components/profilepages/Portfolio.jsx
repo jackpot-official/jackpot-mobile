@@ -21,49 +21,51 @@ import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-function isValidString(str) {
-  if (str && str.trim() !== '') {
-    return true;
-  }
-  return false;
-}
+// function isValidString(str) {
+//   if (str && str.trim() !== '') {
+//     return true;
+//   }
+//   return false;
+// }
 
-function createLinkTokenConfiguration( token ) {
-  console.log(`token: ${token}`);
-  return {
-    token: token
-  };
-}
+// function createLinkTokenConfiguration( token ) {
+//   console.log(`token: ${token}`);
+//   return {
+//     token: token
+//   };
+// }
 
-function createLinkOpenProps() {
-  return {
-    onSuccess: (success) => {
-      console.log('Success: ', success);
-      success.metadata.accounts.forEach(it => console.log('accounts', it));
-    },
-    onExit: (linkExit) => {
-      console.log('Exit: ', linkExit);
-      dismissLink();
-    },
-    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
-    logLevel: LinkLogLevel.ERROR,
-  };
-}
+// function createLinkOpenProps() {
+//   return {
+//     onSuccess: (success) => {
+//       console.log('Success: ', success);
+//       success.metadata.accounts.forEach(it => console.log('accounts', it));
+//     },
+//     onExit: (linkExit) => {
+//       console.log('Exit: ', linkExit);
+//       dismissLink();
+//     },
+//     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+//     logLevel: LinkLogLevel.ERROR,
+//   };
+// }
 
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [contentWidth, setContentWidth] = useState(1);
-  const [text, onChangeText] = React.useState('');
+  // const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = useState(true);
   const [holdings, setHoldings] = useState(null);
 
   const [linkToken, setLinkToken] = useState(null);
+  const [publicToken, setPublicToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
     const fetchLinkToken = async () => {
         try {
             const response = await axios.post('http://localhost:3000/create_link_token');
+            console.log(response);
             setLinkToken(response.data.link_token);
         } catch (error) {
             console.error('Error fetching link token:', error);
@@ -97,11 +99,50 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
         access_token: accessToken
       });
       console.log(response.data);
+      setHoldings(response.data);
       Alert.alert('Success', 'Holdings fetched successfully');
     } catch (error) {
       console.error('Error fetching holdings', error);
       Alert.alert('Error', 'Failed to fetch holdings');
     }
+  };
+
+  // const createLinkOpenProps = () => {
+  //   return {
+  //     onSuccess: (success) => {
+  //       console.log('Success: ', success);
+  //       createAccessToken(success.public_token);
+  //     },
+  //     onExit: (linkExit) => {
+  //       console.log('Exit: ', linkExit);
+  //       dismissLink();
+  //     },
+  //     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+  //     logLevel: LinkLogLevel.ERROR,
+  //   };
+  // };
+  const createLinkOpenProps = () => {
+    return {
+      onSuccess: async (success) => {
+        console.log('Success: ', success);
+        try {
+          const response = await axios.post('http://localhost:3000/api/set_access_token', {
+            public_token: success.publicToken,
+          });
+          setAccessToken(response.data.access_token);
+          Alert.alert('Success', 'Access token set successfully');
+        } catch (error) {
+          console.error('Error setting access token', error);
+          Alert.alert('Error', 'Failed to set access token');
+        }
+      },
+      onExit: (linkExit) => {
+        console.log('Exit: ', linkExit);
+        dismissLink();
+      },
+      iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+      logLevel: LinkLogLevel.ERROR,
+    };
   };
 
   usePlaidEmitter((event) => {
@@ -135,12 +176,23 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
           placeholderTextColor={'#D3D3D3'}
         /> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => {
             if (isValidString(linkToken)) {
               const tokenConfiguration = createLinkTokenConfiguration(linkToken);
               create(tokenConfiguration);
+              setDisabled(false);
+            }
+          }}>
+          <Text style={styles.button}>Create Link</Text>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            if (linkToken) {
+              create({ token: linkToken });
               setDisabled(false);
             }
           }}>
@@ -157,6 +209,27 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
           }}>
           <Text style={styles.button}>Open Link</Text>
         </TouchableOpacity>
+
+        {/* <TouchableOpacity
+          disabled={disabled}
+          style={disabled ? styles.disabledButton : styles.button}
+          onPress={() => {
+            open({
+              onSuccess: (success) => {
+                console.log('Success: ', success);
+                setPublicToken(success.public_token);
+              },
+              onExit: (linkExit) => {
+                console.log('Exit: ', linkExit);
+                dismissLink();
+              },
+              iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+              logLevel: LinkLogLevel.ERROR,
+            });
+            setDisabled(true);
+          }}>
+          <Text style={styles.button}>Open Link</Text>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.button}

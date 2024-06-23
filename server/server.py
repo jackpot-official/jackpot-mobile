@@ -15,7 +15,6 @@ from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchan
 from plaid.exceptions import ApiException
 
 
-# load environment variables from .env file
 load_dotenv()
 
 
@@ -58,36 +57,6 @@ def create_link_token():
         return jsonify(response.to_dict())
     except ApiException as e:
         return jsonify({"error": str(e)}), 400
-    # try:
-    #     req_data = {
-    #         "client_id": PLAID_CLIENT_ID,
-    #         "secret": PLAID_SECRET,
-    #         "user": {
-    #             "client_user_id": "1",
-    #             "email_address": "riyadev@umich.edu"
-    #         },
-    #         "products": ["investments"],
-    #         "client_name": "Jackpot",
-    #         "language": "en",
-    #         "country_codes": ["US"],
-    #         "webhook": "https://sample-web-hook.com",
-    #         "redirect_uri": "https://secure.plaid.com/oauth/redirect"
-    #     }
-
-    #     headers = {
-    #         'Content-Type': 'application/json'
-    #     }
-
-    #     response = requests.post('https://sandbox.plaid.com/link/token/create', json=req_data, headers=headers)
-    #     response_data = response.json()
-
-    #     if response.status_code != 200:
-    #         return jsonify({"error": "Error creating link token"}), 500
-
-    #     return jsonify({"link_token": response_data['link_token']})
-    # except Exception as e:
-    #     print(f"Error: {e}")
-    #     return jsonify({"error": "Error creating link token"}), 500
 
 
 # Exchange token flow - exchange a Link public_token for
@@ -96,27 +65,30 @@ def create_link_token():
 
 @app.route('/api/set_access_token', methods=['POST'])
 def get_access_token():
-    # global access_token
-    # global item_id
-    # global transfer_id
+    global access_token
+    global item_id
+    data = request.json
+    public_token = data.get('public_token')
     # public_token = request.form['public_token']
-    # try:
-    #     exchange_request = ItemPublicTokenExchangeRequest(
-    #         public_token=public_token)
-    #     exchange_response = client.item_public_token_exchange(exchange_request)
-    #     access_token = exchange_response['access_token']
-    #     item_id = exchange_response['item_id']
-    #     return jsonify(exchange_response.to_dict())
-    # except plaid.ApiException as e:
-    #     return json.loads(e.body)
-    public_token = request.json['public_token']
+    print(public_token)
     try:
         exchange_request = ItemPublicTokenExchangeRequest(
             public_token=public_token)
         exchange_response = client.item_public_token_exchange(exchange_request)
+        access_token = exchange_response['access_token']
+        print(access_token)
+        item_id = exchange_response['item_id']
         return jsonify(exchange_response.to_dict())
-    except ApiException as e:
-        return jsonify({"error": str(e)}), 400
+    except plaid.ApiException as e:
+        return json.loads(e.body)
+    # public_token = request.json['public_token']
+    # try:
+    #     exchange_request = ItemPublicTokenExchangeRequest(
+    #         public_token=public_token)
+    #     exchange_response = client.item_public_token_exchange(exchange_request)
+    #     return jsonify(exchange_response.to_dict())
+    # except ApiException as e:
+    #     return jsonify({"error": str(e)}), 400
 
 
 @app.route('/investments/holdings/get', methods=['POST'])
