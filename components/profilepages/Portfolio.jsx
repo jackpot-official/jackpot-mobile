@@ -53,7 +53,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             public_token: success.publicToken,
           });
           setAccessToken(response.data.access_token);
-          Alert.alert('Success', 'Access token set successfully');
+          // Alert.alert('Success', 'Access token set successfully');
         } catch (error) {
           console.error('Error setting access token', error);
           Alert.alert('Error', 'Failed to set access token');
@@ -81,7 +81,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
       setHoldings(response.data.holdings);
       const totalValue = response.data.holdings.reduce((total, holding) => total + holding.institution_value, 0);
       setPortfolioValue(totalValue);
-      Alert.alert('Success', 'Holdings fetched successfully');
+      // Alert.alert('Success', 'Holdings fetched successfully');
     } catch (error) {
       console.error('Error fetching holdings', error);
       Alert.alert('Error', 'Failed to fetch holdings');
