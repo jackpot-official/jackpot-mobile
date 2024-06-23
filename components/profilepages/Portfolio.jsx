@@ -29,6 +29,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
 
   const [linkToken, setLinkToken] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
+  const [portfolioValue, setPortfolioValue] = useState(0);
 
   useEffect(() => {
     const fetchLinkToken = async () => {
@@ -78,8 +79,9 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
       const response = await axios.post('http://localhost:3000/investments/holdings/get', {
         access_token: accessToken
       });
-      console.log(response.data);
-      setHoldings(response.data);
+      setHoldings(response.data.holdings);
+      const totalValue = response.data.holdings.reduce((total, holding) => total + holding.institution_value, 0);
+      setPortfolioValue(totalValue);
       Alert.alert('Success', 'Holdings fetched successfully');
     } catch (error) {
       console.error('Error fetching holdings', error);
@@ -97,7 +99,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }}className="flex-1">
       <View className="items-center">
-
+      <View className="flex-row justify-between	mb-5 w-full	">
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -125,8 +127,12 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
           onPress={fetchHoldings}>
           <Text style={styles.button}>Fetch Holdings</Text>
         </TouchableOpacity>
+        </View>
 
-        <GainLossCard gainloss="$45,678.90" percentage="-20" />
+        {/* <GainLossCard gainloss="$45,678.90" percentage="-20" /> */}
+
+        <GainLossCard gainloss={`$${portfolioValue.toFixed(2)}`} percentage="-20" />
+
 
         <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4">
           <Image
@@ -188,8 +194,7 @@ const styles = StyleSheet.create({
   button: {
     elevation: 8,
     backgroundColor: '#2196F3',
-    width: '90%',
-    margin: 4,
+    // margin: 4,
     paddingVertical: 4,
     fontSize: 16,
     textAlign: 'center',
@@ -202,8 +207,7 @@ const styles = StyleSheet.create({
   disabledButton: {
     elevation: 8,
     backgroundColor: '#2196F3',
-    width: '90%',
-    margin: 4,
+    // margin: 4,
     paddingVertical: 4,
     fontSize: 16,
     textAlign: 'center',
@@ -213,20 +217,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     overflow: 'hidden',
     opacity: 0.5,
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    width: '90%',
-    alignSelf: 'center',
-    borderWidth: 1,
-    padding: 10,
-    borderColor: '#000000',
-  },
-  embedded: {
-    width: '95%',
-    alignSelf: 'center',
-    height: 360,
   },
 });
 
