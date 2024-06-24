@@ -12,6 +12,10 @@ const Posts = ({ user, posts }) => {
         title="I just lost 50% in NVDA"
         body="Title. I lost a ton of mony in NVDA. Exit rn."
         datetime="March 24, 2024 2:15:15 PM"
+        like_count={0}
+        liked={false}
+        comment_count={0}
+        comments={["i'd agree"]}
       />
 
       <FlatList
