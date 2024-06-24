@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Animated, Easing } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Animated, Easing, LayoutAnimation } from 'react-native'
 import React, { useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons';
@@ -36,28 +36,33 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
     };
 
     const toggleComments = () => {
-        if (showComments) {
-          Animated.timing(slideAnim, {
-            toValue: 0,
-            duration: 300,
-            easing: Easing.ease,
-            useNativeDriver: false,
-          }).start(() => setShowComments(false));
-        } else {
-          setShowComments(true);
-          Animated.timing(slideAnim, {
-            toValue: 1,
-            duration: 300,
-            easing: Easing.ease,
-            useNativeDriver: false,
-          }).start();
-        }
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setShowComments(!showComments);
     };
 
-    const commentSectionHeight = slideAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 200],
-    });
+    // const toggleComments = () => {
+    //     if (showComments) {
+    //       Animated.timing(slideAnim, {
+    //         toValue: 0,
+    //         duration: 300,
+    //         easing: Easing.ease,
+    //         useNativeDriver: false,
+    //       }).start(() => setShowComments(false));
+    //     } else {
+    //       setShowComments(true);
+    //       Animated.timing(slideAnim, {
+    //         toValue: 1,
+    //         duration: 300,
+    //         easing: Easing.ease,
+    //         useNativeDriver: false,
+    //       }).start();
+    //     }
+    // };
+
+    // const commentSectionHeight = slideAnim.interpolate({
+    //     inputRange: [0, 1],
+    //     outputRange: [0, 200],
+    // });
 
     return (
         <View className="mb-6">
@@ -97,20 +102,20 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
             {/* Like and comment Touchable Opacity Icons */}
             <View className="flex flex-row ml-16 mt-2">
                 <TouchableOpacity onPress={handleLike} className="flex flex-row items-center mr-4">
-                    <FontAwesome name="thumbs-up" size={20} color={hasLiked ? "#043725" : "#808080"} />
+                    <FontAwesome name="thumbs-up" size={20} color={hasLiked ? "#1d4b3b" : "#808080"} />
                     <Text className="ml-1">{likes}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={toggleComments} className="flex flex-row items-center">
-                    <FontAwesome name="comment" size={20} color="#043725" />
+                    <FontAwesome name="comment" size={20} color="#1d4b3b" />
                     <Text className="ml-1">{commentCount}</Text>
                 </TouchableOpacity>
             </View>
             
             {/* Comment Section */}
             {showComments && (
-                <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
-                    <View className="mt-4 m-4">
+                // <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
+                    <View className="mt-4 m-4 ml-16 w-80">
                         <FlatList
                             data={commentList}
                             keyExtractor={(item, index) => index.toString()}
@@ -120,9 +125,11 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
                                     <Text className="font-hregular text-black text-md">{item.text}</Text>
                                 </View>
                             )}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            style={{ maxHeight: 200 }}
                         />
 
-                        <View className="flex flex-row items-center mt-2 w-96">
+                        <View className="flex flex-row items-center mt-2">
                             <TextInput
                                 className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
                                 placeholder="Add a comment..."
@@ -134,7 +141,7 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
                             </TouchableOpacity>
                         </View>
                     </View>
-                </Animated.View>
+                // </Animated.View>
             )}
         </View>
     )
