@@ -14,8 +14,7 @@ const Posts = ({ user, posts }) => {
         datetime="March 24, 2024 2:15:15 PM"
         like_count={0}
         liked={false}
-        comment_count={0}
-        comments={["i'd agree"]}
+        comments={[{ user: 'lukezhu', text: "I'd agree" }]}
       />
 
       <FlatList

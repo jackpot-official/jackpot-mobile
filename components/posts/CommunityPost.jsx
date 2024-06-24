@@ -1,21 +1,23 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Animated, Easing } from 'react-native'
+import React, { useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons';
 
-const CommunityPost = ( { user, title, body, datetime, like_count, liked, comment_count, comments } ) => {
+const CommunityPost = ( { user, title, body, datetime, like_count, liked, comments } ) => {
     const [likes, setLikes] = useState(like_count);
     const [hasLiked, setHasLiked] = useState(liked);
     const [showComments, setShowComments] = useState(false); // Toggle comment visibility
     const [newComment, setNewComment] = useState(''); // New comment input
     const [commentList, setCommentList] = useState(comments); // Comments array
+    const [commentCount, setCommentCount] = useState(comments.length);
+
+    const slideAnim = useRef(new Animated.Value(0)).current;
 
     const handleLike = () => {
         if (!hasLiked) {
             setLikes(likes + 1);
             setHasLiked(true);
-        }
-        else {
+        } else {
             setLikes(likes - 1);
             setHasLiked(false);
         }
@@ -29,8 +31,33 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
                 ]
             );
             setNewComment('');
+            setCommentCount(commentCount + 1);
         }
     };
+
+    const toggleComments = () => {
+        if (showComments) {
+          Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 300,
+            easing: Easing.ease,
+            useNativeDriver: false,
+          }).start(() => setShowComments(false));
+        } else {
+          setShowComments(true);
+          Animated.timing(slideAnim, {
+            toValue: 1,
+            duration: 300,
+            easing: Easing.ease,
+            useNativeDriver: false,
+          }).start();
+        }
+    };
+
+    const commentSectionHeight = slideAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200],
+    });
 
     return (
         <View className="mb-6">
@@ -74,40 +101,41 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
                     <Text className="ml-1">{likes}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => setShowComments(!showComments)} className="flex flex-row items-center">
+                <TouchableOpacity onPress={toggleComments} className="flex flex-row items-center">
                     <FontAwesome name="comment" size={20} color="#043725" />
-                    <Text className="ml-1">{comment_count}</Text>
+                    <Text className="ml-1">{commentCount}</Text>
                 </TouchableOpacity>
             </View>
             
             {/* Comment Section */}
             {showComments && (
-                <View className="mt-4">
-                    <FlatList
-                        data={commentList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <View className="flex flex-row items-center mb-2">
-                                <Text className="font-hsemibold text-black text-md">{item.user}: </Text>
-                                <Text className="font-hregular text-black text-md">{item.text}</Text>
-                            </View>
-                        )}
-                    />
-
-                    <View className="flex flex-row items-center mt-2 w-96">
-                        <TextInput
-                            className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
-                            placeholder="Add a comment..."
-                            value={newComment}
-                            onChangeText={setNewComment}
+                <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
+                    <View className="mt-4 m-4">
+                        <FlatList
+                            data={commentList}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <View className="flex flex-row items-center mb-2">
+                                    <Text className="font-hsemibold text-black text-md">{item.user}: </Text>
+                                    <Text className="font-hregular text-black text-md">{item.text}</Text>
+                                </View>
+                            )}
                         />
-                        <TouchableOpacity onPress={handleAddComment} className="bg-primarytint-200 py-1 px-3 rounded-md">
-                            <Text className="text-white">Post</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            )}
 
+                        <View className="flex flex-row items-center mt-2 w-96">
+                            <TextInput
+                                className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
+                                placeholder="Add a comment..."
+                                value={newComment}
+                                onChangeText={setNewComment}
+                            />
+                            <TouchableOpacity onPress={handleAddComment} className="bg-primarytint-200 py-1 px-3 rounded-md">
+                                <Text className="text-white">Post</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Animated.View>
+            )}
         </View>
     )
 }
