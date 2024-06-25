@@ -1,9 +1,18 @@
 /* Libraries */
-import { View, FlatList, TouchableOpacity, Image, Text, ScrollView, Animated, Dimensions } from 'react-native'
+import {
+    View,
+    FlatList,
+    TouchableOpacity,
+    Image,
+    Text,
+    ScrollView,
+    Animated,
+    Dimensions,
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import axios from 'axios';
+import axios from 'axios'
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
@@ -28,28 +37,73 @@ const Profile = () => {
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
 
     const [topHoldings, setTopHoldings] = useState([
-        { symbol: 'TSLA', image: "https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/06/1200/675/TESLA-LOGO.jpg?ve=1&tl=1" },
-        { symbol: 'LOWE', image: "https://mobileimages.lowes.com/marketingimages/d0c68e7e-54a6-4d2d-a53d-385f8a156529/lowes-dp18-328966-og.png" },
-        { symbol: 'T', image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/T-Mobile_logo_2022.svg/2048px-T-Mobile_logo_2022.svg.png" },
-        { symbol: 'AAL', image: "https://external-preview.redd.it/noGVmHkGp3tV46SVyR3TSndGMlFp-2Vf3uLBm9UUZlY.png?auto=webp&s=fd18075339f5cf34ee0a7512ede6476c619a21cb" },
-        { symbol: 'TSM', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRqo5wp-OXM1witvjvBX9my2Dkuc287jm1sg&s" },
-    ]);
+        {
+            symbol: 'TSLA',
+            image: 'https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/06/1200/675/TESLA-LOGO.jpg?ve=1&tl=1',
+        },
+        {
+            symbol: 'LOWE',
+            image: 'https://mobileimages.lowes.com/marketingimages/d0c68e7e-54a6-4d2d-a53d-385f8a156529/lowes-dp18-328966-og.png',
+        },
+        {
+            symbol: 'T',
+            image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/T-Mobile_logo_2022.svg/2048px-T-Mobile_logo_2022.svg.png',
+        },
+        {
+            symbol: 'AAL',
+            image: 'https://external-preview.redd.it/noGVmHkGp3tV46SVyR3TSndGMlFp-2Vf3uLBm9UUZlY.png?auto=webp&s=fd18075339f5cf34ee0a7512ede6476c619a21cb',
+        },
+        {
+            symbol: 'TSM',
+            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRqo5wp-OXM1witvjvBX9my2Dkuc287jm1sg&s',
+        },
+    ])
 
     const [topGainers, setTopGainers] = useState([
-        { symbol: 'AMZN', image: "https://1000logos.net/wp-content/uploads/2016/10/Amazon-logo-meaning.jpg" },
-        { symbol: 'GOOGL', image: "https://blog.hubspot.com/hubfs/image8-2.jpg" },
-        { symbol: 'META', image: "https://static.stocktitan.net/company-logo/meta.png" },
-        { symbol: 'HSY', image: "https://s3-symbol-logo.tradingview.com/hershey--600.png" },
-        { symbol: 'CVS', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGy9SsVpkF4KgjSMteLMro-L8p9K5CHdDgsw&s" },
-    ]);
+        {
+            symbol: 'AMZN',
+            image: 'https://1000logos.net/wp-content/uploads/2016/10/Amazon-logo-meaning.jpg',
+        },
+        {
+            symbol: 'GOOGL',
+            image: 'https://blog.hubspot.com/hubfs/image8-2.jpg',
+        },
+        {
+            symbol: 'META',
+            image: 'https://static.stocktitan.net/company-logo/meta.png',
+        },
+        {
+            symbol: 'HSY',
+            image: 'https://s3-symbol-logo.tradingview.com/hershey--600.png',
+        },
+        {
+            symbol: 'CVS',
+            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGy9SsVpkF4KgjSMteLMro-L8p9K5CHdDgsw&s',
+        },
+    ])
 
     const [topLosers, setTopLosers] = useState([
-        { symbol: 'NFLX', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtnU7EnBvhTa0NoSb_relPpl9xBM5imEOUfA&s" },
-        { symbol: 'DIS', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-x7WKB6vtl_f-K1QSaiL3m-cwRFYPEK6nUw&s" },
-        { symbol: 'UBER', image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROSz4KuB3f_iKz6_QWE0wvnIJbVpoOIongMw&s" },
-        { symbol: 'SPOT', image: "https://g.foolcdn.com/art/companylogos/square/spot.png" },
-        { symbol: 'BABA', image: "https://companiesmarketcap.com/img/company-logos/256/BABA.png" },
-    ]);
+        {
+            symbol: 'NFLX',
+            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtnU7EnBvhTa0NoSb_relPpl9xBM5imEOUfA&s',
+        },
+        {
+            symbol: 'DIS',
+            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-x7WKB6vtl_f-K1QSaiL3m-cwRFYPEK6nUw&s',
+        },
+        {
+            symbol: 'UBER',
+            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROSz4KuB3f_iKz6_QWE0wvnIJbVpoOIongMw&s',
+        },
+        {
+            symbol: 'SPOT',
+            image: 'https://g.foolcdn.com/art/companylogos/square/spot.png',
+        },
+        {
+            symbol: 'BABA',
+            image: 'https://companiesmarketcap.com/img/company-logos/256/BABA.png',
+        },
+    ])
 
     const logout = async () => {
         await signOut()
@@ -61,15 +115,17 @@ const Profile = () => {
     const renderContent = () => {
         switch (selectedTab) {
             case 'Portfolio':
-                return <Portfolio
-                    topHoldings={topHoldings}
-                    topGainers={topGainers}
-                    topLosers={topLosers}
-                />;
+                return (
+                    <Portfolio
+                        topHoldings={topHoldings}
+                        topGainers={topGainers}
+                        topLosers={topLosers}
+                    />
+                )
             case 'Posts':
-                return <Posts user={user} posts={posts} />;
+                return <Posts user={user} posts={posts} />
             case 'Achievements':
-                return <Achievements />;
+                return <Achievements />
             default:
                 return null
         }

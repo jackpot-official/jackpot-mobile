@@ -31,7 +31,10 @@ export default function App() {
 
                         <Text className="text-3xl text-black font-bold text-center font-hbold mt-1">
                             Trade. Social.
-                            <Text className="text-tertiary font-pbold"> Earn.</Text>
+                            <Text className="text-tertiary font-pbold">
+                                {' '}
+                                Earn.
+                            </Text>
                         </Text>
                     </View>
 

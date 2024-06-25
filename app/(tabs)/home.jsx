@@ -17,6 +17,7 @@ import useAppwrite from '../../lib/useAppwrite'
 import { getAllPosts, getLatestPosts } from '../../lib/appwrite'
 import VideoCard from '../../components/VideoCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import CommunityPost from '../../components/posts/CommunityPost'
 
 const Home = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
@@ -33,7 +34,7 @@ const Home = () => {
     }
 
     return (
-        <SafeAreaView className="bg-primary">
+        <SafeAreaView className="bg-white">
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
@@ -42,17 +43,17 @@ const Home = () => {
                     <View className="flex my-6 px-4 space-y-6">
                         <View className="flex justify-between items-start flex-row mb-6">
                             <View>
-                                <Text className="font-hmedium text-sm text-gray-100">
+                                <Text className="font-hmedium text-sm text-black">
                                     Welcome back,
                                 </Text>
-                                <Text className="text-2xl font-hsemibold text-white">
+                                <Text className="text-2xl font-hsemibold text-black">
                                     {user?.username}
                                 </Text>
                             </View>
 
                             <View className="mt-1">
                                 <Image
-                                    source={images.text_white}
+                                    source={images.text_black}
                                     className="w-48 h-9"
                                     resizeMode="contain"
                                 />
@@ -62,13 +63,30 @@ const Home = () => {
                         <SearchInput />
 
                         {/* ADD CONTENT IN HERE  */}
+                        <CommunityPost
+                            user={user}
+                            title="I just lost 50% in NVDA"
+                            body="Title. I lost a ton of mony in NVDA. Exit rn."
+                            datetime="March 24, 2024 2:15:15 PM"
+                            like_count={0}
+                            liked={false}
+                            comments={[{ user: 'lukezhu', text: "I'd agree" }]}
+                        />
 
-                        
+                        <CommunityPost
+                            user={user}
+                            title="I just lost 50% in NVDA"
+                            body="Title. I lost a ton of mony in NVDA. Exit rn."
+                            datetime="March 24, 2024 2:15:15 PM"
+                            like_count={0}
+                            liked={false}
+                            comments={[{ user: 'lukezhu', text: "I'd agree" }]}
+                        />
 
                         {/* ADD CONTENT IN HERE */}
 
                         <View className="w-full flex-1 pt-5 pb-8">
-                            <Text className="text-lightgreen text-lg font-hregular">
+                            <Text className="text-black text-lg font-hregular">
                                 Latest Posts
                             </Text>
 
