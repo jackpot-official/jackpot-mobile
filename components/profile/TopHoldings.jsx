@@ -3,7 +3,9 @@ import { View, Text, Image } from 'react-native'
 
 const TopHoldings = ({ title, holdings, boxStyle }) => {
     return (
-        <View className={`bg-white w-52 rounded-xl p-5 flex flex-col border border-gray-100 shadow-black-300 shadow-md ${boxStyle}`}>
+        <View
+            className={`bg-white w-52 rounded-xl p-5 flex flex-col border border-gray-100 shadow-black-300 shadow-md ${boxStyle}`}
+        >
             <Text className="font-hmedium text-black text-2xl mb-5">
                 Top 5 {title}
             </Text>

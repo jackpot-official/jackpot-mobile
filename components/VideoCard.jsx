@@ -27,13 +27,13 @@ const VideoCard = ({
 
                     <View className="flex justify-center flex-1 ml-3 gap-y-1">
                         <Text
-                            className="text-white font-hsemibold text-sm"
+                            className="text-black font-hsemibold text-sm"
                             numberOfLines={1}
                         >
                             {title}
                         </Text>
                         <Text
-                            className="text-xs text-gray-100 font-hregular"
+                            className="text-xs text-black font-hregular"
                             numberOfLines={1}
                         >
                             {username}

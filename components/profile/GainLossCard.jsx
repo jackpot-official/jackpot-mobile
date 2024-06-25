@@ -2,10 +2,14 @@ import React from 'react'
 import { View, Text } from 'react-native'
 
 const GainLossCard = ({ gainloss, percentage }) => {
-    const isNegativeGainLoss = gainloss.startsWith('-');
-    const isNegativePercentage = percentage.startsWith('-');
-    const gainLossTextColor = isNegativeGainLoss ? 'text-red-600' : 'text-green-800';
-    const percentageTextColor = isNegativePercentage ? 'text-red-400' : 'text-green-600';
+    const isNegativeGainLoss = gainloss.startsWith('-')
+    const isNegativePercentage = percentage.startsWith('-')
+    const gainLossTextColor = isNegativeGainLoss
+        ? 'text-red-600'
+        : 'text-green-800'
+    const percentageTextColor = isNegativePercentage
+        ? 'text-red-400'
+        : 'text-green-600'
 
     return (
         <View className="bg-white w-2/3 rounded-xl shadow-md shadow-black-300 p-5 flex flex-col space-y-3 border border-gray-100">
@@ -13,7 +17,9 @@ const GainLossCard = ({ gainloss, percentage }) => {
                 Today's G/L
             </Text>
 
-            <Text className={`font-hbold ${gainLossTextColor} text-3xl self-center`}>
+            <Text
+                className={`font-hbold ${gainLossTextColor} text-3xl self-center`}
+            >
                 {gainloss}
             </Text>
 

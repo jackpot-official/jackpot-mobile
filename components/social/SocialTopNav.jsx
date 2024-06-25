@@ -2,7 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { icons } from '../../constants'
 
-const TopNavigation = ({ logout }) => {
+const SocialTopNav = ({ logout }) => {
     return (
         <View className="w-full flex-row justify-between items-center px-4 py-2 bg-white">
             <TouchableOpacity>
@@ -13,7 +13,7 @@ const TopNavigation = ({ logout }) => {
                 />
             </TouchableOpacity>
 
-            <Text className="text-xl font-semibold">Profile</Text>
+            <Text className="text-xl font-semibold">Social</Text>
 
             <TouchableOpacity onPress={logout}>
                 <Image
@@ -26,4 +26,4 @@ const TopNavigation = ({ logout }) => {
     )
 }
 
-export default TopNavigation
+export default SocialTopNav

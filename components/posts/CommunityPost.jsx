@@ -1,44 +1,61 @@
-import { View, Text, Image, TouchableOpacity, FlatList, TextInput, Animated, Easing, LayoutAnimation } from 'react-native'
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    FlatList,
+    TextInput,
+    Animated,
+    Easing,
+    LayoutAnimation,
+} from 'react-native'
 import React, { useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons'
 
-const CommunityPost = ( { user, title, body, datetime, like_count, liked, comments } ) => {
-    const [likes, setLikes] = useState(like_count);
-    const [hasLiked, setHasLiked] = useState(liked);
-    const [showComments, setShowComments] = useState(false); // Toggle comment visibility
-    const [newComment, setNewComment] = useState(''); // New comment input
-    const [commentList, setCommentList] = useState(comments); // Comments array
-    const [commentCount, setCommentCount] = useState(comments.length);
+const CommunityPost = ({
+    user,
+    title,
+    body,
+    datetime,
+    like_count,
+    liked,
+    comments,
+}) => {
+    const [likes, setLikes] = useState(like_count)
+    const [hasLiked, setHasLiked] = useState(liked)
+    const [showComments, setShowComments] = useState(false) // Toggle comment visibility
+    const [newComment, setNewComment] = useState('') // New comment input
+    const [commentList, setCommentList] = useState(comments) // Comments array
+    const [commentCount, setCommentCount] = useState(comments.length)
 
-    const slideAnim = useRef(new Animated.Value(0)).current;
+    const slideAnim = useRef(new Animated.Value(0)).current
 
     const handleLike = () => {
         if (!hasLiked) {
-            setLikes(likes + 1);
-            setHasLiked(true);
+            setLikes(likes + 1)
+            setHasLiked(true)
         } else {
-            setLikes(likes - 1);
-            setHasLiked(false);
+            setLikes(likes - 1)
+            setHasLiked(false)
         }
-    };
+    }
 
     const handleAddComment = () => {
         if (newComment.trim()) {
-            setCommentList(
-                [...commentList,
-                    { user: user.username, text: newComment }
-                ]
-            );
-            setNewComment('');
-            setCommentCount(commentCount + 1);
+            setCommentList([
+                ...commentList,
+                { user: user.username, text: newComment },
+            ])
+            setNewComment('')
+            setCommentCount(commentCount + 1)
         }
-    };
+    }
 
     const toggleComments = () => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setShowComments(!showComments);
-    };
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        setShowComments(!showComments)
+    }
 
     // const toggleComments = () => {
     //     if (showComments) {
@@ -66,7 +83,7 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
 
     return (
         <View className="mb-6">
-             <View className="flex flex-row items-center">
+            <View className="flex flex-row items-center">
                 {/* user pfp */}
                 <View className="ml-4 w-10 h-10 rounded-lg justify-center items-center">
                     <Image
@@ -86,61 +103,78 @@ const CommunityPost = ( { user, title, body, datetime, like_count, liked, commen
 
             {/* Title */}
             <Text className="font-hsemibold text-black text-xl ml-16">
-                { title }
+                {title}
             </Text>
 
             {/* Text */}
             <Text className="font-hregular text-black text-md ml-16">
-                { body }
+                {body}
             </Text>
 
             {/* Time and Date */}
             <Text className="font-hregular text-gray-400 text-sm ml-16">
-                { datetime }
+                {datetime}
             </Text>
 
             {/* Like and comment Touchable Opacity Icons */}
             <View className="flex flex-row ml-16 mt-2">
-                <TouchableOpacity onPress={handleLike} className="flex flex-row items-center mr-4">
-                    <FontAwesome name="thumbs-up" size={20} color={hasLiked ? "#1d4b3b" : "#808080"} />
+                <TouchableOpacity
+                    onPress={handleLike}
+                    className="flex flex-row items-center mr-4"
+                >
+                    <FontAwesome
+                        name="thumbs-up"
+                        size={20}
+                        color={hasLiked ? '#1d4b3b' : '#808080'}
+                    />
                     <Text className="ml-1">{likes}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={toggleComments} className="flex flex-row items-center">
+                <TouchableOpacity
+                    onPress={toggleComments}
+                    className="flex flex-row items-center"
+                >
                     <FontAwesome name="comment" size={20} color="#1d4b3b" />
                     <Text className="ml-1">{commentCount}</Text>
                 </TouchableOpacity>
             </View>
-            
+
             {/* Comment Section */}
             {showComments && (
                 // <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
-                    <View className="mt-4 m-4 ml-16 w-80">
-                        <FlatList
-                            data={commentList}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item }) => (
-                                <View className="flex flex-row items-center mb-2">
-                                    <Text className="font-hsemibold text-black text-md">{item.user}: </Text>
-                                    <Text className="font-hregular text-black text-md">{item.text}</Text>
-                                </View>
-                            )}
-                            contentContainerStyle={{ flexGrow: 1 }}
-                            style={{ maxHeight: 200 }}
-                        />
+                <View className="mt-4 m-4 ml-16 w-80">
+                    <FlatList
+                        data={commentList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <View className="flex flex-row items-center mb-2">
+                                <Text className="font-hsemibold text-black text-md">
+                                    {item.user}:{' '}
+                                </Text>
+                                <Text className="font-hregular text-black text-md">
+                                    {item.text}
+                                </Text>
+                            </View>
+                        )}
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        style={{ maxHeight: 200 }}
+                    />
 
-                        <View className="flex flex-row items-center mt-2">
-                            <TextInput
-                                className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
-                                placeholder="Add a comment..."
-                                value={newComment}
-                                onChangeText={setNewComment}
-                            />
-                            <TouchableOpacity onPress={handleAddComment} className="bg-primarytint-200 py-1 px-3 rounded-md">
-                                <Text className="text-white">Post</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View className="flex flex-row items-center mt-2">
+                        <TextInput
+                            className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
+                            placeholder="Add a comment..."
+                            value={newComment}
+                            onChangeText={setNewComment}
+                        />
+                        <TouchableOpacity
+                            onPress={handleAddComment}
+                            className="bg-primarytint-200 py-1 px-3 rounded-md"
+                        >
+                            <Text className="text-white">Post</Text>
+                        </TouchableOpacity>
                     </View>
+                </View>
                 // </Animated.View>
             )}
         </View>
