@@ -6,8 +6,11 @@ import TopNavigation from '../../components/profile/TopNavigation'
 import SocialTopNav from '../../components/social/SocialTopNav'
 import PercentageBadge from '../../components/PercentageBadge'
 import ComparisonCard from '../../components/comparison/ComparisonCard'
+import { useGlobalContext } from '../../context/GlobalProvider'
 
 const Social = () => {
+    const { user, setUser, setIsLoggedIn } = useGlobalContext()
+
     return (
         <SafeAreaView className="bg-white h-full">
             <SocialTopNav />
@@ -15,7 +18,7 @@ const Social = () => {
                 <View className="flex-row justify-between items-center mb-4">
                     <View className="flex-row items-center">
                         <Image
-                            source={{ uri: 'https://via.placeholder.com/50' }}
+                            source={{ uri: user?.avatar }}
                             className="w-12 h-12 rounded-full"
                         />
                         <Text className="ml-2 text-lg font-semibold">

@@ -21,8 +21,8 @@ const PercentageBadge = ({ percentage }) => {
                 size={12}
                 color={iconColor}
             />
-            <Text className="font-hmedium text-sm" style={textColor}>
-                {percentage}
+            <Text className="font-hmedium text-md" style={textColor}>
+                {percentage}%
             </Text>
         </View>
     )

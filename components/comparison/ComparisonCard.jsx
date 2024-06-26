@@ -11,7 +11,7 @@ const ComparisonCard = ({ percentage }) => {
                 <Text className="text-6xl font-bold text-gray-900 mr-2">
                     {percentage}
                 </Text>
-                <PercentageBadge percentage={percentage} />
+                <PercentageBadge percentage={5} />
             </View>
             <SimilarityBar percentage={percentage} />
         </View>

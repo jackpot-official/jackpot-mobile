@@ -8,12 +8,12 @@ const SearchInput = ({ initialQuery }) => {
     const [query, setQuery] = useState(initialQuery || '')
 
     return (
-        <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-100 rounded-2xl focus:border-secondary items-center flex-row space-x-4">
+        <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-300 rounded-2xl focus:border-secondary items-center flex-row space-x-4">
             <TextInput
                 className="text-base mt-0.5 text-white flex-1 font-hregular"
                 value={query}
                 placeholder="Search for a post topic"
-                placeholderTextColor="#cdcde0"
+                placeholderTextColor="white"
                 onChangeText={(e) => setQuery(e)}
             />
 
