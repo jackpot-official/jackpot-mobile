@@ -2,9 +2,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesome } from '@expo/vector-icons'
-import TopNavigation from '../../components/profile/TopNavigation'
 import SocialTopNav from '../../components/social/SocialTopNav'
-import PercentageBadge from '../../components/PercentageBadge'
 import ComparisonCard from '../../components/comparison/ComparisonCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
 
@@ -38,6 +36,7 @@ const Social = () => {
                 </View>
 
                 <ComparisonCard percentage={75} />
+
             </View>
 
             {/* Investing Overview Section */}
