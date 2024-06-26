@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesome } from '@expo/vector-icons'
 import TopNavigation from '../../components/profile/TopNavigation'
 import SocialTopNav from '../../components/social/SocialTopNav'
+import PercentageBadge from '../../components/PercentageBadge'
 
 const Social = () => {
     return (
@@ -35,9 +36,10 @@ const Social = () => {
                     <Text className="text-gray-600 text-sm">
                         Similarity Percentage
                     </Text>
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-4xl font-bold">100</Text>
-                        <FontAwesome name="rocket" size={24} color="black" />
+                    <View className="flex-row items-center">
+                        <Text className="text-4xl font-bold mr-2">100</Text>
+                        {/* <FontAwesome name="rocket" size={24} color="black" /> */}
+                        <PercentageBadge percentage="100.00%" />
                     </View>
                     <View className="flex-row justify-between items-center">
                         <TouchableOpacity className="bg-primarytint-200 rounded-full py-2 px-4">
