@@ -11,6 +11,14 @@ import logout from '../assets/icons/logout.png'
 import eyeHide from '../assets/icons/eye-hide.png'
 import eye from '../assets/icons/eye.png'
 import play from '../assets/icons/play.png'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
+
+
+const userGroupIcon = ({ size, color }) => (
+    <FontAwesomeIcon icon={faUserGroup} color={color} size={size} />
+);
+
 
 export default {
     play,
@@ -26,4 +34,5 @@ export default {
     logout,
     eyeHide,
     eye,
+    userGroupIcon,
 }

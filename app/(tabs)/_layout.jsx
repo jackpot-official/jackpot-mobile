@@ -2,16 +2,22 @@ import { View, Text, Image } from 'react-native'
 import { Tabs, Redirect } from 'expo-router'
 
 import { icons } from '../../constants'
+import { FontAwesome } from '@expo/vector-icons'
+
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
         <View className="items-center justify-center gap-2">
-            <Image
-                source={icon}
-                resizeMode="contain"
-                tintColor={color}
-                className="w-6 h-6"
-            />
+            {typeof icon === 'function' ? (
+                icon({ color, size: 24 })
+            ) : (
+                <Image
+                    source={icon}
+                    resizeMode="contain"
+                    tintColor={color}
+                    className="w-6 h-6"
+                />
+            )}
             <Text
                 className={`${focused ? 'font-hsemibold' : 'font-hregular'} text-xs`}
                 style={{ color }}
@@ -86,7 +92,7 @@ const TabsLayout = () => {
                         headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon
-                                icon={icons.bookmark}
+                                icon={ icons.userGroupIcon }
                                 color={color}
                                 name="Social"
                                 focused={focused}
