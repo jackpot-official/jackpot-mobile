@@ -75,8 +75,8 @@ const Home = () => {
 
                         <CommunityPost
                             user={user}
-                            title="I just lost 50% in NVDA"
-                            body="Title. I lost a ton of mony in NVDA. Exit rn."
+                            title="Someone was very wrong about AAL."
+                            body="It's down 20%. This must be a joke."
                             datetime="March 24, 2024 2:15:15 PM"
                             like_count={0}
                             liked={false}

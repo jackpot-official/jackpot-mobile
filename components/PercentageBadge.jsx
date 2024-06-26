@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons'
 
 const PercentageBadge = ({ percentage }) => {
     const isPositive = parseFloat(percentage) >= 0
+    const formattedPercentage = Math.abs(parseFloat(percentage)).toFixed(2)
     const containerStyle = isPositive
         ? styles.containerPositive
         : styles.containerNegative
@@ -22,7 +23,7 @@ const PercentageBadge = ({ percentage }) => {
                 color={iconColor}
             />
             <Text className="font-hmedium text-md" style={textColor}>
-                {percentage}%
+                {formattedPercentage}%
             </Text>
         </View>
     )
