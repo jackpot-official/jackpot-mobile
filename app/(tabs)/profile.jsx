@@ -2,25 +2,16 @@
 import {
     View,
     FlatList,
-    TouchableOpacity,
     Image,
-    Text,
-    ScrollView,
-    Animated,
-    Dimensions,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import axios from 'axios'
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
 import { getUserPosts, signOut } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
-
-/* Assets and constants */
-import { icons } from '../../constants'
 
 /* Components */
 import InfoBox from '../../components/InfoBox'

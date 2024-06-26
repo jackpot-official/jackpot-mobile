@@ -4,11 +4,11 @@ import {
     FlatList,
     Image,
     RefreshControl,
-    Alert,
 } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+// Constants and components
 import { images } from '../../constants'
 import SearchInput from '../../components/SearchInput'
 import Trending from '../../components/Trending'
@@ -62,7 +62,6 @@ const Home = () => {
 
                         <SearchInput />
 
-                        {/* ADD CONTENT IN HERE  */}
                         <CommunityPost
                             user={user}
                             title="I just lost 50% in NVDA"
@@ -82,8 +81,6 @@ const Home = () => {
                             liked={false}
                             comments={[{ user: 'lukezhu', text: "I'd agree" }]}
                         />
-
-                        {/* ADD CONTENT IN HERE */}
 
                         <View className="w-full flex-1 pt-5 pb-8">
                             <Text className="text-black text-lg font-hregular">

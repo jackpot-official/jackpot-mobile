@@ -9,12 +9,12 @@ const SimilarityBar = ({ percentage }) => {
         React.useCallback(() => {
             Animated.timing(animatedWidth, {
                 toValue: percentage,
-                duration: 1000, // Animation duration in milliseconds
-                useNativeDriver: false, // Width animation can't use native driver
+                duration: 1000,
+                useNativeDriver: false,
             }).start()
 
             return () => {
-                animatedWidth.setValue(0) // Reset the animation value when screen loses focus
+                animatedWidth.setValue(0)
             }
         }, [percentage])
     )

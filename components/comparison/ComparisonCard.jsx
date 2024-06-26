@@ -1,5 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+
+// Components
 import PercentageBadge from '../PercentageBadge'
 import SimilarityBar from './SimilarityBar'
 

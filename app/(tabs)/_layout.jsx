@@ -1,6 +1,5 @@
 import { View, Text, Image } from 'react-native'
 import { Tabs, Redirect } from 'expo-router'
-// import { LinearGradient } from 'expo-linear-gradient';
 
 import { icons } from '../../constants'
 
