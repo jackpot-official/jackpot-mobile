@@ -29,7 +29,7 @@ const CommunityPost = ({ user, post }) => {
 
     const handleLike = async () => {
         try {
-            await likePost(postId, user.id);
+            await likePost(postId, user.$id);
 
             if (!hasLiked) {
                 setLikes(likes + 1)
@@ -46,10 +46,10 @@ const CommunityPost = ({ user, post }) => {
     const handleAddComment = async() => {
         if (newComment.trim()) {
             try {
-                await createComment(postId, user.id, newComment);
+                await createComment( postId, user.$id, newComment );
                 setCommentList([
                     ...commentList,
-                    { user: user.username, text: newComment },
+                    { user: user.username, text: newComment, owner: user.$id },
                 ]);
                 setNewComment('')
                 setCommentCount(commentCount + 1)
