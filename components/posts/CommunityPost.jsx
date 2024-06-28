@@ -13,6 +13,10 @@ import React, { useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons'
 
+import { likePost } from '../../lib/appwrite'
+
+// post: title, body, datetime, creator, userlike
+
 const CommunityPost = ({
     user,
     title,
@@ -21,23 +25,30 @@ const CommunityPost = ({
     like_count,
     liked,
     comments,
+    postId,
 }) => {
     const [likes, setLikes] = useState(like_count)
     const [hasLiked, setHasLiked] = useState(liked)
-    const [showComments, setShowComments] = useState(false) // Toggle comment visibility
-    const [newComment, setNewComment] = useState('') // New comment input
-    const [commentList, setCommentList] = useState(comments) // Comments array
+    const [showComments, setShowComments] = useState(false) // toggle comment visibility
+    const [newComment, setNewComment] = useState('') // new comment input
+    const [commentList, setCommentList] = useState(comments) // comments array
     const [commentCount, setCommentCount] = useState(comments.length)
 
     const slideAnim = useRef(new Animated.Value(0)).current
 
-    const handleLike = () => {
-        if (!hasLiked) {
-            setLikes(likes + 1)
-            setHasLiked(true)
-        } else {
-            setLikes(likes - 1)
-            setHasLiked(false)
+    const handleLike = async () => {
+        try {
+            await likePost(postId, user.id);
+
+            if (!hasLiked) {
+                setLikes(likes + 1)
+                setHasLiked(true)
+            } else {
+                setLikes(likes - 1)
+                setHasLiked(false)
+            }
+        } catch (error) {
+            console.error("Error liking the post: ", error);
         }
     }
 
@@ -56,30 +67,6 @@ const CommunityPost = ({
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         setShowComments(!showComments)
     }
-
-    // const toggleComments = () => {
-    //     if (showComments) {
-    //       Animated.timing(slideAnim, {
-    //         toValue: 0,
-    //         duration: 300,
-    //         easing: Easing.ease,
-    //         useNativeDriver: false,
-    //       }).start(() => setShowComments(false));
-    //     } else {
-    //       setShowComments(true);
-    //       Animated.timing(slideAnim, {
-    //         toValue: 1,
-    //         duration: 300,
-    //         easing: Easing.ease,
-    //         useNativeDriver: false,
-    //       }).start();
-    //     }
-    // };
-
-    // const commentSectionHeight = slideAnim.interpolate({
-    //     inputRange: [0, 1],
-    //     outputRange: [0, 200],
-    // });
 
     return (
         <View className="mb-6">

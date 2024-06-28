@@ -70,6 +70,7 @@ const Home = () => {
                             like_count={0}
                             liked={false}
                             comments={[{ user: 'lukezhu', text: "I'd agree" }]}
+                            postId="667cf946003773e4f5bd"
                         />
 
                         <CommunityPost
