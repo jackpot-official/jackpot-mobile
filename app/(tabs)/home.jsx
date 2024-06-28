@@ -5,7 +5,7 @@ import {
     Image,
     RefreshControl,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Constants and components
@@ -14,14 +14,14 @@ import SearchInput from '../../components/SearchInput'
 import Trending from '../../components/Trending'
 import EmptyState from '../../components/EmptyState'
 import useAppwrite from '../../lib/useAppwrite'
-import { getAllPosts, getLatestPosts } from '../../lib/appwrite'
+import { getAllPosts, getLatestPosts, getPostComments, getAllTextPosts } from '../../lib/appwrite'
 import VideoCard from '../../components/VideoCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
 import CommunityPost from '../../components/posts/CommunityPost'
 
 const Home = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
-    const { data: posts, refetch } = useAppwrite(getAllPosts)
+    const { data: posts, refetch } = useAppwrite(getAllTextPosts)
     const { data: latestPosts } = useAppwrite(getLatestPosts)
 
     const [refreshing, setRefreshing] = useState(false)
@@ -33,12 +33,34 @@ const Home = () => {
         setRefreshing(false)
     }
 
+    useEffect(() => {
+        const fetchCommentsForPosts = async () => {
+            if (posts) {
+                for (let post of posts) {
+                    const comments = await getPostComments(post.$id);
+                    post.comments = comments;
+                }
+            }
+        }
+        fetchCommentsForPosts();
+    }, [posts]);
+
     return (
         <SafeAreaView className="bg-white">
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
-                renderItem={({ item }) => <VideoCard video={item} />}
+                // renderItem={({ item }) => <VideoCard video={item} />}
+                renderItem={({ item }) => (
+                    <CommunityPost
+                        user={user}
+                        post={{
+                            ...item,
+                            comments: item.comments ?? [],
+                            postId: item.$id,
+                        }}
+                    />
+                )}
                 ListHeaderComponent={() => (
                     <View className="flex my-6 px-4 space-y-6">
                         <View className="flex justify-between items-start flex-row mb-6">
@@ -62,7 +84,7 @@ const Home = () => {
 
                         <SearchInput />
 
-                        <CommunityPost
+                        {/* <CommunityPost
                             user={user}
                             title="I just lost 50% in NVDA"
                             body="Title. I lost a ton of mony in NVDA. Exit rn."
@@ -81,7 +103,7 @@ const Home = () => {
                             like_count={0}
                             liked={false}
                             comments={[{ user: 'lukezhu', text: "I'd agree" }]}
-                        />
+                        /> */}
 
                         <View className="w-full flex-1 pt-5 pb-8">
                             <Text className="text-black text-lg font-hregular">

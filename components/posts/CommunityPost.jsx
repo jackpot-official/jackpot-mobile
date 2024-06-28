@@ -13,20 +13,11 @@ import React, { useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons'
 
-import { likePost } from '../../lib/appwrite'
+import { likePost, createComment, getPostComments } from '../../lib/appwrite'
 
-// post: title, body, datetime, creator, userlike
+const CommunityPost = ({ user, post }) => {
+    const { creator, title, body, datetime, like_count, liked, comments, postId } = post;
 
-const CommunityPost = ({
-    user,
-    title,
-    body,
-    datetime,
-    like_count,
-    liked,
-    comments,
-    postId,
-}) => {
     const [likes, setLikes] = useState(like_count)
     const [hasLiked, setHasLiked] = useState(liked)
     const [showComments, setShowComments] = useState(false) // toggle comment visibility
@@ -52,14 +43,19 @@ const CommunityPost = ({
         }
     }
 
-    const handleAddComment = () => {
+    const handleAddComment = async() => {
         if (newComment.trim()) {
-            setCommentList([
-                ...commentList,
-                { user: user.username, text: newComment },
-            ])
-            setNewComment('')
-            setCommentCount(commentCount + 1)
+            try {
+                await createComment(postId, user.id, newComment);
+                setCommentList([
+                    ...commentList,
+                    { user: user.username, text: newComment },
+                ]);
+                setNewComment('')
+                setCommentCount(commentCount + 1)
+            } catch (error) {
+                console.error("Error adding comment: ", error);
+            }
         }
     }
 
@@ -130,6 +126,22 @@ const CommunityPost = ({
             {showComments && (
                 // <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
                 <View className="mt-4 m-4 ml-16 w-80">
+                    {/* <FlatList
+                        data={commentList}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <View className="flex flex-row items-center mb-2">
+                                <Text className="font-hsemibold text-black text-md">
+                                    {item.user}:{' '}
+                                </Text>
+                                <Text className="font-hregular text-black text-md">
+                                    {item.text}
+                                </Text>
+                            </View>
+                        )}
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        style={{ maxHeight: 200 }}
+                    /> */}
                     <FlatList
                         data={commentList}
                         keyExtractor={(item, index) => index.toString()}
