@@ -9,23 +9,38 @@ import {
     Easing,
     LayoutAnimation,
 } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons'
 
-import { likePost, createComment, getPostComments } from '../../lib/appwrite'
+import { likePost, createComment, getPostComments, getPostLikes } from '../../lib/appwrite'
 
 const CommunityPost = ({ user, post }) => {
-    const { creator, title, body, datetime, like_count, liked, comments, postId } = post;
+    const { creator, title, body, datetime, comments, postId } = post;
 
-    const [likes, setLikes] = useState(like_count)
-    const [hasLiked, setHasLiked] = useState(liked)
+    const [likes, setLikes] = useState(0)
+    const [hasLiked, setHasLiked] = useState(false)
     const [showComments, setShowComments] = useState(false) // toggle comment visibility
     const [newComment, setNewComment] = useState('') // new comment input
     const [commentList, setCommentList] = useState(comments) // comments array
     const [commentCount, setCommentCount] = useState(comments.length)
 
-    const slideAnim = useRef(new Animated.Value(0)).current
+    const slideAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        const fetchLikes = async () => {
+            try {
+                const { likeCount, userLiked } = await getPostLikes(postId, user.$id);
+                setLikes(likeCount);
+                setHasLiked(userLiked);
+                console.log('User liked:', userLiked);
+            } catch (error) {
+                console.error("Error fetching likes: ", error);
+            }
+        };
+
+        fetchLikes();
+    }, [postId, user.$id]);
 
     const handleLike = async () => {
         try {
@@ -70,7 +85,7 @@ const CommunityPost = ({ user, post }) => {
                 {/* user pfp */}
                 <View className="ml-4 w-10 h-10 rounded-lg justify-center items-center">
                     <Image
-                        source={{ uri: user?.avatar }}
+                        source={{ uri: creator?.avatar }}
                         className="w-[90%] h-[90%] rounded-full"
                         resizeMode="cover"
                     />
@@ -78,7 +93,7 @@ const CommunityPost = ({ user, post }) => {
 
                 {/* username */}
                 <InfoBox
-                    title={`@${user?.username}`}
+                    title={`@${creator?.username}`}
                     containerStyles="mt-5 ml-2"
                     titleStyles="text-md"
                 />

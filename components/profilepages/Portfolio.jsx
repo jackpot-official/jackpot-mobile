@@ -47,7 +47,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                 const response = await axios.post(
                     'http://localhost:3000/create_link_token'
                 )
-                console.log(response)
+                // console.log(response)
                 setLinkToken(response.data.link_token)
             } catch (error) {
                 console.error('Error fetching link token:', error)
@@ -60,7 +60,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     const createLinkOpenProps = () => {
         return {
             onSuccess: async (success) => {
-                console.log('Success: ', success)
+                // console.log('Success: ', success)
                 try {
                     const response = await axios.post(
                         'http://localhost:3000/api/set_access_token',
@@ -76,7 +76,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                 }
             },
             onExit: (linkExit) => {
-                console.log('Exit: ', linkExit)
+                // console.log('Exit: ', linkExit)
                 dismissLink()
             },
             iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
