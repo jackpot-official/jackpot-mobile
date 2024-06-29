@@ -39,7 +39,18 @@ const CommunityPost = ({ user, post }) => {
             }
         };
 
+        const fetchComments = async () => {
+            try {
+                const fetchedComments = await getPostComments(postId);
+                setCommentList(fetchedComments);
+                setCommentCount(fetchedComments.length);
+            } catch (error) {
+                console.error("Error fetching comments: ", error);
+            }
+        };
+
         fetchLikes();
+        fetchComments();
     }, [postId, user.$id]);
 
     const handleLike = async () => {
