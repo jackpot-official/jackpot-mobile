@@ -52,14 +52,17 @@ const Home = () => {
                 keyExtractor={(item) => item.$id}
                 // renderItem={({ item }) => <VideoCard video={item} />}
                 renderItem={({ item }) => (
-                    <CommunityPost
-                        user={user}
-                        post={{
-                            ...item,
-                            comments: item.comments ?? [],
-                            postId: item.$id,
-                        }}
-                    />
+                    <>
+                        <CommunityPost
+                            user={user}
+                            post={{
+                                ...item,
+                                comments: item.comments ?? [],
+                                postId: item.$id,
+                            }}
+                        />
+                        <View className="h-10" />
+                    </>
                 )}
                 ListHeaderComponent={() => (
                     <View className="flex my-6 px-4 space-y-6">
@@ -83,27 +86,6 @@ const Home = () => {
                         </View>
 
                         <SearchInput />
-
-                        {/* <CommunityPost
-                            user={user}
-                            title="I just lost 50% in NVDA"
-                            body="Title. I lost a ton of mony in NVDA. Exit rn."
-                            datetime="March 24, 2024 2:15:15 PM"
-                            like_count={0}
-                            liked={false}
-                            comments={[{ user: 'lukezhu', text: "I'd agree" }]}
-                            postId="667cf946003773e4f5bd"
-                        />
-
-                        <CommunityPost
-                            user={user}
-                            title="Someone was very wrong about AAL."
-                            body="It's down 20%. This must be a joke."
-                            datetime="March 24, 2024 2:15:15 PM"
-                            like_count={0}
-                            liked={false}
-                            comments={[{ user: 'lukezhu', text: "I'd agree" }]}
-                        /> */}
 
                         <View className="w-full flex-1 pt-5 pb-8">
                             <Text className="text-black text-lg font-hregular">

@@ -10,7 +10,7 @@ import { router } from 'expo-router'
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
-import { getUserPosts, signOut } from '../../lib/appwrite'
+import { getUserPosts, getUserTextPosts, signOut } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
 
 /* Components */
@@ -25,7 +25,7 @@ const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [selectedTab, setSelectedTab] = useState('Portfolio')
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
-    const { data: posts } = useAppwrite(() => getUserPosts(user.$id))
+    const { data: posts } = useAppwrite(() => getUserTextPosts(user.$id))
 
     const [topHoldings, setTopHoldings] = useState([
         {

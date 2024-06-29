@@ -16,7 +16,15 @@ import { FontAwesome } from '@expo/vector-icons'
 import { likePost, createComment, getPostComments, getPostLikes } from '../../lib/appwrite'
 
 const CommunityPost = ({ user, post }) => {
+    // console.log(post);
     const { creator, title, body, datetime, comments, postId } = post;
+
+    // console.log("Post Creator:", creator);
+    // console.log("Post Title:", title);
+    // console.log("Post Body:", body);
+    // console.log("Post Datetime:", datetime);
+    // console.log("Post Comments:", comments);
+    // console.log("Post ID:", postId);
 
     const [likes, setLikes] = useState(0)
     const [hasLiked, setHasLiked] = useState(false)
@@ -33,7 +41,7 @@ const CommunityPost = ({ user, post }) => {
                 const { likeCount, userLiked } = await getPostLikes(postId, user.$id);
                 setLikes(likeCount);
                 setHasLiked(userLiked);
-                console.log('User liked:', userLiked);
+                // console.log('User liked:', userLiked);
             } catch (error) {
                 console.error("Error fetching likes: ", error);
             }
@@ -150,7 +158,6 @@ const CommunityPost = ({ user, post }) => {
 
             {/* Comment Section */}
             {showComments && (
-                // <Animated.View style={{ height: commentSectionHeight, overflow: 'hidden' }}>
                 <View className="mt-4 m-4 ml-16 w-80">
                     {/* <FlatList
                         data={commentList}
@@ -200,7 +207,6 @@ const CommunityPost = ({ user, post }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                // </Animated.View>
             )}
         </View>
     )
