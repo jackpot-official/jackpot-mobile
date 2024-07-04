@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd server
+cd ../server
 source venv/bin/activate
 python server.py
 
