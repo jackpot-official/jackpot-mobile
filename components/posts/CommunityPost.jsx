@@ -181,7 +181,7 @@ const CommunityPost = ({ user, post }) => {
                         renderItem={({ item }) => (
                             <View className="flex flex-row items-center mb-2">
                                 <Text className="font-hsemibold text-black text-md">
-                                    {item.user}:{' '}
+                                    {item.owner.username}:{' '}
                                 </Text>
                                 <Text className="font-hregular text-black text-md">
                                     {item.text}
