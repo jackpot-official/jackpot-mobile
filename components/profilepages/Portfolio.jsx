@@ -28,11 +28,14 @@ import {
 } from 'react-native-plaid-link-sdk'
 
 import { create, open } from 'react-native-plaid-link-sdk/dist/PlaidLink'
+import { updateUserWithPlaidCredentials } from '../../lib/appwrite';
 import axios from 'axios'
+import { useGlobalContext } from '../../context/GlobalProvider'
 
 const { width: screenWidth } = Dimensions.get('window')
 
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
+    const { user } = useGlobalContext()
     const scrollX = useRef(new Animated.Value(0)).current
     const [contentWidth, setContentWidth] = useState(1)
     const [holdings, setHoldings] = useState(null)
@@ -60,23 +63,21 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     const createLinkOpenProps = () => {
         return {
             onSuccess: async (success) => {
-                // console.log('Success: ', success)
                 try {
                     const response = await axios.post(
-                        'http://localhost:3000/api/set_access_token',
-                        {
+                        'http://localhost:3000/api/set_access_token', {
                             public_token: success.publicToken,
-                        }
-                    )
-                    setAccessToken(response.data.access_token)
-                    // Alert.alert('Success', 'Access token set successfully');
+                        });
+                    
+                    await updateUserWithPlaidCredentials(response.data.access_token, response.data.item_id);
+
+                    setAccessToken(response.data.access_token);
                 } catch (error) {
                     console.error('Error setting access token', error)
                     Alert.alert('Error', 'Failed to set access token')
                 }
             },
             onExit: (linkExit) => {
-                // console.log('Exit: ', linkExit)
                 dismissLink()
             },
             iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,

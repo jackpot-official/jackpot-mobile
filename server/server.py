@@ -73,6 +73,7 @@ def get_access_token():
         access_token = exchange_response['access_token']
         print(access_token)
         item_id = exchange_response['item_id']
+        print(item_id)
         return jsonify(exchange_response.to_dict())
     except plaid.ApiException as e:
         return json.loads(e.body)
