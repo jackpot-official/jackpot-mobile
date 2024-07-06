@@ -39,34 +39,48 @@ const { width: screenWidth } = Dimensions.get('window')
 
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     const scrollX = useRef(new Animated.Value(0)).current
-    const { user } = useGlobalContext()
+    const { user, setUser } = useGlobalContext()
     const [contentWidth, setContentWidth] = useState(1)
     const [holdings, setHoldings] = useState(null)
 
-    const [linkToken, setLinkToken] = useState(null)
-    const [accessToken, setAccessToken] = useState(null)
+    // const [linkToken, setLinkToken] = useState(null)
+    const [publicToken, setPublicToken] = useState(null)
     const [portfolioValue, setPortfolioValue] = useState(0)
 
+    // Run on first render
     useEffect(() => {
         const initialize = async () => {
             if (user.plaidAccessToken) {
-                // console.log('User has plaid access token.')
-                // setAccessToken(user.plaidAccessToken)
-                fetchHoldings(user.plaidAccessToken)
+                fetchHoldings()
             } else {
                 fetchLinkToken()
+                fetchHoldings()
             }
         }
 
         initialize()
     }, [])
 
+    // Run when `user`changes
+    useEffect(() => {
+        const initialize = async () => {
+            if (user.plaidAccessToken) {
+                fetchHoldings()
+            } else {
+                fetchLinkToken()
+                fetchHoldings()
+            }
+        }
+
+        initialize()
+    }, [user])
+
     const fetchLinkToken = async () => {
         try {
             const response = await axios.post(
                 'http://localhost:3000/create_link_token'
             )
-            setLinkToken(response.data.link_token)
+            // setLinkToken(response.data.link_token)
             create({ token: response.data.link_token })
             const openProps = createLinkOpenProps()
             open(openProps)
@@ -74,21 +88,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             console.error('Error fetching link token:', error)
         }
     }
-
-    // useEffect(() => {
-    //     const fetchLinkToken = async () => {
-    //         try {
-    //             const response = await axios.post(
-    //                 'http://localhost:3000/create_link_token'
-    //             )
-    //             setLinkToken(response.data.link_token)
-    //         } catch (error) {
-    //             console.error('Error fetching link token:', error)
-    //         }
-    //     }
-
-    //     fetchLinkToken()
-    // }, [])
 
     const createLinkOpenProps = () => {
         return {
@@ -106,10 +105,13 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                         response.data.item_id
                     )
 
-                    setAccessToken(response.data.access_token)
+                    const updatedUser = await getCurrentUser()
+                    setUser(updatedUser)
+
+                    // setAccessToken(response.data.access_token)
                 } catch (error) {
                     console.error('Error setting access token', error)
-                    Alert.alert('Error', 'Failed to set access token')
+                    // Alert.alert('Error', 'Failed to set access token')
                 }
             },
             onExit: (linkExit) => {
@@ -122,7 +124,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
 
     const fetchHoldings = async () => {
         if (!user.plaidAccessToken) {
-            Alert.alert('Error', 'Access token is required')
+            // Alert.alert('Error', 'Access token is required')
             return
         }
 
@@ -141,13 +143,13 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             setPortfolioValue(totalValue)
         } catch (error) {
             console.error('Error fetching holdings', error)
-            Alert.alert('Error', 'Failed to fetch holdings')
+            // Alert.alert('Error', 'Failed to fetch holdings')
         }
     }
 
     usePlaidEmitter((event) => {
         if (event.eventName === 'SUCCESS') {
-            setAccessToken(event.metadata.publicToken)
+            setPublicToken(event.metadata.publicToken)
         }
     })
 
@@ -157,42 +159,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             className="flex-1"
         >
             <View className="items-center">
-                {/* <View className="flex-row justify-between w-96 mb-5"> */}
-                {/* <TouchableOpacity
-                        className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
-                        onPress={() => {
-                            if (linkToken) {
-                                create({ token: linkToken })
-                            }
-                        }}
-                    >
-                        <Text className="text-white text-lg uppercase text-center">
-                            Create Link
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
-                        onPress={() => {
-                            const openProps = createLinkOpenProps()
-                            open(openProps)
-                        }}
-                    >
-                        <Text className="text-white text-lg uppercase text-center">
-                            Open Link
-                        </Text>
-                    </TouchableOpacity> */}
-
-                {/* <TouchableOpacity
-                        className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
-                        onPress={fetchHoldings}
-                    >
-                        <Text className="text-white text-lg uppercase text-center">
-                            Fetch Holdings
-                        </Text>
-                    </TouchableOpacity> */}
-                {/* </View> */}
-
                 <GainLossCard
                     gainloss={`$${portfolioValue.toFixed(2)}`}
                     percentage="-20"
