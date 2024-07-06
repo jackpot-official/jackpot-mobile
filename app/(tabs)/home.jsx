@@ -20,33 +20,45 @@ import { useGlobalContext } from '../../context/GlobalProvider'
 import CommunityPost from '../../components/posts/CommunityPost'
 
 const Home = () => {
-    const { user, setUser, setIsLoggedIn } = useGlobalContext()
+    const { user } = useGlobalContext()
     const { data: posts, refetch } = useAppwrite(getAllTextPosts)
-    const { data: latestPosts } = useAppwrite(getLatestPosts)
-
+    // const { data: latestPosts } = useAppwrite(getLatestPosts)
     const [refreshing, setRefreshing] = useState(false)
+    const [updatedPosts, setUpdatedPosts] = useState([]);
 
     const onRefresh = async () => {
         setRefreshing(true)
-        // re call videos when new videos appear
         await refetch()
         setRefreshing(false)
     }
 
     useEffect(() => {
+        // const fetchCommentsForPosts = async () => {
+        //     if (posts) {
+        //         for (let post of posts) {
+        //             const comments = await getPostComments(post.$id);
+        //             post.comments = comments;
+        //         }
+        //     }
+        // }
+        // fetchCommentsForPosts();
         const fetchCommentsForPosts = async () => {
             if (posts) {
-                for (let post of posts) {
-                    const comments = await getPostComments(post.$id);
-                    post.comments = comments;
-                }
+                const postsWithComments = await Promise.all(
+                    posts.map(async (post) => {
+                        const comments = await getPostComments(post.$id);
+                        return { ...post, comments };
+                    })
+                );
+                setUpdatedPosts(postsWithComments);
             }
-        }
+        };
+
         fetchCommentsForPosts();
     }, [posts]);
 
     return (
-        <SafeAreaView className="bg-white">
+        <SafeAreaView className="bg-white h-full">
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
@@ -87,13 +99,13 @@ const Home = () => {
 
                         <SearchInput />
 
-                        <View className="w-full flex-1 pt-5 pb-8">
+                        {/* <View className="w-full flex-1 pt-5 pb-8">
                             <Text className="text-black text-lg font-hregular">
                                 Latest Posts
                             </Text>
 
                             <Trending posts={latestPosts ?? []} />
-                        </View>
+                        </View> */}
                     </View>
                 )}
                 ListEmptyComponent={() => (

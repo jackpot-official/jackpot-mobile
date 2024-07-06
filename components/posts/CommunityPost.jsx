@@ -80,12 +80,25 @@ const CommunityPost = ({ user, post }) => {
     const handleAddComment = async() => {
         if (newComment.trim()) {
             try {
-                await createComment( postId, user.$id, newComment );
-                setCommentList([
-                    ...commentList,
-                    { user: user.username, text: newComment, owner: user.$id },
-                ]);
-                setNewComment('')
+                // await createComment( postId, user.$id, newComment );
+                // setCommentList([
+                //     ...commentList,
+                //     // { user: user.username, text: newComment, owner: user.$id },
+                //     // { user: user?.username, text: newComment, owner: user.$id },
+                //     owner: { username: user.username },
+                //     text: newComment,
+                // ]);
+                // setNewComment('')
+                const createdComment = await createComment(postId, user.$id, newComment);
+                const newCommentObject = {
+                    ...createdComment,
+                    owner: { username: user.username },
+                    text: newComment,
+                };
+
+                setCommentList([...commentList, newCommentObject]);
+                setNewComment('');
+
                 setCommentCount(commentCount + 1)
             } catch (error) {
                 console.error("Error adding comment: ", error);
