@@ -33,15 +33,6 @@ const Home = () => {
     }
 
     useEffect(() => {
-        // const fetchCommentsForPosts = async () => {
-        //     if (posts) {
-        //         for (let post of posts) {
-        //             const comments = await getPostComments(post.$id);
-        //             post.comments = comments;
-        //         }
-        //     }
-        // }
-        // fetchCommentsForPosts();
         const fetchCommentsForPosts = async () => {
             if (posts) {
                 const postsWithComments = await Promise.all(
@@ -62,7 +53,6 @@ const Home = () => {
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
-                // renderItem={({ item }) => <VideoCard video={item} />}
                 renderItem={({ item }) => (
                     <>
                         <CommunityPost

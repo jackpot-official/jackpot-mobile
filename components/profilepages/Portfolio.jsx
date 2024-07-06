@@ -28,15 +28,18 @@ import {
 } from 'react-native-plaid-link-sdk'
 
 import { create, open } from 'react-native-plaid-link-sdk/dist/PlaidLink'
-import { updateUserWithPlaidCredentials } from '../../lib/appwrite';
+import {
+    getCurrentUser,
+    updateUserWithPlaidCredentials,
+} from '../../lib/appwrite'
 import axios from 'axios'
 import { useGlobalContext } from '../../context/GlobalProvider'
 
 const { width: screenWidth } = Dimensions.get('window')
 
 const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
-    const { user } = useGlobalContext()
     const scrollX = useRef(new Animated.Value(0)).current
+    const { user } = useGlobalContext()
     const [contentWidth, setContentWidth] = useState(1)
     const [holdings, setHoldings] = useState(null)
 
@@ -45,33 +48,64 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     const [portfolioValue, setPortfolioValue] = useState(0)
 
     useEffect(() => {
-        const fetchLinkToken = async () => {
-            try {
-                const response = await axios.post(
-                    'http://localhost:3000/create_link_token'
-                )
-                // console.log(response)
-                setLinkToken(response.data.link_token)
-            } catch (error) {
-                console.error('Error fetching link token:', error)
+        const initialize = async () => {
+            if (user.plaidAccessToken) {
+                setAccessToken(user.plaidAccessToken)
+                fetchHoldings(user.plaidAccessToken)
+            } else {
+                fetchLinkToken()
             }
         }
 
-        fetchLinkToken()
+        initialize()
     }, [])
+
+    const fetchLinkToken = async () => {
+        try {
+            const response = await axios.post(
+                'http://localhost:3000/create_link_token'
+            )
+            setLinkToken(response.data.link_token)
+            create({ token: response.data.link_token })
+            const openProps = createLinkOpenProps()
+            open(openProps)
+        } catch (error) {
+            console.error('Error fetching link token:', error)
+        }
+    }
+
+    // useEffect(() => {
+    //     const fetchLinkToken = async () => {
+    //         try {
+    //             const response = await axios.post(
+    //                 'http://localhost:3000/create_link_token'
+    //             )
+    //             setLinkToken(response.data.link_token)
+    //         } catch (error) {
+    //             console.error('Error fetching link token:', error)
+    //         }
+    //     }
+
+    //     fetchLinkToken()
+    // }, [])
 
     const createLinkOpenProps = () => {
         return {
             onSuccess: async (success) => {
                 try {
                     const response = await axios.post(
-                        'http://localhost:3000/api/set_access_token', {
+                        'http://localhost:3000/api/set_access_token',
+                        {
                             public_token: success.publicToken,
-                        });
-                    
-                    await updateUserWithPlaidCredentials(response.data.access_token, response.data.item_id);
+                        }
+                    )
 
-                    setAccessToken(response.data.access_token);
+                    await updateUserWithPlaidCredentials(
+                        response.data.access_token,
+                        response.data.item_id
+                    )
+
+                    setAccessToken(response.data.access_token)
                 } catch (error) {
                     console.error('Error setting access token', error)
                     Alert.alert('Error', 'Failed to set access token')
@@ -104,7 +138,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                 0
             )
             setPortfolioValue(totalValue)
-            // Alert.alert('Success', 'Holdings fetched successfully');
         } catch (error) {
             console.error('Error fetching holdings', error)
             Alert.alert('Error', 'Failed to fetch holdings')
@@ -124,7 +157,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
         >
             <View className="items-center">
                 <View className="flex-row justify-between w-96 mb-5">
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
                         onPress={() => {
                             if (linkToken) {
@@ -147,7 +180,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                         <Text className="text-white text-lg uppercase text-center">
                             Open Link
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity
                         className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
@@ -158,8 +191,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-
-                {/* <GainLossCard gainloss="$45,678.90" percentage="-20" /> */}
 
                 <GainLossCard
                     gainloss={`$${portfolioValue.toFixed(2)}`}
