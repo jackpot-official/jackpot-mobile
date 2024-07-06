@@ -50,7 +50,8 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     useEffect(() => {
         const initialize = async () => {
             if (user.plaidAccessToken) {
-                setAccessToken(user.plaidAccessToken)
+                // console.log('User has plaid access token.')
+                // setAccessToken(user.plaidAccessToken)
                 fetchHoldings(user.plaidAccessToken)
             } else {
                 fetchLinkToken()
@@ -120,7 +121,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     }
 
     const fetchHoldings = async () => {
-        if (!accessToken) {
+        if (!user.plaidAccessToken) {
             Alert.alert('Error', 'Access token is required')
             return
         }
@@ -129,7 +130,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             const response = await axios.post(
                 'http://localhost:3000/investments/holdings/get',
                 {
-                    access_token: accessToken,
+                    access_token: user.plaidAccessToken,
                 }
             )
             setHoldings(response.data.holdings)
@@ -156,8 +157,8 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             className="flex-1"
         >
             <View className="items-center">
-                <View className="flex-row justify-between w-96 mb-5">
-                    {/* <TouchableOpacity
+                {/* <View className="flex-row justify-between w-96 mb-5"> */}
+                {/* <TouchableOpacity
                         className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
                         onPress={() => {
                             if (linkToken) {
@@ -182,15 +183,15 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                         </Text>
                     </TouchableOpacity> */}
 
-                    <TouchableOpacity
+                {/* <TouchableOpacity
                         className="bg-primarytint-200 my-1 mx-0.5 py-1 text-center text-white text-lg uppercase rounded-md self-center overflow-hidden px-1"
                         onPress={fetchHoldings}
                     >
                         <Text className="text-white text-lg uppercase text-center">
                             Fetch Holdings
                         </Text>
-                    </TouchableOpacity>
-                </View>
+                    </TouchableOpacity> */}
+                {/* </View> */}
 
                 <GainLossCard
                     gainloss={`$${portfolioValue.toFixed(2)}`}
