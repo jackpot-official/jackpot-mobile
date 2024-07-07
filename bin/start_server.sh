@@ -6,3 +6,5 @@ python server.py
 
 # cd ..
 # npx expo start -c
+
+# npx expo run:ios
