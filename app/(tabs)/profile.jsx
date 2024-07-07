@@ -1,16 +1,19 @@
 /* Libraries */
-import {
-    View,
-    FlatList,
-    Image,
-} from 'react-native'
-import React, { useState } from 'react'
+import { View, FlatList, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
-import { getUserPosts, getUserTextPosts, signOut } from '../../lib/appwrite'
+import {
+    getUserPosts,
+    getUserTextPosts,
+    signOut,
+    createFollowing,
+    getFollowers,
+    getFollowing,
+} from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
 
 /* Components */
@@ -26,6 +29,11 @@ const Profile = () => {
     const [selectedTab, setSelectedTab] = useState('Portfolio')
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
     const { data: posts } = useAppwrite(() => getUserTextPosts(user.$id))
+
+    const [followers, setFollowers] = useState([])
+    const [followersCount, setFollowersCount] = useState(0)
+    const [following, setFollowing] = useState([])
+    const [followingCount, setFollowingCount] = useState(0)
 
     const [topHoldings, setTopHoldings] = useState([
         {
@@ -96,6 +104,33 @@ const Profile = () => {
         },
     ])
 
+    useEffect(() => {
+        if (user) {
+            fetchFollowers()
+            fetchFollowing()
+        }
+    }, [])
+
+    const fetchFollowers = async () => {
+        try {
+            const response = await getFollowers(user.$id)
+            setFollowers(response.documents)
+            setFollowersCount(response.length)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const fetchFollowing = async () => {
+        try {
+            const response = await getFollowing(user.$id)
+            setFollowing(response.documents)
+            setFollowingCount(response.length)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const logout = async () => {
         await signOut()
         setUser(null)
@@ -120,6 +155,24 @@ const Profile = () => {
             default:
                 return null
         }
+    }
+
+    const navigateToFollowers = () => {
+        router.push({
+            pathname: '/profile/followers',
+            params: {
+                followers: followers,
+            },
+        })
+    }
+
+    const navigateToFollowing = () => {
+        router.push({
+            pathname: '/profile/following',
+            params: {
+                following: following,
+            },
+        })
     }
 
     return (
@@ -160,17 +213,34 @@ const Profile = () => {
                                     />
 
                                     {/* number of followers */}
-                                    <InfoBox
+                                    {/* <InfoBox
                                         title="1.3k"
                                         subtitle="Followers"
                                         containerStyles="mr-8"
-                                    />
+                                    /> */}
+                                    <TouchableOpacity
+                                        onPress={navigateToFollowers}
+                                    >
+                                        <InfoBox
+                                            title={followersCount}
+                                            subtitle="Followers"
+                                            containerStyles="mr-8"
+                                        />
+                                    </TouchableOpacity>
 
                                     {/* number following */}
-                                    <InfoBox
+                                    {/* <InfoBox
                                         title="1.1k"
                                         subtitle="Following"
-                                    />
+                                    /> */}
+                                    <TouchableOpacity
+                                        onPress={navigateToFollowing}
+                                    >
+                                        <InfoBox
+                                            title={followingCount}
+                                            subtitle="Following"
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
