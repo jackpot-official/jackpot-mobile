@@ -1,15 +1,28 @@
-import React from 'react'
-import { View, Text, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation, useRouter, useLocalSearchParams } from 'expo-router'
 import FollowNavigation from '../../components/profile/FollowNavigation'
+import { getFollowers } from '../../lib/appwrite'
 
 const Followers = () => {
     const navigation = useNavigation()
-    const { followers } = useLocalSearchParams()
+    const { userId } = useLocalSearchParams()
+    const [followers, setFollowers] = useState([])
+
+    useEffect(() => {
+        const fetchFollowers = async () => {
+            if (userId) {
+                const response = await getFollowers(userId)
+                setFollowers(response.documents)
+            }
+        }
+
+        fetchFollowers()
+    }, [userId])
 
     return (
-        <SafeAreaView>
+        <SafeAreaView className="bg-white h-full">
             <FollowNavigation
                 title="Followers"
                 onBackPress={() => navigation.goBack()}
@@ -29,10 +42,17 @@ const Followers = () => {
 
             <FlatList
                 data={followers}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.user2.$id}
                 renderItem={({ item }) => (
-                    <View>
-                        <Text>{item.name}</Text>
+                    <View className="flex flex-row items-center p-4 border-b border-gray-200">
+                        <Image
+                            source={{ uri: item.user1.avatar }}
+                            className="w-10 h-10 rounded-full mr-4"
+                            resizeMode="cover"
+                        />
+                        <Text className="text-lg font-semibold">
+                            {item.user1.username}
+                        </Text>
                     </View>
                 )}
             />
