@@ -1,3 +1,4 @@
+import back from '../assets/icons/back.png'
 import bookmark from '../assets/icons/bookmark.png'
 import home from '../assets/icons/home.png'
 import plus from '../assets/icons/plus.png'
@@ -14,13 +15,12 @@ import play from '../assets/icons/play.png'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
 
-
 const userGroupIcon = ({ size, color }) => (
     <FontAwesomeIcon icon={faUserGroup} color={color} size={size} />
-);
-
+)
 
 export default {
+    back,
     play,
     bookmark,
     home,
