@@ -22,7 +22,7 @@ const Social = () => {
                             className="w-12 h-12 rounded-full"
                         />
                         <Text className="ml-2 text-lg font-semibold">
-                            Riya Dev
+                            {user?.username}
                         </Text>
                     </View>
                     <FontAwesome name="times" size={24} color="black" />
@@ -38,7 +38,6 @@ const Social = () => {
                 </View>
 
                 <ComparisonCard percentage={75} />
-
             </View>
 
             {/* Investing Overview Section */}
