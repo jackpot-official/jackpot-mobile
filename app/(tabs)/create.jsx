@@ -37,7 +37,7 @@ const Create = () => {
         try {
             await createPost(form.title, form.body, user.$id)
 
-            Alert.alert('Success', 'Post created successfully')
+            // Alert.alert('Success', 'Post created successfully')
             router.push('/profile')
         } catch (error) {
             Alert.alert('Error', error.message)
