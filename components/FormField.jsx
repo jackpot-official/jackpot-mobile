@@ -8,20 +8,23 @@ const FormField = ({
     placeholder,
     handleChangeText,
     otherStyles,
+    boxStyles,
     ...props
 }) => {
     const [showPassword, setShowPassword] = useState(false)
 
     return (
         <View className={`space-y-2 ${otherStyles}`}>
-            <Text className="text-base text-white font-hbold">{title}</Text>
+            <Text className="text-base text-black font-hbold">{title}</Text>
 
-            <View className="border-2 border-primaryshade-100 w-full h-16 px-4 bg-primarytint-100 rounded-2xl focus:border-secondary items-center flex-row">
+            <View
+                className={`border-2 border-white w-full h-16 px-4 bg-primarytint-900 rounded-2xl focus:border-primaryshade-800 items-center flex-row ${boxStyles}`}
+            >
                 <TextInput
-                    className="flex-1 text-white font-hmedium text-base"
+                    className="flex-1 text-black font-hmedium text-lg"
                     value={value}
                     placeholder={placeholder}
-                    placeholderTextColor="#ffffff"
+                    placeholderTextColor="#000000"
                     onChangeText={handleChangeText}
                     secureTextEntry={title === 'Password' && !showPassword}
                 />

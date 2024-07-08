@@ -15,114 +15,71 @@ import { ResizeMode, Video } from 'expo-av'
 import { icons } from '../../constants'
 import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router'
-import { createVideo } from '../../lib/appwrite'
+import { createPost, createVideo } from '../../lib/appwrite'
 import { useGlobalContext } from '../../context/GlobalProvider'
+
 
 const Create = () => {
     const { user } = useGlobalContext()
     const [uploading, setUploading] = useState(false)
     const [form, setForm] = useState({
         title: '',
-        video: null,
-        thumbnail: null,
-        prompt: '',
+        body: '',
     })
 
-    const openPicker = async (selectType) => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes:
-                selectType === 'image'
-                    ? ImagePicker.MediaTypeOptions.Images
-                    : ImagePicker.MediaTypeOptions.Videos,
-            aspect: [4, 3],
-            quality: 1,
-        })
-
-        if (!result.canceled) {
-            if (selectType === 'image') {
-                setForm({ ...form, thumbnail: result.assets[0] })
-            }
-            if (selectType === 'video') {
-                setForm({ ...form, video: result.assets[0] })
-            }
-        }
-    }
-
     const submit = async () => {
-        if (!form.prompt || !form.title || !form.video || !form.thumbnail) {
+        if (!form.title || !form.body) {
             return Alert.alert('Please fill in all of the fields.')
         }
 
         setUploading(true)
 
         try {
-            await createVideo({
-                ...form,
-                userId: user.$id,
-            })
+            await createPost(form.title, form.body, user.$id)
 
-            Alert.alert('Success', 'Post uploaded successfully')
-            router.push('/home')
+            Alert.alert('Success', 'Post created successfully')
+            router.push('/profile')
         } catch (error) {
             Alert.alert('Error', error.message)
         } finally {
             setForm({
                 title: '',
-                video: null,
-                thumbnail: null,
-                prompt: '',
+                body: '',
             })
             setUploading(false)
         }
     }
 
     return (
-        <SafeAreaView className="bg-primary h-full">
+        <SafeAreaView className="bg-white h-full">
             <ScrollView className="px-4 my-6">
-                <Text className="text-2xl text-white font-hsemibold">
-                    Upload video
+                <Text className="text-2xl text-black font-hsemibold">
+                    Create Post
                 </Text>
 
-                {/* Enter video title */}
+                {/* Enter post title */}
                 <FormField
-                    title="Video Title"
+                    title=""
                     value={form.title}
-                    placeholder="Give your video a catchy title..."
+                    placeholder="Give your post a catchy title..."
                     handleChangeText={(e) => setForm({ ...form, title: e })}
-                    otherStyles="mt-10"
+                    otherStyles="mt-3"
                 />
 
-                {/* Upload Video */}
-                <View className="mt-7 space-y-2">
-                    <Text className="text-base text-white font-hbold">
-                        Upload video
-                    </Text>
-                    <TouchableOpacity onPress={() => openPicker('video')}>
-                        {form.video ? (
-                            <Video
-                                source={{ uri: form.video.uri }}
-                                className="w-full h-64 rounded-2xl"
-                                resizeMode={ResizeMode.COVER}
-                            />
-                        ) : (
-                            <View className="w-full h-40 px-4 bg-primarytint-100 rounded-2xl justify-center items-center">
-                                <View className="w-14 h-14 horder border-dashed border-secondary-100 justify-center items-center">
-                                    <Image
-                                        source={icons.upload}
-                                        resizeMode="contain"
-                                        className="w-1/2"
-                                    />
-                                </View>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                </View>
+                {/* Enter post body */}
+                <FormField
+                    title=""
+                    value={form.body}
+                    placeholder="Write the body of your post..."
+                    handleChangeText={(e) => setForm({ ...form, body: e })}
+                    otherStyles=""
+                    boxStyles="h-52"
+                />
 
-                {/* Upload thumbnail image */}
                 <View className="mt-7 space-y-2">
-                    <Text className="text-base text-white font-hbold">
-                        Thumbnail Image
-                    </Text>
+                    {/* <Text className="text-base text-black font-hbold">
+                        Image
+                    </Text> */}
 
                     <TouchableOpacity onPress={() => openPicker('image')}>
                         {form.thumbnail ? (
@@ -132,28 +89,19 @@ const Create = () => {
                                 className="w-full h-64 rounded-2xl"
                             />
                         ) : (
-                            <View className="w-full h-16 px-4 bg-primarytint-100 rounded-2xl justify-center items-center border-2 border-black-200 flex-row space-x-2">
+                            <View className="w-full h-16 px-4 bg-primarytint-900 rounded-2xl justify-center items-center flex-row space-x-2">
                                 <Image
                                     source={icons.upload}
                                     resizeMode="contain"
                                     className="w-5 h-5"
                                 />
-                                <Text className="text-base text-white font-hmedium">
+                                <Text className="text-base text-black font-hmedium">
                                     Choose a file
                                 </Text>
                             </View>
                         )}
                     </TouchableOpacity>
                 </View>
-
-                {/* Enter AI Prompt */}
-                <FormField
-                    title="AI Prompt"
-                    value={form.prompt}
-                    placeholder="The prompt you used to create this video"
-                    handleChangeText={(e) => setForm({ ...form, prompt: e })}
-                    otherStyles="mt-7"
-                />
 
                 {/* Submit and publish custom button */}
                 <CustomButton
