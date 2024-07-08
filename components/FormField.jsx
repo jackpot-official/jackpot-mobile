@@ -19,6 +19,7 @@ const FormField = ({
 
             <View
                 className={`border-2 border-white w-full h-16 px-4 bg-primarytint-900 rounded-2xl focus:border-primaryshade-800 items-center flex-row ${boxStyles}`}
+                style={{ alignItems: 'flex-start' }}
             >
                 <TextInput
                     className="flex-1 text-black font-hmedium text-lg"
@@ -27,6 +28,7 @@ const FormField = ({
                     placeholderTextColor="#000000"
                     onChangeText={handleChangeText}
                     secureTextEntry={title === 'Password' && !showPassword}
+                    style={{ textAlignVertical: 'top', paddingTop: 18 }}
                 />
 
                 {title === 'Password' && (

@@ -61,7 +61,7 @@ const Create = () => {
                 <FormField
                     title=""
                     value={form.title}
-                    placeholder="Give your post a catchy title..."
+                    placeholder="Give your post a title..."
                     handleChangeText={(e) => setForm({ ...form, title: e })}
                     otherStyles="mt-3"
                 />
