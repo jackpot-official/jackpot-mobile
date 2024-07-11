@@ -12,17 +12,23 @@ import {
 import React, { useEffect, useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
 import { FontAwesome } from '@expo/vector-icons'
-
-import { likePost, createComment, getPostComments, getPostLikes } from '../../lib/appwrite'
+import {
+    likePost,
+    createComment,
+    getPostComments,
+    getPostLikes,
+} from '../../lib/appwrite'
+import { formatDistanceToNow } from 'date-fns'
 
 const CommunityPost = ({ user, post }) => {
-    // console.log(post);
-    const { creator, title, body, datetime, comments, postId } = post;
+    // console.log(post)
+    // const { creator, title, body, createdAt, comments, postId } = post
+    const { creator, title, body, date, comments, postId } = post
 
     // console.log("Post Creator:", creator);
     // console.log("Post Title:", title);
     // console.log("Post Body:", body);
-    // console.log("Post Datetime:", datetime);
+    console.log('Post createdAt:', date)
     // console.log("Post Comments:", comments);
     // console.log("Post ID:", postId);
 
@@ -33,37 +39,40 @@ const CommunityPost = ({ user, post }) => {
     const [commentList, setCommentList] = useState(comments) // comments array
     const [commentCount, setCommentCount] = useState(comments.length)
 
-    const slideAnim = useRef(new Animated.Value(0)).current;
+    const slideAnim = useRef(new Animated.Value(0)).current
 
     useEffect(() => {
         const fetchLikes = async () => {
             try {
-                const { likeCount, userLiked } = await getPostLikes(postId, user.$id);
-                setLikes(likeCount);
-                setHasLiked(userLiked);
+                const { likeCount, userLiked } = await getPostLikes(
+                    postId,
+                    user.$id
+                )
+                setLikes(likeCount)
+                setHasLiked(userLiked)
                 // console.log('User liked:', userLiked);
             } catch (error) {
-                console.error("Error fetching likes: ", error);
+                console.error('Error fetching likes: ', error)
             }
-        };
+        }
 
         const fetchComments = async () => {
             try {
-                const fetchedComments = await getPostComments(postId);
-                setCommentList(fetchedComments);
-                setCommentCount(fetchedComments.length);
+                const fetchedComments = await getPostComments(postId)
+                setCommentList(fetchedComments)
+                setCommentCount(fetchedComments.length)
             } catch (error) {
-                console.error("Error fetching comments: ", error);
+                console.error('Error fetching comments: ', error)
             }
-        };
+        }
 
-        fetchLikes();
-        fetchComments();
-    }, [postId, user.$id]);
+        fetchLikes()
+        fetchComments()
+    }, [postId, user.$id])
 
     const handleLike = async () => {
         try {
-            await likePost(postId, user.$id);
+            await likePost(postId, user.$id)
 
             if (!hasLiked) {
                 setLikes(likes + 1)
@@ -73,11 +82,11 @@ const CommunityPost = ({ user, post }) => {
                 setHasLiked(false)
             }
         } catch (error) {
-            console.error("Error liking the post: ", error);
+            console.error('Error liking the post: ', error)
         }
     }
 
-    const handleAddComment = async() => {
+    const handleAddComment = async () => {
         if (newComment.trim()) {
             try {
                 // await createComment( postId, user.$id, newComment );
@@ -89,19 +98,23 @@ const CommunityPost = ({ user, post }) => {
                 //     text: newComment,
                 // ]);
                 // setNewComment('')
-                const createdComment = await createComment(postId, user.$id, newComment);
+                const createdComment = await createComment(
+                    postId,
+                    user.$id,
+                    newComment
+                )
                 const newCommentObject = {
                     ...createdComment,
                     owner: { username: user.username },
                     text: newComment,
-                };
+                }
 
-                setCommentList([...commentList, newCommentObject]);
-                setNewComment('');
+                setCommentList([...commentList, newCommentObject])
+                setNewComment('')
 
                 setCommentCount(commentCount + 1)
             } catch (error) {
-                console.error("Error adding comment: ", error);
+                console.error('Error adding comment: ', error)
             }
         }
     }
@@ -142,12 +155,12 @@ const CommunityPost = ({ user, post }) => {
             </Text>
 
             {/* Time and Date */}
-            <Text className="font-hregular text-gray-400 text-sm ml-16">
-                {datetime}
+            <Text className="font-hregular text-gray-500 text-sm ml-16 mt-3">
+                {formatDistanceToNow(new Date(date), { addSuffix: true })}
             </Text>
 
             {/* Like and comment Touchable Opacity Icons */}
-            <View className="flex flex-row ml-16 mt-2">
+            <View className="flex flex-row ml-16 mt-1">
                 <TouchableOpacity
                     onPress={handleLike}
                     className="flex flex-row items-center mr-4"
@@ -192,12 +205,23 @@ const CommunityPost = ({ user, post }) => {
                         data={commentList}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (
-                            <View className="flex flex-row items-center mb-2">
-                                <Text className="font-hsemibold text-black text-md">
-                                    {item.owner.username}:{' '}
-                                </Text>
-                                <Text className="font-hregular text-black text-md">
-                                    {item.text}
+                            <View className="flex flex-col mb-2">
+                                <View className="flex flex-row items-center">
+                                    <Text className="font-hsemibold text-black text-md">
+                                        {item.owner.username}:{' '}
+                                    </Text>
+                                    <Text className="font-hregular text-black text-md">
+                                        {item.text}
+                                    </Text>
+                                </View>
+                                <Text
+                                    className="font-hregular text-gray-500 text-sm"
+                                    style={{ alignSelf: 'flex-end' }}
+                                >
+                                    {formatDistanceToNow(
+                                        new Date(item.datetime),
+                                        { addSuffix: true }
+                                    )}
                                 </Text>
                             </View>
                         )}
