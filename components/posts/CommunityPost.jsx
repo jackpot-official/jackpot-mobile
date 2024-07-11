@@ -116,13 +116,13 @@ const CommunityPost = ({ user, post }) => {
     }
 
     return (
-        <View className="">
+        <View className="bg-white rounded-lg shadow-sm p-4">
             <View className="flex flex-row items-center">
                 {/* user pfp */}
-                <View className="ml-4 w-10 h-10 rounded-lg justify-center items-center">
+                <View className="w-10 h-10 rounded-full justify-center items-center overflow-hidden">
                     <Image
                         source={{ uri: creator?.avatar }}
-                        className="w-[90%] h-[90%] rounded-full"
+                        className="w-full h-full"
                         resizeMode="cover"
                     />
                 </View>
@@ -130,28 +130,28 @@ const CommunityPost = ({ user, post }) => {
                 {/* username */}
                 <InfoBox
                     title={`@${creator?.username}`}
-                    containerStyles="mt-5 ml-2"
+                    containerStyles="ml-2"
                     titleStyles="text-md"
                 />
             </View>
 
             {/* Title */}
-            <Text className="font-hsemibold text-black text-xl ml-16">
+            <Text className="font-hsemibold text-black text-xl mt-2">
                 {title}
             </Text>
 
             {/* Text */}
-            <Text className="font-hregular text-black text-md ml-16">
+            <Text className="font-hregular text-black text-md mt-1">
                 {body}
             </Text>
 
             {/* Time and Date */}
-            <Text className="font-hregular text-gray-500 text-sm ml-16 mt-3">
+            <Text className="font-hregular text-gray-500 text-sm mt-3">
                 {formatDistanceToNow(new Date(date), { addSuffix: true })}
             </Text>
 
             {/* Like and comment Touchable Opacity Icons */}
-            <View className="flex flex-row ml-16 mt-1">
+            <View className="flex flex-row mt-2">
                 <TouchableOpacity
                     onPress={handleLike}
                     className="flex flex-row items-center mr-4"
@@ -175,15 +175,15 @@ const CommunityPost = ({ user, post }) => {
 
             {/* Comment Section */}
             {showComments && (
-                <View className="mt-4 ml-16 w-80">
+                <View className="mt-4">
                     <ScrollView
-                        style={{ maxHeight: 200, marginBottom: 16 }}
+                        className="max-h-52 mb-4"
                         showsVerticalScrollIndicator={true}
                     >
                         {commentList.map((item, index) => (
                             <View
                                 key={index.toString()}
-                                className="flex flex-col mb-2"
+                                className="bg-gray-100 rounded-lg p-3 mb-3 shadow-sm"
                             >
                                 <View className="flex flex-row items-center">
                                     <Text className="font-hsemibold text-black text-md">
@@ -194,7 +194,7 @@ const CommunityPost = ({ user, post }) => {
                                     </Text>
                                 </View>
                                 <Text
-                                    className="font-hregular text-gray-500 text-xs mb-2"
+                                    className="font-hregular text-gray-600 text-xs mt-1"
                                     style={{ alignSelf: 'flex-start' }}
                                 >
                                     {formatDistanceToNow(
@@ -206,16 +206,16 @@ const CommunityPost = ({ user, post }) => {
                         ))}
                     </ScrollView>
 
-                    <View className="flex flex-row items-center">
+                    <View className="flex flex-row items-center bg-white rounded-lg p-3 shadow-sm">
                         <TextInput
-                            className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
+                            className="flex-1 border border-gray-200 rounded-lg p-2 bg-gray-200 mr-2"
                             placeholder="Add a comment..."
                             value={newComment}
                             onChangeText={setNewComment}
                         />
                         <TouchableOpacity
                             onPress={handleAddComment}
-                            className="bg-primarytint-200 py-1 px-3 rounded-md"
+                            className="bg-primarytint-200 py-2 px-4 rounded-lg"
                         >
                             <Text className="text-white">Post</Text>
                         </TouchableOpacity>
