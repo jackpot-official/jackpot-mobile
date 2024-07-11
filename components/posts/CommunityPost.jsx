@@ -8,6 +8,7 @@ import {
     Animated,
     Easing,
     LayoutAnimation,
+    ScrollView,
 } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import InfoBox from '../InfoBox'
@@ -21,17 +22,7 @@ import {
 import { formatDistanceToNow } from 'date-fns'
 
 const CommunityPost = ({ user, post }) => {
-    // console.log(post)
-    // const { creator, title, body, createdAt, comments, postId } = post
     const { creator, title, body, date, comments, postId } = post
-
-    // console.log("Post Creator:", creator);
-    // console.log("Post Title:", title);
-    // console.log("Post Body:", body);
-    console.log('Post createdAt:', date)
-    // console.log("Post Comments:", comments);
-    // console.log("Post ID:", postId);
-
     const [likes, setLikes] = useState(0)
     const [hasLiked, setHasLiked] = useState(false)
     const [showComments, setShowComments] = useState(false) // toggle comment visibility
@@ -125,7 +116,7 @@ const CommunityPost = ({ user, post }) => {
     }
 
     return (
-        <View className="mb-6">
+        <View className="">
             <View className="flex flex-row items-center">
                 {/* user pfp */}
                 <View className="ml-4 w-10 h-10 rounded-lg justify-center items-center">
@@ -184,28 +175,16 @@ const CommunityPost = ({ user, post }) => {
 
             {/* Comment Section */}
             {showComments && (
-                <View className="mt-4 m-4 ml-16 w-80">
-                    {/* <FlatList
-                        data={commentList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <View className="flex flex-row items-center mb-2">
-                                <Text className="font-hsemibold text-black text-md">
-                                    {item.user}:{' '}
-                                </Text>
-                                <Text className="font-hregular text-black text-md">
-                                    {item.text}
-                                </Text>
-                            </View>
-                        )}
-                        contentContainerStyle={{ flexGrow: 1 }}
-                        style={{ maxHeight: 200 }}
-                    /> */}
-                    <FlatList
-                        data={commentList}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <View className="flex flex-col mb-2">
+                <View className="mt-4 ml-16 w-80">
+                    <ScrollView
+                        style={{ maxHeight: 200, marginBottom: 16 }}
+                        showsVerticalScrollIndicator={true}
+                    >
+                        {commentList.map((item, index) => (
+                            <View
+                                key={index.toString()}
+                                className="flex flex-col mb-2"
+                            >
                                 <View className="flex flex-row items-center">
                                     <Text className="font-hsemibold text-black text-md">
                                         {item.owner.username}:{' '}
@@ -215,8 +194,8 @@ const CommunityPost = ({ user, post }) => {
                                     </Text>
                                 </View>
                                 <Text
-                                    className="font-hregular text-gray-500 text-sm"
-                                    style={{ alignSelf: 'flex-end' }}
+                                    className="font-hregular text-gray-500 text-xs mb-2"
+                                    style={{ alignSelf: 'flex-start' }}
                                 >
                                     {formatDistanceToNow(
                                         new Date(item.datetime),
@@ -224,12 +203,10 @@ const CommunityPost = ({ user, post }) => {
                                     )}
                                 </Text>
                             </View>
-                        )}
-                        contentContainerStyle={{ flexGrow: 1 }}
-                        style={{ maxHeight: 200 }}
-                    />
+                        ))}
+                    </ScrollView>
 
-                    <View className="flex flex-row items-center mt-2">
+                    <View className="flex flex-row items-center">
                         <TextInput
                             className="border border-gray-400 rounded-lg flex-1 mr-2 p-2"
                             placeholder="Add a comment..."
