@@ -170,7 +170,7 @@ const Profile = () => {
         router.push({
             pathname: '/profile/following',
             params: {
-                following: following,
+                userId: user.$id,
             },
         })
     }
