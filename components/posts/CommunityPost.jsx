@@ -3,10 +3,8 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    FlatList,
     TextInput,
     Animated,
-    Easing,
     LayoutAnimation,
     ScrollView,
 } from 'react-native'
@@ -20,6 +18,7 @@ import {
     getPostLikes,
 } from '../../lib/appwrite'
 import { formatDistanceToNow } from 'date-fns'
+import { router } from 'expo-router'
 
 const CommunityPost = ({ user, post }) => {
     const { creator, title, body, date, comments, postId } = post
@@ -115,22 +114,42 @@ const CommunityPost = ({ user, post }) => {
         setShowComments(!showComments)
     }
 
+    const navigateToProfile = () => {
+        console.log(JSON.stringify(creator, null, 2))
+        router.push({
+            pathname: '/profile/socialProfile',
+            params: {
+                profileUser: JSON.stringify(creator),
+            },
+        })
+    }
+
     return (
         <View className="bg-white rounded-lg shadow-sm p-4">
             <View className="flex flex-row items-center">
                 {/* user pfp */}
-                <View className="w-10 h-10 rounded-full justify-center items-center overflow-hidden">
+                {/* <View className="w-10 h-10 rounded-full justify-center items-center overflow-hidden">
                     <Image
                         source={{ uri: creator?.avatar }}
                         className="w-full h-full"
                         resizeMode="cover"
                     />
-                </View>
+                </View> */}
+                <TouchableOpacity
+                    className="w-10 h-10 rounded-full justify-center items-center overflow-hidden"
+                    onPress={() => navigateToProfile()}
+                >
+                    <Image
+                        source={{ uri: creator?.avatar }}
+                        className="w-full h-full"
+                        resizeMode="cover"
+                    />
+                </TouchableOpacity>
 
                 {/* username */}
                 <InfoBox
                     title={`@${creator?.username}`}
-                    containerStyles="ml-2"
+                    containerStyles="mt-3 ml-2"
                     titleStyles="text-md"
                 />
             </View>
@@ -206,7 +225,7 @@ const CommunityPost = ({ user, post }) => {
                         ))}
                     </ScrollView>
 
-                    <View className="flex flex-row items-center bg-white rounded-lg p-3 shadow-sm">
+                    <View className="flex flex-row items-center bg-white rounded-lg shadow-sm">
                         <TextInput
                             className="flex-1 border border-gray-200 rounded-lg p-2 bg-gray-200 mr-2"
                             placeholder="Add a comment..."
