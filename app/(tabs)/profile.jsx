@@ -183,7 +183,7 @@ const Profile = () => {
                 ListHeaderComponent={() => (
                     <>
                         <TopNavigation logout={logout} />
-                        <View className="w-full justify-center mt-6 mb-3 px-4">
+                        <View className="w-full justify-center mt-2 mb-3 px-4">
                             {/* Header */}
                             <View className="flex flex-row justify-between items-center">
                                 <View className="flex flex-row items-center">
@@ -213,11 +213,6 @@ const Profile = () => {
                                     />
 
                                     {/* number of followers */}
-                                    {/* <InfoBox
-                                        title="1.3k"
-                                        subtitle="Followers"
-                                        containerStyles="mr-8"
-                                    /> */}
                                     <TouchableOpacity
                                         onPress={navigateToFollowers}
                                     >
@@ -229,10 +224,6 @@ const Profile = () => {
                                     </TouchableOpacity>
 
                                     {/* number following */}
-                                    {/* <InfoBox
-                                        title="1.1k"
-                                        subtitle="Following"
-                                    /> */}
                                     <TouchableOpacity
                                         onPress={navigateToFollowing}
                                     >

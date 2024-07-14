@@ -2,12 +2,12 @@ import React from 'react'
 import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { icons } from '../../constants'
 
-const SocialTopNav = ({ logout }) => {
+const SocialTopNav = ({ onBackPress }) => {
     return (
         <View className="w-full flex-row justify-between items-center px-4 py-2 bg-white">
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onBackPress}>
                 <Image
-                    source={icons.menu}
+                    source={icons.back}
                     resizeMode="contain"
                     className="w-6 h-6"
                 />
@@ -15,9 +15,9 @@ const SocialTopNav = ({ logout }) => {
 
             <Text className="text-xl font-semibold">Social</Text>
 
-            <TouchableOpacity onPress={logout}>
+            <TouchableOpacity>
                 <Image
-                    source={icons.logout}
+                    source={icons.menu}
                     resizeMode="contain"
                     className="w-6 h-6"
                 />
