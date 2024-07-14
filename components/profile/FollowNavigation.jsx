@@ -2,7 +2,7 @@ import React from 'react'
 import { View, TouchableOpacity, Image, Text } from 'react-native'
 import { icons } from '../../constants'
 
-const TopNavigation = ({ title, onBackPress }) => {
+const FollowNavigation = ({ title, onBackPress }) => {
     return (
         <View className="w-full flex-row justify-between items-center px-4 py-2 bg-white">
             <TouchableOpacity onPress={onBackPress}>
@@ -20,4 +20,4 @@ const TopNavigation = ({ title, onBackPress }) => {
     )
 }
 
-export default TopNavigation
+export default FollowNavigation

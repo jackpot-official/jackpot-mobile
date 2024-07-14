@@ -1,8 +1,8 @@
 /* Libraries */
-import { View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, FlatList, Image, TouchableOpacity, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 
 /* Local libraries & global context */
 import useAppwrite from '../../lib/useAppwrite'
@@ -24,10 +24,13 @@ import Portfolio from '../../components/profilepages/Portfolio'
 import Achievements from '../../components/profilepages/Achievements'
 import Posts from '../../components/profilepages/Posts'
 import TopNavigation from '../../components/profile/TopNavigation'
+import FollowNavigation from '../../components/profile/FollowNavigation'
+import LineSeparator from '../../components/LineSeparator'
 
 const SocialProfile = () => {
     const { profileUser } = useLocalSearchParams()
     const deserializedProfileUser = JSON.parse(profileUser)
+    const navigation = useNavigation()
     // const [profileUser, setProfileUser] = useState(null)
 
     const [selectedTab, setSelectedTab] = useState('Portfolio')
@@ -41,6 +44,7 @@ const SocialProfile = () => {
     const [followersCount, setFollowersCount] = useState(0)
     const [following, setFollowing] = useState([])
     const [followingCount, setFollowingCount] = useState(0)
+    const [isFollowing, setIsFollowing] = useState(false)
 
     const [topHoldings, setTopHoldings] = useState([
         {
@@ -115,16 +119,42 @@ const SocialProfile = () => {
         if (deserializedProfileUser.$id) {
             fetchFollowers()
             fetchFollowing()
+            checkIfFollowing()
         }
     }, [])
 
-    // useEffect(() => {
-    //     if (profileUser.$id) {
-    //         setProfileUser(getProfileUser(profileUser.$id))
-    //         fetchFollowers()
-    //         fetchFollowing()
-    //     }
-    // }, [profileUser])
+    const checkIfFollowing = async () => {
+        try {
+            const response = await getFollowing(user.accountId)
+            const isFollowing = response.documents.some(
+                (doc) => doc.accountId === deserializedProfileUser.accountId
+            )
+            setIsFollowing(isFollowing)
+        } catch (error) {
+            console.error('Error checking following status:', error)
+        }
+    }
+
+    const handleFollow = async () => {
+        try {
+            if (isFollowing) {
+                await removeFollowing(
+                    deserializedProfileUser.accountId,
+                    user.accountId
+                )
+                setFollowersCount(followersCount - 1)
+            } else {
+                await createFollowing(
+                    deserializedProfileUser.accountId,
+                    user.accountId
+                )
+                setFollowersCount(followersCount + 1)
+            }
+            setIsFollowing(!isFollowing)
+        } catch (error) {
+            console.error('Error following/unfollowing user:', error)
+        }
+    }
 
     const fetchFollowers = async () => {
         try {
@@ -201,8 +231,12 @@ const SocialProfile = () => {
                 keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={() => (
                     <>
-                        <TopNavigation logout={logout} />
-                        <View className="w-full justify-center mt-6 mb-3 px-4">
+                        <FollowNavigation
+                            title="Social Profile"
+                            onBackPress={() => navigation.goBack()}
+                        />
+
+                        <View className="w-full justify-center mt-2 mb-3 px-4">
                             {/* Header */}
                             <View className="flex flex-row justify-between items-center">
                                 <View className="flex flex-row items-center">
@@ -255,19 +289,36 @@ const SocialProfile = () => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            <View className="flex flex-row space-x-2">
+                                {/* Follow/Unfollow Button */}
+                                <TouchableOpacity
+                                    onPress={handleFollow}
+                                    className={`flex-1 py-2 rounded-xl mt-1 ${
+                                        isFollowing
+                                            ? 'bg-gray-400'
+                                            : 'bg-primarytint-400'
+                                    }`}
+                                >
+                                    <Text className="font-hbold text-md text-white text-center">
+                                        {isFollowing ? 'Unfollow' : 'Follow'}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                {/* Compare Button */}
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        router.push('/(tabs)/social')
+                                    }
+                                    className="flex-1 py-2 rounded-xl mt-1 bg-gray-400"
+                                >
+                                    <Text className="font-hbold text-md text-white text-center">
+                                        Compare
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
 
-                        {/* Line separator */}
-                        <View
-                            className="border-b border-gray-200 shadow-md"
-                            style={{
-                                shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 2 },
-                                shadowOpacity: 0.25,
-                                shadowRadius: 3.84,
-                                elevation: 5,
-                            }}
-                        />
+                        <LineSeparator />
 
                         <View className="flex flex-row justify-items-start ml-3 mb-6">
                             <ProfileNavButton
