@@ -34,6 +34,7 @@ import {
 } from '../../lib/appwrite'
 import axios from 'axios'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import InvestmentReturns from '../profile/InvestmentReturns'
 
 const { width: screenWidth } = Dimensions.get('window')
 
@@ -43,7 +44,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
     const [contentWidth, setContentWidth] = useState(1)
     const [holdings, setHoldings] = useState(null)
 
-    // const [linkToken, setLinkToken] = useState(null)
     const [publicToken, setPublicToken] = useState(null)
     const [portfolioValue, setPortfolioValue] = useState(0)
 
@@ -80,7 +80,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             const response = await axios.post(
                 'http://localhost:3000/create_link_token'
             )
-            // setLinkToken(response.data.link_token)
             create({ token: response.data.link_token })
             const openProps = createLinkOpenProps()
             open(openProps)
@@ -107,11 +106,8 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
 
                     const updatedUser = await getCurrentUser()
                     setUser(updatedUser)
-
-                    // setAccessToken(response.data.access_token)
                 } catch (error) {
                     console.error('Error setting access token', error)
-                    // Alert.alert('Error', 'Failed to set access token')
                 }
             },
             onExit: (linkExit) => {
@@ -124,7 +120,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
 
     const fetchHoldings = async () => {
         if (!user.plaidAccessToken) {
-            // Alert.alert('Error', 'Access token is required')
             return
         }
 
@@ -143,7 +138,6 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             setPortfolioValue(totalValue)
         } catch (error) {
             console.error('Error fetching holdings', error)
-            // Alert.alert('Error', 'Failed to fetch holdings')
         }
     }
 
@@ -159,6 +153,8 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
             className="flex-1"
         >
             <View className="items-center">
+                {/* <InvestmentReturns /> */}
+
                 <GainLossCard
                     gainloss={`$${portfolioValue.toFixed(2)}`}
                     percentage="-20"
