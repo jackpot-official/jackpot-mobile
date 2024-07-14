@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 import requests
 from dotenv import load_dotenv
 import os
+from datetime import datetime, timedelta
+import dateutil.relativedelta
+
 
 import plaid
 from plaid.api import plaid_api
@@ -13,6 +16,7 @@ from plaid.model.products import Products
 from plaid.model.country_code import CountryCode
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
 from plaid.exceptions import ApiException
+from plaid.model.investments_transactions_get_request import InvestmentsTransactionsGetRequest
 
 
 load_dotenv()
@@ -71,9 +75,7 @@ def get_access_token():
             public_token=public_token)
         exchange_response = client.item_public_token_exchange(exchange_request)
         access_token = exchange_response['access_token']
-        print(access_token)
         item_id = exchange_response['item_id']
-        print(item_id)
         return jsonify(exchange_response.to_dict())
     except plaid.ApiException as e:
         return json.loads(e.body)
@@ -100,5 +102,87 @@ def get_holdings():
         return jsonify({'error': str(e)}), 400
 
 
+def calculate_percent_return(transactions):
+    buy_total = 0
+    sell_total = 0
+    for transaction in transactions:
+        transaction_type = str(transaction['type'])
+        amount = transaction['amount']
+        if transaction_type == 'buy':
+            buy_total += amount
+        elif transaction_type == 'sell':
+            sell_total += amount
+    if buy_total == 0:
+        return 0
+    return (sell_total - buy_total) / buy_total * 100
+
+
+def calculate_returns(transactions):
+    total = 0
+    gain = 0
+    loss = 0
+    for transaction in transactions:
+        transaction_type = str(transaction['type'])
+        amount = transaction['amount']
+        if transaction_type == 'sell':
+            total += amount
+            gain += amount
+        elif transaction_type == 'buy':
+            total -= amount
+            loss -= amount
+        elif transaction_type == 'cash' or transaction_type == 'dividend':
+            total += amount
+            gain += amount
+            
+        
+    percent_return = calculate_percent_return(transactions)
+    return total, percent_return
+
+
+@app.route('/investments/returns/get', methods=['POST'])
+def get_investment_returns():
+    data = request.get_json()
+    access_token = data['access_token']
+
+    def fetch_investment_transactions(start_date, end_date):
+        try:
+            transactions_request = InvestmentsTransactionsGetRequest(
+                access_token=access_token,
+                start_date=datetime.strptime(start_date, '%Y-%m-%d').date(),
+                end_date=datetime.strptime(end_date, '%Y-%m-%d').date()
+            )
+            transactions_response = client.investments_transactions_get(transactions_request)
+            # print(transactions_response)
+            return transactions_response['investment_transactions']
+        except ApiException as e:
+            return jsonify({'error': str(e)}), 400
+
+    now = datetime.now()
+    periods = {
+        'Today': (now - timedelta(days=1)).strftime('%Y-%m-%d'),
+        '5D': (now - timedelta(days=5)).strftime('%Y-%m-%d'),
+        '1M': (now - dateutil.relativedelta.relativedelta(months=1)).strftime('%Y-%m-%d'),
+        '3M': (now - dateutil.relativedelta.relativedelta(months=3)).strftime('%Y-%m-%d'),
+        'YTD': datetime(now.year, 1, 1).strftime('%Y-%m-%d'),
+        '1Y': (now - dateutil.relativedelta.relativedelta(years=1)).strftime('%Y-%m-%d'),
+        '5Y': (now - dateutil.relativedelta.relativedelta(years=5)).strftime('%Y-%m-%d')
+    }
+
+    returns_data = {}
+    end_date = datetime.now().strftime('%Y-%m-%d')
+
+    for period, start_date in periods.items():
+        transactions = fetch_investment_transactions(start_date, end_date)
+        if 'error' in transactions:
+            return transactions
+        returns, percent_return = calculate_returns(transactions)
+        returns_data[period] = {
+            'absolute_return': returns,
+            'percent_return': percent_return
+        }
+
+    return jsonify(returns_data)
+            
+            
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
