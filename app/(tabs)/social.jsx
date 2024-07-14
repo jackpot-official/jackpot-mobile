@@ -7,13 +7,15 @@ import { FontAwesome } from '@expo/vector-icons'
 import SocialTopNav from '../../components/social/SocialTopNav'
 import ComparisonCard from '../../components/comparison/ComparisonCard'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import { useNavigation } from 'expo-router'
 
 const Social = () => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
+    const navigation = useNavigation()
 
     return (
         <SafeAreaView className="bg-white h-full">
-            <SocialTopNav />
+            <SocialTopNav onBackPress={() => navigation.goBack()} />
             <View className="w-full justify-center mt-6 mb-3 px-4">
                 <View className="flex-row justify-between items-center mb-4">
                     <View className="flex-row items-center">
