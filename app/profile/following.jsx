@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation, useRouter, useLocalSearchParams } from 'expo-router'
 import FollowNavigation from '../../components/profile/FollowNavigation'
 import { getFollowing } from '../../lib/appwrite'
+import { Image } from 'react-native-animatable'
 
 const Following = () => {
     const navigation = useNavigation()

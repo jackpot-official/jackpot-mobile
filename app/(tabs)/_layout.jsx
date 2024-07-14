@@ -1,9 +1,8 @@
 import { View, Text, Image } from 'react-native'
-import { Tabs, Redirect } from 'expo-router'
+import { Tabs, Redirect, Stack } from 'expo-router'
 
 import { icons } from '../../constants'
 import { FontAwesome } from '@expo/vector-icons'
-
 
 const TabIcon = ({ icon, color, name, focused }) => {
     return (
@@ -92,7 +91,7 @@ const TabsLayout = () => {
                         headerShown: false,
                         tabBarIcon: ({ color, focused }) => (
                             <TabIcon
-                                icon={ icons.userGroupIcon }
+                                icon={icons.userGroupIcon}
                                 color={color}
                                 name="Social"
                                 focused={focused}

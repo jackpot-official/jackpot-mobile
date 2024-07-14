@@ -5,27 +5,27 @@ import VideoCard from '../../components/VideoCard'
 import EmptyState from '../../components/EmptyState'
 
 import { getUserPosts, getUserTextPosts } from '../../lib/appwrite'
-
+import { View } from 'react-native-animatable'
 
 const Posts = ({ user }) => {
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 // const videoPosts = await getUserPosts(user.$id);
-                const textPosts = await getUserTextPosts(user.$id);
-                setPosts([...textPosts]);
-                setLoading(false);
+                const textPosts = await getUserTextPosts(user.$id)
+                setPosts([...textPosts])
+                setLoading(false)
             } catch (error) {
-                console.error("Error fetching posts: ", error);
-                setLoading(false);
+                console.error('Error fetching posts: ', error)
+                setLoading(false)
             }
-        };
+        }
 
-        fetchPosts();
-    }, [user.$id]);
+        fetchPosts()
+    }, [user.$id])
 
     return (
         <>
@@ -42,17 +42,19 @@ const Posts = ({ user }) => {
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
-                renderItem={({ item }) => 
-                // <VideoCard video={item} />
-                    <CommunityPost
-                        user={user}
-                        post={{
-                            ...item,
-                            comments: item.comments ?? [],
-                            postId: item.$id,
-                        }}
-                    />
-                }
+                renderItem={({ item }) => (
+                    <>
+                        <CommunityPost
+                            user={user}
+                            post={{
+                                ...item,
+                                comments: item.comments ?? [],
+                                postId: item.$id,
+                            }}
+                        />
+                        <View className="h-10" />
+                    </>
+                )}
                 ListEmptyComponent={() => (
                     <EmptyState
                         title="No posts found."
@@ -61,7 +63,7 @@ const Posts = ({ user }) => {
                     />
                 )}
             />
-        </>                
+        </>
     )
 }
 
