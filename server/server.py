@@ -30,6 +30,7 @@ PLAID_SECRET = os.getenv('PLAID_SECRET')
 PLAID_ENV = plaid.Environment.Sandbox if os.getenv('PLAID_ENV') == 'sandbox' else plaid.Environment.Production
 PLAID_PRODUCTS = os.getenv('PLAID_PRODUCTS', 'investments').split(',')
 PLAID_COUNTRY_CODES = os.getenv('PLAID_COUNTRY_CODES', 'US').split(',')
+API_NINJAS_KEY=os.getenv('API_NINJAS_KEY')
 
 
 client = plaid_api.PlaidApi(plaid.ApiClient(
@@ -107,6 +108,20 @@ def get_holdings():
         top_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
 
         # top_holdings = sorted(holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
+        
+        for holding in top_holdings:
+            ticker = holding['security']['ticker_symbol']
+            logo_url = f'https://api.api-ninjas.com/v1/logo?name={ticker}'
+            headers = {'X-Api-Key': API_NINJAS_KEY}
+            response = requests.get(logo_url, headers=headers)
+            if response.status_code == 200:
+                logo_data = response.json()
+                if logo_data:
+                    holding['image'] = logo_data[0]['image']
+                else:
+                    holding['image'] = None
+            else:
+                holding['image'] = None
         
         return jsonify({
             'holdings': holdings,

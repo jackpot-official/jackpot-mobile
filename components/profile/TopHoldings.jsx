@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { View, Text, Image } from 'react-native'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import { images } from '../../constants'
 
 const TopHoldings = ({ title, holdings, boxStyle }) => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
@@ -25,7 +26,11 @@ const TopHoldings = ({ title, holdings, boxStyle }) => {
                     <View key={index} className="flex flex-row items-center">
                         {/* Displaying the name of the security */}
                         <Image
-                            source={{ uri: holding.image }}
+                            source={
+                                holding.image
+                                    ? { uri: holding.image }
+                                    : images.logo
+                            }
                             className="w-8 h-8 rounded-full"
                             resizeMode="cover"
                         />

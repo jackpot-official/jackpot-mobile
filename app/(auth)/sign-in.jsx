@@ -43,6 +43,7 @@ const SignIn = () => {
                 <View className="w-full justify-center flex-1 px-4 my-6">
                     <Image
                         source={images.dollaz}
+                        // source={images.logo}
                         resizeMode="contain"
                         className="w-[195px] h-[126px]"
                     />
