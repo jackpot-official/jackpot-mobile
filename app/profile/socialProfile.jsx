@@ -125,9 +125,9 @@ const SocialProfile = () => {
 
     const checkIfFollowing = async () => {
         try {
-            const response = await getFollowing(user.accountId)
+            const response = await getFollowing(user.$id)
             const isFollowing = response.documents.some(
-                (doc) => doc.accountId === deserializedProfileUser.accountId
+                (doc) => doc.$id === deserializedProfileUser.$id
             )
             setIsFollowing(isFollowing)
         } catch (error) {
@@ -138,16 +138,10 @@ const SocialProfile = () => {
     const handleFollow = async () => {
         try {
             if (isFollowing) {
-                await removeFollowing(
-                    deserializedProfileUser.accountId,
-                    user.accountId
-                )
+                await removeFollowing(user.$id, deserializedProfileUser.$id)
                 setFollowersCount(followersCount - 1)
             } else {
-                await createFollowing(
-                    deserializedProfileUser.accountId,
-                    user.accountId
-                )
+                await createFollowing(user.$id, deserializedProfileUser.$id)
                 setFollowersCount(followersCount + 1)
             }
             setIsFollowing(!isFollowing)
@@ -158,9 +152,7 @@ const SocialProfile = () => {
 
     const fetchFollowers = async () => {
         try {
-            const response = await getFollowers(
-                deserializedProfileUser.accountId
-            )
+            const response = await getFollowers(deserializedProfileUser.$id)
             setFollowers(response.documents)
             setFollowersCount(response.length)
         } catch (error) {
@@ -170,9 +162,7 @@ const SocialProfile = () => {
 
     const fetchFollowing = async () => {
         try {
-            const response = await getFollowing(
-                deserializedProfileUser.accountId
-            )
+            const response = await getFollowing(deserializedProfileUser.$id)
             setFollowing(response.documents)
             setFollowingCount(response.length)
         } catch (error) {

@@ -90,13 +90,28 @@ def get_holdings():
         holdings_request = InvestmentsHoldingsGetRequest(access_token=access_token)
         holdings_response = client.investments_holdings_get(holdings_request)
         
-        holdings = [holding.to_dict() for holding in holdings_response['holdings']]
-        securities = [security.to_dict() for security in holdings_response['securities']]
+        # holdings = [holding.to_dict() for holding in holdings_response['holdings']]
+        # securities = [security.to_dict() for security in holdings_response['securities']]
         
+        holdings = [holding.to_dict() for holding in holdings_response['holdings']]
+        securities = {security['security_id']: security.to_dict() for security in holdings_response['securities']}
+        
+        for holding in holdings:
+            holding['security'] = securities.get(holding['security_id'])
+        
+        filtered_holdings = [
+            holding for holding in holdings 
+            if holding['security']['type'] in ['mutual fund','equity']
+        ]
+        
+        top_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
+
+        # top_holdings = sorted(holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
         
         return jsonify({
             'holdings': holdings,
-            'securities': securities
+            'top_holdings': top_holdings,
+            'securities': list(securities.values())
         })
     except ApiException as e:
         return jsonify({'error': str(e)}), 400

@@ -38,11 +38,12 @@ import InvestmentReturns from '../profile/InvestmentReturns'
 
 const { width: screenWidth } = Dimensions.get('window')
 
-const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
+const Portfolio = ({ topGainers, topLosers }) => {
     const scrollX = useRef(new Animated.Value(0)).current
     const { user, setUser } = useGlobalContext()
     const [contentWidth, setContentWidth] = useState(1)
-    const [holdings, setHoldings] = useState(null)
+    const [holdings, setHoldings] = useState([])
+    const [topHoldings, setTopHoldings] = useState([])
 
     const [publicToken, setPublicToken] = useState(null)
     const [portfolioValue, setPortfolioValue] = useState(0)
@@ -131,6 +132,9 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                 }
             )
             setHoldings(response.data.holdings)
+            console.log('Portfolio.jsx Holdings:', holdings)
+            setTopHoldings(response.data.top_holdings)
+            console.log('Portfolio.jsx Top Holdings:', topHoldings)
             const totalValue = response.data.holdings.reduce(
                 (total, holding) => total + holding.institution_value,
                 0
@@ -192,7 +196,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                                 title="Holdings"
                                 boxStyle="mr-4"
                             />
-                            <TopHoldings
+                            {/* <TopHoldings
                                 holdings={topGainers}
                                 title="Gainers"
                                 boxStyle="mr-4"
@@ -201,7 +205,7 @@ const Portfolio = ({ topHoldings, topGainers, topLosers }) => {
                                 holdings={topLosers}
                                 title="Losers"
                                 boxStyle="mr-4"
-                            />
+                            /> */}
                         </View>
                     </ScrollView>
 
