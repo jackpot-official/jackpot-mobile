@@ -25,18 +25,20 @@ const TopHoldings = ({ title, holdings, boxStyle }) => {
                 {holdings.map((holding, index) => (
                     <View key={index} className="flex flex-row items-center">
                         {/* Displaying the name of the security */}
-                        <Image
-                            source={
-                                holding.image
-                                    ? { uri: holding.image }
-                                    : images.logo
-                            }
-                            className="w-8 h-8 rounded-full"
-                            resizeMode="cover"
-                        />
+                        <View className="w-8 h-8 rounded-full overflow-hidden">
+                            <Image
+                                source={
+                                    holding.image
+                                        ? { uri: holding.image }
+                                        : images.logo
+                                }
+                                className="w-full h-full"
+                                resizeMode="cover"
+                            />
+                        </View>
                         <Text className="font-hmedium text-black text-lg ml-4">
-                            {holding.security.ticker_symbol}- $
-                            {holding.institution_value.toFixed(2)}
+                            {holding.security.ticker_symbol}
+                            {/* - $ {holding.institution_value.toFixed(2)} */}
                         </Text>
                     </View>
                 ))}

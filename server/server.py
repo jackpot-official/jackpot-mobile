@@ -1,3 +1,4 @@
+# from server import app
 from flask import Flask, request, jsonify
 import requests
 from dotenv import load_dotenv
@@ -111,7 +112,9 @@ def get_holdings():
         
         for holding in top_holdings:
             ticker = holding['security']['ticker_symbol']
-            logo_url = f'https://api.api-ninjas.com/v1/logo?name={ticker}'
+            if ticker == 'GOOGL':
+                ticker = 'GOOG'
+            logo_url = f'https://api.api-ninjas.com/v1/logo?ticker={ticker}'
             headers = {'X-Api-Key': API_NINJAS_KEY}
             response = requests.get(logo_url, headers=headers)
             if response.status_code == 200:
