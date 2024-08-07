@@ -42,6 +42,7 @@ const TopHoldings = ({ title, holdings, boxStyle }) => {
                         </Text>
                     </View>
                 ))}
+                <Text className="text-xs">Logos provided by Parqet</Text>
             </View>
         </View>
     )

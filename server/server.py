@@ -112,19 +112,22 @@ def get_holdings():
         
         for holding in top_holdings:
             ticker = holding['security']['ticker_symbol']
-            if ticker == 'GOOGL':
-                ticker = 'GOOG'
-            logo_url = f'https://api.api-ninjas.com/v1/logo?ticker={ticker}'
-            headers = {'X-Api-Key': API_NINJAS_KEY}
-            response = requests.get(logo_url, headers=headers)
-            if response.status_code == 200:
-                logo_data = response.json()
-                if logo_data:
-                    holding['image'] = logo_data[0]['image']
-                else:
-                    holding['image'] = None
-            else:
-                holding['image'] = None
+            # if ticker == 'GOOGL':
+            #     ticker = 'GOOG'
+            asset_id_type = 'symbol'  # Assuming we are using NASDAQ symbols for this example
+            logo_url = f'https://assets.parqet.com/logos/{asset_id_type}/{ticker}?format=png'
+            holding['image'] = logo_url
+            # logo_url = f'https://api.api-ninjas.com/v1/logo?ticker={ticker}'
+            # headers = {'X-Api-Key': API_NINJAS_KEY}
+            # response = requests.get(logo_url, headers=headers)
+            # if response.status_code == 200:
+            #     logo_data = response.json()
+            #     if logo_data:
+            #         holding['image'] = logo_data[0]['image']
+            #     else:
+            #         holding['image'] = None
+            # else:
+            #     holding['image'] = None
         
         return jsonify({
             'holdings': holdings,
