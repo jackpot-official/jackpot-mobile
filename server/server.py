@@ -92,9 +92,6 @@ def get_holdings():
         holdings_request = InvestmentsHoldingsGetRequest(access_token=access_token)
         holdings_response = client.investments_holdings_get(holdings_request)
         
-        # holdings = [holding.to_dict() for holding in holdings_response['holdings']]
-        # securities = [security.to_dict() for security in holdings_response['securities']]
-        
         holdings = [holding.to_dict() for holding in holdings_response['holdings']]
         securities = {security['security_id']: security.to_dict() for security in holdings_response['securities']}
         
@@ -106,31 +103,18 @@ def get_holdings():
             if holding['security']['type'] in ['mutual fund','equity']
         ]
         
+        sorted_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)
+        # print(sorted_holdings)
         top_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
 
-        # top_holdings = sorted(holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
-        
         for holding in top_holdings:
             ticker = holding['security']['ticker_symbol']
-            # if ticker == 'GOOGL':
-            #     ticker = 'GOOG'
-            asset_id_type = 'symbol'  # Assuming we are using NASDAQ symbols for this example
+            asset_id_type = 'symbol'  # assuming NASDAQ symbols
             logo_url = f'https://assets.parqet.com/logos/{asset_id_type}/{ticker}?format=png'
             holding['image'] = logo_url
-            # logo_url = f'https://api.api-ninjas.com/v1/logo?ticker={ticker}'
-            # headers = {'X-Api-Key': API_NINJAS_KEY}
-            # response = requests.get(logo_url, headers=headers)
-            # if response.status_code == 200:
-            #     logo_data = response.json()
-            #     if logo_data:
-            #         holding['image'] = logo_data[0]['image']
-            #     else:
-            #         holding['image'] = None
-            # else:
-            #     holding['image'] = None
         
         return jsonify({
-            'holdings': holdings,
+            'holdings': sorted_holdings,
             'top_holdings': top_holdings,
             'securities': list(securities.values())
         })

@@ -164,6 +164,66 @@ const Portfolio = ({ topGainers, topLosers }) => {
                     percentage="-20"
                 />
 
+                {/* Holdings Table */}
+                <View className="bg-white w-11/12 rounded-xl p-6 flex flex-col border border-gray-100 shadow-md mt-6 mx-auto">
+                    <View className="w-full">
+                        <Text className="text-xl font-bold mb-2 text-center">
+                            Your Holdings
+                        </Text>
+
+                        <ScrollView horizontal>
+                            <View>
+                                <View className="flex-row py-3 border-b border-gray-300">
+                                    <Text className="flex-[1.2] text-center font-semibold uppercase">
+                                        Ticker
+                                    </Text>
+                                    <Text className="flex-1 text-center font-semibold uppercase">
+                                        Shares
+                                    </Text>
+                                    <Text className="flex-[1.5] text-center font-semibold uppercase">
+                                        Total Value
+                                    </Text>
+                                    <Text className="flex-[1.5] text-center font-semibold uppercase">
+                                        Price/Share
+                                    </Text>
+                                    <Text className="flex-1 text-center font-semibold uppercase">
+                                        Type
+                                    </Text>
+                                </View>
+
+                                {holdings.map((holding, index) => (
+                                    <View
+                                        key={index}
+                                        className={`flex-row py-3 border-b border-gray-200 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
+                                    >
+                                        <Text className="flex-[1.2] text-center px-2">
+                                            {holding.security.ticker_symbol}
+                                        </Text>
+                                        <Text className="flex-1 text-center px-2">
+                                            {holding.quantity}
+                                        </Text>
+                                        <Text className="flex-[1.5] text-center px-2">
+                                            $
+                                            {holding.institution_value.toFixed(
+                                                2
+                                            )}
+                                        </Text>
+                                        <Text className="flex-[1.5] text-center px-2">
+                                            $
+                                            {holding.institution_price.toFixed(
+                                                2
+                                            )}
+                                        </Text>
+                                        <Text className="flex-1 text-center px-2">
+                                            {holding.security.type}
+                                        </Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+
                 <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4">
                     <Image
                         source={images.chart}
