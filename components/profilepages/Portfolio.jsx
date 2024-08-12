@@ -165,19 +165,22 @@ const Portfolio = ({ topGainers, topLosers }) => {
                 />
 
                 {/* Holdings Table */}
-                <View className="bg-white w-11/12 rounded-xl p-4 flex flex-col border border-gray-100 shadow-md mt-6 mx-auto">
-                    <View className="w-full">
-                        <Text className="text-xl font-bold mb-4 text-center">
-                            Your Holdings
-                        </Text>
+                <View className="bg-white w-11/12 h-96 rounded-xl pt-4 flex flex-col border border-gray-200 shadow-md mt-6 mx-auto overflow-hidden">
+                    <Text className="text-xl font-bold bg-gray-50 text-center">
+                        Your Holdings
+                    </Text>
 
+                    <ScrollView
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        showsVerticalScrollIndicator={false}
+                    >
                         <ScrollView
                             horizontal
                             contentContainerStyle={{ paddingHorizontal: 0 }}
                             showsHorizontalScrollIndicator={false}
                         >
                             <View>
-                                <View className="flex-row py-3 border-b-2 border-gray-300">
+                                <View className="flex-row py-4 bg-gray-50 border-b-2 border-gray-300">
                                     <Text className="w-20 text-center font-semibold uppercase" />
                                     <Text className="w-24 text-center font-semibold uppercase">
                                         Ticker
@@ -206,7 +209,9 @@ const Portfolio = ({ topGainers, topLosers }) => {
                                             <Image
                                                 source={
                                                     holding.image
-                                                        ? { uri: holding.image }
+                                                        ? {
+                                                              uri: holding.image,
+                                                          }
                                                         : images.logo
                                                 }
                                                 className="w-10 h-10 rounded-full"
@@ -238,7 +243,7 @@ const Portfolio = ({ topGainers, topLosers }) => {
                                 ))}
                             </View>
                         </ScrollView>
-                    </View>
+                    </ScrollView>
                 </View>
 
                 <View className="bg-white border border-gray-100 rounded-xl p-2 shadow-lg mt-4">
