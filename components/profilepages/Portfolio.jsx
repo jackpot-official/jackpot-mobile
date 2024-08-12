@@ -165,56 +165,73 @@ const Portfolio = ({ topGainers, topLosers }) => {
                 />
 
                 {/* Holdings Table */}
-                <View className="bg-white w-11/12 rounded-xl p-6 flex flex-col border border-gray-100 shadow-md mt-6 mx-auto">
+                <View className="bg-white w-11/12 rounded-xl p-4 flex flex-col border border-gray-100 shadow-md mt-6 mx-auto">
                     <View className="w-full">
-                        <Text className="text-xl font-bold mb-2 text-center">
+                        <Text className="text-xl font-bold mb-4 text-center">
                             Your Holdings
                         </Text>
 
-                        <ScrollView horizontal>
+                        <ScrollView
+                            horizontal
+                            contentContainerStyle={{ paddingHorizontal: 0 }}
+                            showsHorizontalScrollIndicator={false}
+                        >
                             <View>
-                                <View className="flex-row py-3 border-b border-gray-300">
-                                    <Text className="flex-[1.2] text-center font-semibold uppercase">
+                                <View className="flex-row py-3 border-b-2 border-gray-300">
+                                    <Text className="w-20 text-center font-semibold uppercase" />
+                                    <Text className="w-24 text-center font-semibold uppercase">
                                         Ticker
                                     </Text>
-                                    <Text className="flex-1 text-center font-semibold uppercase">
+                                    <Text className="w-24 text-center font-semibold uppercase">
                                         Shares
                                     </Text>
-                                    <Text className="flex-[1.5] text-center font-semibold uppercase">
+                                    <Text className="w-32 text-center font-semibold uppercase">
                                         Total Value
                                     </Text>
-                                    <Text className="flex-[1.5] text-center font-semibold uppercase">
+                                    <Text className="w-32 text-center font-semibold uppercase">
                                         Price/Share
                                     </Text>
-                                    <Text className="flex-1 text-center font-semibold uppercase">
+                                    <Text className="w-24 text-center font-semibold uppercase">
                                         Type
                                     </Text>
+                                    {/* image, average share price bought, gains/losses, % gains/% loses, day change of stock, % of portfolio, type of investment, make it vertically scrollable, tickers should be clickable */}
                                 </View>
 
                                 {holdings.map((holding, index) => (
                                     <View
                                         key={index}
-                                        className={`flex-row py-3 border-b border-gray-200 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}`}
+                                        className={`flex-row py-2 border-b border-gray-200 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
                                     >
-                                        <Text className="flex-[1.2] text-center px-2">
+                                        <View className="w-20 items-center justify-center">
+                                            <Image
+                                                source={
+                                                    holding.image
+                                                        ? { uri: holding.image }
+                                                        : images.logo
+                                                }
+                                                className="w-10 h-10 rounded-full"
+                                                resizeMode="cover"
+                                            />
+                                        </View>
+                                        <Text className="w-24 text-center self-center">
                                             {holding.security.ticker_symbol}
                                         </Text>
-                                        <Text className="flex-1 text-center px-2">
+                                        <Text className="w-24 text-center self-center">
                                             {holding.quantity}
                                         </Text>
-                                        <Text className="flex-[1.5] text-center px-2">
+                                        <Text className="w-32 text-center self-center">
                                             $
                                             {holding.institution_value.toFixed(
                                                 2
                                             )}
                                         </Text>
-                                        <Text className="flex-[1.5] text-center px-2">
+                                        <Text className="w-32 text-center self-center">
                                             $
                                             {holding.institution_price.toFixed(
                                                 2
                                             )}
                                         </Text>
-                                        <Text className="flex-1 text-center px-2">
+                                        <Text className="w-24 text-center self-center">
                                             {holding.security.type}
                                         </Text>
                                     </View>

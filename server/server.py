@@ -97,6 +97,10 @@ def get_holdings():
         
         for holding in holdings:
             holding['security'] = securities.get(holding['security_id'])
+            ticker = holding['security']['ticker_symbol']
+            asset_id_type = 'symbol'  # assuming NASDAQ symbols
+            logo_url = f'https://assets.parqet.com/logos/{asset_id_type}/{ticker}?format=png'
+            holding['image'] = logo_url
         
         filtered_holdings = [
             holding for holding in holdings 
@@ -104,14 +108,7 @@ def get_holdings():
         ]
         
         sorted_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)
-        # print(sorted_holdings)
-        top_holdings = sorted(filtered_holdings, key=lambda x: x['institution_value'], reverse=True)[:5]
-
-        for holding in top_holdings:
-            ticker = holding['security']['ticker_symbol']
-            asset_id_type = 'symbol'  # assuming NASDAQ symbols
-            logo_url = f'https://assets.parqet.com/logos/{asset_id_type}/{ticker}?format=png'
-            holding['image'] = logo_url
+        top_holdings = sorted_holdings[:5]
         
         return jsonify({
             'holdings': sorted_holdings,
