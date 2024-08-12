@@ -165,8 +165,9 @@ const Portfolio = ({ topGainers, topLosers }) => {
                 />
 
                 {/* Holdings Table */}
+                {/* image, average share price bought, gains/losses, % gains/% loses, day change of stock, % of portfolio, type of investment, make it vertically scrollable, tickers should be clickable */}
                 <View className="bg-white w-11/12 h-96 rounded-xl pt-4 flex flex-col border border-gray-200 shadow-md mt-6 mx-auto overflow-hidden">
-                    <Text className="text-xl font-bold bg-gray-50 text-center">
+                    <Text className="text-xl font-bold mb-2 bg-white text-center">
                         Your Holdings
                     </Text>
 
@@ -180,7 +181,7 @@ const Portfolio = ({ topGainers, topLosers }) => {
                             showsHorizontalScrollIndicator={false}
                         >
                             <View>
-                                <View className="flex-row py-4 bg-gray-50 border-b-2 border-gray-300">
+                                <View className="flex-row py-4 bg-white border-b-2 border-gray-300">
                                     <Text className="w-20 text-center font-semibold uppercase" />
                                     <Text className="w-24 text-center font-semibold uppercase">
                                         Ticker
@@ -197,7 +198,6 @@ const Portfolio = ({ topGainers, topLosers }) => {
                                     <Text className="w-24 text-center font-semibold uppercase">
                                         Type
                                     </Text>
-                                    {/* image, average share price bought, gains/losses, % gains/% loses, day change of stock, % of portfolio, type of investment, make it vertically scrollable, tickers should be clickable */}
                                 </View>
 
                                 {holdings.map((holding, index) => (
