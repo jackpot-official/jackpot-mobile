@@ -14,13 +14,6 @@ def getBullishBearishTag(title, body):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     pipe = pipeline("text-classification", model="ProsusAI/finbert")
 
+    result = pipe(allText)
 
-    res = pipe(allText)
-
-    # Determine if the result is Bullish or Bearish
-    if res[0]['label'] == 'positive':
-        return "Bullish"
-    elif res[0]['label'] == 'negative':
-        return "Bearish"
-    else:
-        return "Neutral"
+    return result
