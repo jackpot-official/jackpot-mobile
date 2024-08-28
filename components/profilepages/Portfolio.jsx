@@ -132,9 +132,7 @@ const Portfolio = ({ topGainers, topLosers }) => {
                 }
             )
             setHoldings(response.data.holdings)
-            console.log('Portfolio.jsx Holdings:', holdings)
             setTopHoldings(response.data.top_holdings)
-            console.log('Portfolio.jsx Top Holdings:', topHoldings)
             const totalValue = response.data.holdings.reduce(
                 (total, holding) => total + holding.institution_value,
                 0

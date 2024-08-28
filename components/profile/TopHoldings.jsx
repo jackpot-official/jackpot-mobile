@@ -6,12 +6,12 @@ import { images } from '../../constants'
 const TopHoldings = ({ title, holdings, boxStyle }) => {
     const { user, setUser, setIsLoggedIn } = useGlobalContext()
 
-    useEffect(() => {
-        console.log(
-            'TopHoldings.jsx holdings passed from Portfolio.jsx:',
-            holdings
-        )
-    }, [holdings])
+    // useEffect(() => {
+    //     console.log(
+    //         'TopHoldings.jsx holdings passed from Portfolio.jsx:',
+    //         holdings
+    //     )
+    // }, [holdings])
 
     return (
         <View

@@ -34,6 +34,7 @@ client = plaid_api.PlaidApi(plaid.ApiClient(
     )
 ))
 
+
 def create_link_token():
     try:
         request_data = LinkTokenCreateRequest(
@@ -66,6 +67,7 @@ def get_access_token(public_token):
         return exchange_response.to_dict()
     except plaid.ApiException as e:
         return json.loads(e.body)
+
 
 def get_holdings(access_token):
     try:
@@ -134,6 +136,7 @@ def calculate_returns(transactions):
         
     percent_return = calculate_percent_return(transactions)
     return total, percent_return
+
 
 def get_investment_returns():
     data = request.get_json()
