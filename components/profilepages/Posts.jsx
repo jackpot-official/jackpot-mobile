@@ -43,7 +43,7 @@ const Posts = ({ user }) => {
                 data={posts}
                 keyExtractor={(item) => item.$id}
                 renderItem={({ item }) => (
-                    <>
+                    <View className="bg-white rounded-lg shadow-md mx-4 my-2">
                         <CommunityPost
                             user={user}
                             post={{
@@ -51,17 +51,17 @@ const Posts = ({ user }) => {
                                 comments: item.comments ?? [],
                                 postId: item.$id,
                             }}
+                            scrollableComments={true}
                         />
-                        <View className="h-10" />
-                    </>
+                    </View>
                 )}
                 ListEmptyComponent={() => (
                     <EmptyState
                         title="No posts found."
-                        // subtitle="No videos found for this search query."
-                        subtitle=""
+                        subtitle="You haven't made any posts yet."
                     />
                 )}
+                contentContainerStyle={{ paddingBottom: 50 }}
             />
         </>
     )
