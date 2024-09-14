@@ -1,6 +1,6 @@
 /* Libraries */
-import { View, FlatList, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Image, TouchableOpacity, Animated } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 
@@ -81,6 +81,8 @@ const Profile = () => {
         },
     ])
 
+    const scrollY = useRef(new Animated.Value(0)).current
+
     useEffect(() => {
         if (user) {
             fetchFollowers()
@@ -150,109 +152,132 @@ const Profile = () => {
 
     return (
         <SafeAreaView className="bg-white h-full">
-            <FlatList
-                data={[]}
-                keyExtractor={(item, index) => index.toString()}
-                ListHeaderComponent={() => (
-                    <>
-                        <TopNavigation logout={logout} />
-                        <View className="w-full justify-center mt-2 mb-3 px-4">
-                            {/* Header */}
-                            <View className="flex flex-row justify-between items-center">
-                                <View className="flex flex-row items-center">
-                                    {/* user pfp */}
-                                    <View className="w-16 h-16 rounded-lg justify-center items-center">
-                                        <Image
-                                            source={{ uri: user?.avatar }}
-                                            className="w-[90%] h-[90%] rounded-full"
-                                            resizeMode="cover"
-                                        />
-                                    </View>
-
-                                    {/* username */}
-                                    <InfoBox
-                                        title={`@${user?.username}`}
-                                        containerStyles="mt-5 ml-2"
-                                    />
-                                </View>
-
-                                {/* posts and followers */}
-                                <View className="mt-5 flex-row">
-                                    {/* number of posts */}
-                                    <InfoBox
-                                        title={posts?.length || 0}
-                                        subtitle="Posts"
-                                        containerStyles="mr-8"
-                                    />
-
-                                    {/* number of followers */}
-                                    <TouchableOpacity
-                                        onPress={navigateToFollowers}
-                                    >
-                                        <InfoBox
-                                            title={followersCount}
-                                            subtitle="Followers"
-                                            containerStyles="mr-8"
-                                        />
-                                    </TouchableOpacity>
-
-                                    {/* number following */}
-                                    <TouchableOpacity
-                                        onPress={navigateToFollowing}
-                                    >
-                                        <InfoBox
-                                            title={followingCount}
-                                            subtitle="Following"
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Line separator */}
-                        <View
-                            className="border-b border-gray-200 mb-3 shadow-md"
-                            style={{
-                                shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 2 },
-                                shadowOpacity: 0.25,
-                                shadowRadius: 3.84,
-                                elevation: 5,
-                            }}
-                        />
-
-                        <View className="flex flex-row justify-items-start ml-3 mb-6">
-                            <ProfileNavButton
-                                title="Portfolio"
-                                handlePress={() => setSelectedTab('Portfolio')}
-                                containerStyles={`w-1/4 ${selectedTab === 'Portfolio' ? 'bg-primary' : 'bg-white'}`}
-                                textStyles={`${selectedTab === 'Portfolio' ? 'text-white' : 'text-black'}`}
-                                isLoading={isSubmitting}
-                            />
-
-                            {/* shadow-sm shadow-gray-500 */}
-                            <ProfileNavButton
-                                title="Posts"
-                                handlePress={() => setSelectedTab('Posts')}
-                                containerStyles={`w-1/5 ${selectedTab === 'Posts' ? 'bg-primary' : 'bg-white'}`}
-                                textStyles={`${selectedTab === 'Posts' ? 'text-white' : 'text-black'}`}
-                                isLoading={isSubmitting}
-                            />
-
-                            <ProfileNavButton
-                                title="Achievements"
-                                handlePress={() =>
-                                    setSelectedTab('Achievements')
-                                }
-                                containerStyles={`w-4/12 ${selectedTab === 'Achievements' ? 'bg-primary' : 'bg-white'}`}
-                                textStyles={`${selectedTab === 'Achievements' ? 'text-white' : 'text-black'}`}
-                                isLoading={isSubmitting}
-                            />
-                        </View>
-                    </>
+            <Animated.ScrollView
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: false }
                 )}
-                ListFooterComponent={renderContent()}
-            />
+                scrollEventThrottle={16}
+            >
+                <TopNavigation logout={logout} />
+                <View className="w-full justify-center mt-4 mb-6 px-6">
+                    {/* Header */}
+                    <Animated.View
+                        className="flex-col justify-between items-start mb-4"
+                        style={{
+                            height: scrollY.interpolate({
+                                inputRange: [0, 100],
+                                outputRange: [160, 80],
+                                extrapolate: 'clamp',
+                            }),
+                        }}
+                    >
+                        <Animated.View
+                            className="flex-row items-center mb-2"
+                            style={{
+                                opacity: scrollY.interpolate({
+                                    inputRange: [0, 100],
+                                    outputRange: [1, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                            }}
+                        >
+                            {/* User profile picture */}
+                            <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary mr-3">
+                                <Image
+                                    source={{ uri: user?.avatar }}
+                                    className="w-full h-full"
+                                    resizeMode="cover"
+                                />
+                            </View>
+
+                            {/* Username */}
+                            <InfoBox
+                                title={`@${user?.username}`}
+                                titleStyles="text-lg font-semibold"
+                            />
+                        </Animated.View>
+
+                        {/* Stats: Posts, Followers, Following */}
+                        <Animated.View
+                            className="flex-row justify-between w-full"
+                            style={{
+                                transform: [
+                                    {
+                                        translateY: scrollY.interpolate({
+                                            inputRange: [0, 100],
+                                            outputRange: [0, -40],
+                                            extrapolate: 'clamp',
+                                        }),
+                                    },
+                                ],
+                            }}
+                        >
+                            <InfoBox
+                                title={posts?.length || 0}
+                                subtitle="Posts"
+                                containerStyles="items-center"
+                                titleStyles="text-xl font-bold"
+                                subtitleStyles="text-xs text-gray-600"
+                            />
+                            <TouchableOpacity onPress={navigateToFollowers} className="items-center">
+                                <InfoBox
+                                    title={followersCount}
+                                    subtitle="Followers"
+                                    titleStyles="text-xl font-bold"
+                                    subtitleStyles="text-xs text-gray-600"
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={navigateToFollowing} className="items-center">
+                                <InfoBox
+                                    title={followingCount}
+                                    subtitle="Following"
+                                    titleStyles="text-xl font-bold"
+                                    subtitleStyles="text-xs text-gray-600"
+                                />
+                            </TouchableOpacity>
+                        </Animated.View>
+                    </Animated.View>
+                </View>
+
+                {/* Line separator */}
+                <View
+                    className="border-b border-gray-200 mb-4"
+                    style={{
+                        shadowColor: '#000',
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 3.84,
+                        elevation: 5,
+                    }}
+                />
+
+                <View className="flex flex-row justify-center mb-6">
+                    <ProfileNavButton
+                        title="Portfolio"
+                        handlePress={() => setSelectedTab('Portfolio')}
+                        containerStyles={`w-1/4 ${selectedTab === 'Portfolio' ? 'bg-primary' : 'bg-gray-100'}`}
+                        textStyles={`${selectedTab === 'Portfolio' ? 'text-white' : 'text-gray-800'} font-semibold`}
+                        isLoading={isSubmitting}
+                    />
+                    <ProfileNavButton
+                        title="Posts"
+                        handlePress={() => setSelectedTab('Posts')}
+                        containerStyles={`w-1/4 ${selectedTab === 'Posts' ? 'bg-primary' : 'bg-gray-100'}`}
+                        textStyles={`${selectedTab === 'Posts' ? 'text-white' : 'text-gray-800'} font-semibold`}
+                        isLoading={isSubmitting}
+                    />
+                    <ProfileNavButton
+                        title="Achievements"
+                        handlePress={() => setSelectedTab('Achievements')}
+                        containerStyles={`w-1/3 ${selectedTab === 'Achievements' ? 'bg-primary' : 'bg-gray-100'}`}
+                        textStyles={`${selectedTab === 'Achievements' ? 'text-white' : 'text-gray-800'} font-semibold`}
+                        isLoading={isSubmitting}
+                    />
+                </View>
+
+                {renderContent()}
+            </Animated.ScrollView>
         </SafeAreaView>
     )
 }
