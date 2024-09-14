@@ -213,29 +213,65 @@ const Profile = () => {
                                 ],
                             }}
                         >
-                            <InfoBox
-                                title={posts?.length || 0}
-                                subtitle="Posts"
-                                containerStyles="items-center"
-                                titleStyles="text-xl font-bold"
-                                subtitleStyles="text-xs text-gray-600"
-                            />
-                            <TouchableOpacity onPress={navigateToFollowers} className="items-center">
+                            <Animated.View
+                                style={{
+                                    opacity: scrollY.interpolate({
+                                        inputRange: [0, 100],
+                                        outputRange: [1, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                }}
+                            >
                                 <InfoBox
-                                    title={followersCount}
-                                    subtitle="Followers"
+                                    title={posts?.length || 0}
+                                    subtitle="Posts"
+                                    containerStyles="items-center"
                                     titleStyles="text-xl font-bold"
                                     subtitleStyles="text-xs text-gray-600"
                                 />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={navigateToFollowing} className="items-center">
-                                <InfoBox
-                                    title={followingCount}
-                                    subtitle="Following"
-                                    titleStyles="text-xl font-bold"
-                                    subtitleStyles="text-xs text-gray-600"
-                                />
-                            </TouchableOpacity>
+                            </Animated.View>
+                            <Animated.View
+                                style={{
+                                    opacity: scrollY.interpolate({
+                                        inputRange: [0, 100],
+                                        outputRange: [1, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={navigateToFollowers}
+                                    className="items-center"
+                                >
+                                    <InfoBox
+                                        title={followersCount}
+                                        subtitle="Followers"
+                                        titleStyles="text-xl font-bold"
+                                        subtitleStyles="text-xs text-gray-600"
+                                    />
+                                </TouchableOpacity>
+                            </Animated.View>
+                            <Animated.View
+                                style={{
+                                    opacity: scrollY.interpolate({
+                                        inputRange: [0, 100],
+                                        outputRange: [1, 0],
+                                        extrapolate: 'clamp',
+                                    }),
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={navigateToFollowing}
+                                    className="items-center"
+                                >
+                                    <InfoBox
+                                        title={followingCount}
+                                        subtitle="Following"
+                                        titleStyles="text-xl font-bold"
+                                        subtitleStyles="text-xs text-gray-600"
+                                    />
+                                </TouchableOpacity>
+                            </Animated.View>
                         </Animated.View>
                     </Animated.View>
                 </View>
