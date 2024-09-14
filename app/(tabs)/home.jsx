@@ -22,9 +22,8 @@ import CommunityPost from '../../components/posts/CommunityPost'
 const Home = () => {
     const { user } = useGlobalContext()
     const { data: posts, refetch } = useAppwrite(getAllTextPosts)
-    // const { data: latestPosts } = useAppwrite(getLatestPosts)
     const [refreshing, setRefreshing] = useState(false)
-    const [updatedPosts, setUpdatedPosts] = useState([]);
+    const [updatedPosts, setUpdatedPosts] = useState([])
 
     const onRefresh = async () => {
         setRefreshing(true)
@@ -37,24 +36,54 @@ const Home = () => {
             if (posts) {
                 const postsWithComments = await Promise.all(
                     posts.map(async (post) => {
-                        const comments = await getPostComments(post.$id);
-                        return { ...post, comments };
+                        const comments = await getPostComments(post.$id)
+                        return { ...post, comments }
                     })
-                );
-                setUpdatedPosts(postsWithComments);
+                )
+                setUpdatedPosts(postsWithComments)
             }
-        };
+        }
 
-        fetchCommentsForPosts();
-    }, [posts]);
+        fetchCommentsForPosts()
+    }, [posts])
+
+    const renderHeader = () => (
+        <View className="px-4 py-6 bg-primary rounded-b-3xl shadow-lg">
+            <View className="flex-row justify-between items-center mb-6">
+                <View>
+                    <Text className="font-medium text-white text-lg">
+                        Welcome back,
+                    </Text>
+                    <Text className="text-3xl font-bold text-white">
+                        {user?.username}
+                    </Text>
+                </View>
+                <Image
+                    source={{ uri: user?.avatar }}
+                    className="w-14 h-14 rounded-full border-2 border-white"
+                />
+            </View>
+            <SearchInput
+                containerStyle="bg-white rounded-full"
+                placeholderTextColor="gray"
+            />
+        </View>
+    )
+
+    const renderTrending = () => (
+        <View className="mt-6 mb-4 px-4">
+            <Text className="text-xl font-bold mb-4">Trending Topics</Text>
+            <Trending posts={updatedPosts.slice(0, 5)} />
+        </View>
+    )
 
     return (
-        <SafeAreaView className="bg-white h-full">
+        <SafeAreaView className="bg-gray-100 flex-1">
             <FlatList
-                data={posts}
+                data={updatedPosts}
                 keyExtractor={(item) => item.$id}
                 renderItem={({ item }) => (
-                    <>
+                    <View className="bg-white rounded-lg shadow-md mx-4 my-2">
                         <CommunityPost
                             user={user}
                             post={{
@@ -62,42 +91,19 @@ const Home = () => {
                                 comments: item.comments ?? [],
                                 postId: item.$id,
                             }}
+                            scrollableComments={true}
                         />
-                        <View className="h-10" />
-                    </>
-                )}
-                ListHeaderComponent={() => (
-                    <View className="flex my-6 px-4 space-y-6">
-                        <View className="flex justify-between items-start flex-row mb-6">
-                            <View>
-                                <Text className="font-hmedium text-sm text-black">
-                                    Welcome back,
-                                </Text>
-                                <Text className="text-2xl font-hsemibold text-black">
-                                    {user?.username}
-                                </Text>
-                            </View>
-
-                            <View className="mt-1">
-                                <Image
-                                    source={images.text_black}
-                                    className="w-48 h-9"
-                                    resizeMode="contain"
-                                />
-                            </View>
-                        </View>
-
-                        <SearchInput />
-
-                        {/* <View className="w-full flex-1 pt-5 pb-8">
-                            <Text className="text-black text-lg font-hregular">
-                                Latest Posts
-                            </Text>
-
-                            <Trending posts={latestPosts ?? []} />
-                        </View> */}
                     </View>
                 )}
+                ListHeaderComponent={
+                    <>
+                        {renderHeader()}
+                        {renderTrending()}
+                        <Text className="text-xl font-bold px-4 mb-2">
+                            Latest Posts
+                        </Text>
+                    </>
+                }
                 ListEmptyComponent={() => (
                     <EmptyState
                         title="No posts found."
@@ -108,8 +114,11 @@ const Home = () => {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
+                        colors={['#4A90E2']}
+                        tintColor="#4A90E2"
                     />
                 }
+                contentContainerStyle={{ paddingBottom: 20 }}
             />
         </SafeAreaView>
     )
