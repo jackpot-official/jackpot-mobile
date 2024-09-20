@@ -165,15 +165,47 @@ const Profile = () => {
                     <Animated.View
                         className="flex-col justify-between items-start mb-4"
                         style={{
-                            height: scrollY.interpolate({
-                                inputRange: [0, 100],
-                                outputRange: [160, 80],
-                                extrapolate: 'clamp',
-                            }),
+                            // minHeight: 80,
+                            transform: [
+                                {
+                                    translateY: scrollY.interpolate({
+                                        inputRange: [0, 100],
+                                        outputRange: [0, -40],
+                                        extrapolate: 'clamp',
+                                    }),
+                                },
+                            ],
                         }}
                     >
-                        <Animated.View
+                        {/* <Animated.View
                             className="flex-row items-center mb-2"
+                            style={{
+                                opacity: scrollY.interpolate({
+                                    inputRange: [0, 100],
+                                    outputRange: [1, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                            }}
+                        > */}
+                        {/* User profile picture */}
+                        {/* <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary mr-3">
+                                <Image
+                                    source={{ uri: user?.avatar }}
+                                    className="w-full h-full"
+                                    resizeMode="cover"
+                                />
+                            </View> */}
+
+                        {/* Username */}
+                        {/* <InfoBox
+                                title={`${user?.username}`}
+                                titleStyles="text-lg font-semibold"
+                            />
+                        </Animated.View> */}
+
+                        {/* Stats: Posts, Followers, Following */}
+                        <Animated.View
+                            className="flex-row items-center"
                             style={{
                                 opacity: scrollY.interpolate({
                                     inputRange: [0, 100],
@@ -183,7 +215,7 @@ const Profile = () => {
                             }}
                         >
                             {/* User profile picture */}
-                            <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary mr-3">
+                            <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary mr-4">
                                 <Image
                                     source={{ uri: user?.avatar }}
                                     className="w-full h-full"
@@ -191,54 +223,29 @@ const Profile = () => {
                                 />
                             </View>
 
-                            {/* Username */}
-                            <InfoBox
-                                title={`@${user?.username}`}
-                                titleStyles="text-lg font-semibold"
-                            />
-                        </Animated.View>
-
-                        {/* Stats: Posts, Followers, Following */}
-                        <Animated.View
-                            className="flex-row justify-between w-full"
-                            style={{
-                                transform: [
-                                    {
-                                        translateY: scrollY.interpolate({
-                                            inputRange: [0, 100],
-                                            outputRange: [0, -40],
-                                            extrapolate: 'clamp',
-                                        }),
-                                    },
-                                ],
-                            }}
-                        >
                             <Animated.View
+                                className="flex-row justify-between flex-1"
                                 style={{
-                                    opacity: scrollY.interpolate({
-                                        inputRange: [0, 100],
-                                        outputRange: [1, 0],
-                                        extrapolate: 'clamp',
-                                    }),
+                                    transform: [
+                                        {
+                                            translateY: scrollY.interpolate({
+                                                inputRange: [0, 100],
+                                                outputRange: [0, -40],
+                                                extrapolate: 'clamp',
+                                            }),
+                                        },
+                                    ],
                                 }}
                             >
-                                <InfoBox
-                                    title={posts?.length || 0}
-                                    subtitle="Posts"
-                                    containerStyles="items-center"
-                                    titleStyles="text-xl font-bold"
-                                    subtitleStyles="text-xs text-gray-600"
-                                />
-                            </Animated.View>
-                            <Animated.View
-                                style={{
-                                    opacity: scrollY.interpolate({
-                                        inputRange: [0, 100],
-                                        outputRange: [1, 0],
-                                        extrapolate: 'clamp',
-                                    }),
-                                }}
-                            >
+                                <TouchableOpacity className="items-center">
+                                    <InfoBox
+                                        title={posts?.length || 0}
+                                        subtitle="Posts"
+                                        containerStyles="items-center"
+                                        titleStyles="text-lg font-bold"
+                                        subtitleStyles="text-xs text-gray-600"
+                                    />
+                                </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={navigateToFollowers}
                                     className="items-center"
@@ -246,20 +253,10 @@ const Profile = () => {
                                     <InfoBox
                                         title={followersCount}
                                         subtitle="Followers"
-                                        titleStyles="text-xl font-bold"
+                                        titleStyles="text-lg font-bold"
                                         subtitleStyles="text-xs text-gray-600"
                                     />
                                 </TouchableOpacity>
-                            </Animated.View>
-                            <Animated.View
-                                style={{
-                                    opacity: scrollY.interpolate({
-                                        inputRange: [0, 100],
-                                        outputRange: [1, 0],
-                                        extrapolate: 'clamp',
-                                    }),
-                                }}
-                            >
                                 <TouchableOpacity
                                     onPress={navigateToFollowing}
                                     className="items-center"
@@ -267,7 +264,7 @@ const Profile = () => {
                                     <InfoBox
                                         title={followingCount}
                                         subtitle="Following"
-                                        titleStyles="text-xl font-bold"
+                                        titleStyles="text-lg font-bold"
                                         subtitleStyles="text-xs text-gray-600"
                                     />
                                 </TouchableOpacity>
