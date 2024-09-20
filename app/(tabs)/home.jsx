@@ -98,8 +98,8 @@ const Home = () => {
                 ListHeaderComponent={
                     <>
                         {renderHeader()}
-                        {renderTrending()}
-                        <Text className="text-xl font-bold px-4 mb-2">
+                        {/* {renderTrending()} */}
+                        <Text className="text-xl font-bold px-4 mt-4 mb-2">
                             Latest Posts
                         </Text>
                     </>
@@ -118,7 +118,7 @@ const Home = () => {
                         tintColor="#4A90E2"
                     />
                 }
-                contentContainerStyle={{ paddingBottom: 20 }}
+                contentContainerStyle={{ paddingBottom: 50 }}
             />
         </SafeAreaView>
     )
